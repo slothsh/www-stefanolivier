@@ -1,3 +1,4 @@
+@import "./fonts.css";
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -6,7 +7,121 @@
 @source "../**/*.js";
 @source "../**/*.vue";
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+@layer base {
+    :root {
+        --primary: #102530;
+        --secondary: #ccddee;
+        --accent-primary: #203545;
+        --accent-secondary: #ddeeff;
+        --border-primary: #203545;
+        --border-secondary: #bbccdd;
+    }
+
+    html {
+        --background: var(--secondary);
+        --accent-background: var(--accent-secondary);
+        --foreground: var(--primary);
+        --accent-foreground: var(--accent-primary);
+        --border: var(--border-secondary);
+
+        &[data-theme=dark] {
+            --background: var(--primary);
+            --accent-background: var(--accent-primary);
+            --foreground: var(--secondary);
+            --accent-background: var(--accent-secondary);
+            --border: var(--border-primary);
+        }
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        @apply bg-primary;
+        @apply font-main;
+        @apply text-font;
+        font-size: 20px;
+    }
 }
+
+@theme {
+    --color-font: var(--foreground);
+    --color-primary: var(--background);
+    --color-secondary: var(--foreground);
+    --color-border: var(--border);
+    --color-accent-primary: var(--accent-primary);
+    --color-accent-secondary: var(--accent-secondary);
+    --font-main: 'Rethink Sans', sans-serif;
+    --font-8bit: 'Bytesized', sans-serif;
+    --spacing-page: 960px;
+
+    --animate-in-up: in-up 300ms ease-in-out 1;
+    --animate-out-down: out-down 300ms ease-in-out 1;
+    --animate-progress: progress-width linear 1;
+    --animate-scale-out-in: scale-out-in ease-in-out 1;
+    --animate-scale-out-in-again: scale-out-in-again ease-in-out 1;
+
+    @keyframes in-up {
+        0% {
+            opacity: 0%;
+            transform: translateY(50%);
+        }
+        100% {
+            opacity: 100%;
+            transform: translateY(0%);
+        }
+    }
+
+    @keyframes out-down {
+        0% {
+            opacity: 100%;
+            transform: translateY(0%);
+        }
+        100% {
+            opacity: 0%;
+            transform: translateY(50%);
+        }
+    }
+
+    @keyframes scale-out-in {
+        0% {
+            transform: scale(100%);
+            opacity: 100%;
+        }
+        50% {
+            transform: scale(0%);
+            opacity: 50%;
+        }
+        100% {
+            transform: scale(100%);
+            opacity: 100%;
+        }
+    }
+
+    @keyframes scale-out-in-again {
+        0% {
+            transform: scale(100%);
+            opacity: 100%;
+        }
+        50% {
+            transform: scale(0%);
+            opacity: 50%;
+        }
+        100% {
+            transform: scale(100%);
+            opacity: 100%;
+        }
+    }
+
+    @keyframes progress-width {
+        0% {
+            width: 0%;
+        }
+        100% {
+            width: 100%;
+        }
+    }
+}
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
