@@ -1,0 +1,29 @@
+name: Build Stage
+run-name: ${{ github.actor }} building stage ${{ github.event.number }}
+on:
+  pull_request:
+    types: [opened, reopened]
+jobs:
+  build_application:
+    name: Build Web Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Dependencies
+        run: |
+          apt-get unzip php composer sqlite3
+          curl -fsSL https://bun.sh/install | bash
+      - name: Optimize Laravel App
+        run: |
+          composer install
+          php artisan optimize
+      - name: Bundle Javascript Modules
+        env:
+          PATH: ~/.bun/bin:$PATH
+        run: |
+          bun install
+          bun run build
+      - name: Post-Build
+        run: |
+          echo "Completed!"
+          pwd
+          ls -l
