@@ -1,4 +1,8 @@
-import './math.ts'
+import './array';
+import './anim';
+import './bio';
+import './math';
+import './string';
 import './vector';
 import { route as routeFn } from 'ziggy-js';
 

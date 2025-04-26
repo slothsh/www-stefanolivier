@@ -10,26 +10,41 @@
 @layer base {
     :root {
         --primary: #102530;
+        --primary-1: #072030;
         --secondary: #ccddee;
+        --secondary-1: #d0e0f2;
         --accent-primary: #203545;
         --accent-secondary: #ddeeff;
+        --muted-primary: #aabbcc;
+        --muted-secondary: #304555;
         --border-primary: #203545;
         --border-secondary: #bbccdd;
+        --navigation-height: 40px;
+        --footer-height: 80px;
+
+        --z-navigation: 100;
+        --z-page: 10;
     }
 
     html {
         --background: var(--secondary);
+        --background-1: var(--secondary-1);
         --accent-background: var(--accent-secondary);
         --foreground: var(--primary);
+        --foreground-1: var(--primary-1);
         --accent-foreground: var(--accent-primary);
         --border: var(--border-secondary);
+        --muted: var(--muted-secondary);
 
         &[data-theme=dark] {
             --background: var(--primary);
+            --background-1: var(--primary-1);
             --accent-background: var(--accent-primary);
             --foreground: var(--secondary);
+            --foreground-1: var(--secondary-1);
             --accent-background: var(--accent-secondary);
             --border: var(--border-primary);
+            --muted: var(--muted-primary);
         }
     }
 
@@ -48,12 +63,16 @@
 @theme {
     --color-font: var(--foreground);
     --color-primary: var(--background);
+    --color-primary-1: var(--background-1);
     --color-secondary: var(--foreground);
+    --color-secondary-1: var(--foreground-1);
     --color-border: var(--border);
     --color-accent-primary: var(--accent-primary);
     --color-accent-secondary: var(--accent-secondary);
+    --color-muted: var(--muted);
     --font-main: 'Rethink Sans', sans-serif;
     --font-8bit: 'Bytesized', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
     --spacing-page: 960px;
 
     --animate-in-up: in-up 300ms ease-in-out 1;

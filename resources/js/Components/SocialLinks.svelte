@@ -1,34 +1,6 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
-import { faEnvelope, faPaste, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
-import { faGithub, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-
-const socialLinks = [
-    {
-        icon: faEnvelope,
-        link: 'mailto:dev@stefanolivier.com',
-        text: 'dev@stefanolivier.com',
-        clipboard: 'dev@stefanolivier.com',
-    },
-    {
-        icon: faGithub,
-        link: 'https://github.com/slothsh',
-        text: '/slothsh',
-        clipboard: 'https://github.com/slothsh',
-    },
-    {
-        icon: faLinkedin,
-        link: 'https://linkedin.com/in/stefan-olivier-628261145',
-        text: 'Stefan Olivier',
-        clipboard: 'https://linkedin.com/in/stefan-olivier-628261145',
-    },
-    {
-        icon: faInstagram,
-        link: 'https://instagram.com/@stefan_is_stevey',
-        text: '@stefan_is_stevey',
-        clipboard: 'https://instagram.com/@stefan_is_stevey',
-    },
-];
+import { faPaste, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 
 let arrowElement: SVGElement | null = $state(null);
 let socialLinksContainer: HTMLDivElement | null = $state(null);
@@ -66,7 +38,7 @@ const items = [
     'social-link-3',
 ];
 
-function handleCurrentlyFocused(item: typeof socialLinks[number] | null) {
+function handleCurrentlyFocused(item: ContactItem | null) {
     if (currentlySelected) {
         return;
     }
@@ -91,9 +63,9 @@ function handleCurrentlyFocused(item: typeof socialLinks[number] | null) {
         return;
     }
 
-    currentlyFocused = item.text;
+    currentlyFocused = item.displayName;
     lastSelected = currentlyFocused;
-    lastSelectedClipboard = item.clipboard;
+    lastSelectedClipboard = item.src;
 }
 
 function handleCurrentlyFocusedDialog() {
@@ -128,7 +100,7 @@ function handleClose(event: MouseEvent): void {
     }
 }
 
-async function handleCopyLink(event: MouseEvent): Promise<void> {
+async function handleCopyLink(): Promise<void> {
     await navigator.clipboard.writeText(lastSelectedClipboard);
     if (copiedTimeout) {
         clearTimeout(copiedTimeout);
@@ -144,22 +116,22 @@ async function handleCopyLink(event: MouseEvent): Promise<void> {
 <svelte:window on:click={handleClose} />
 
 <div bind:this={socialLinksContainer} class="flex justify-between items-center gap-4">
-    {#each socialLinks as item, i}
+    {#each Object.entries(Bio.contact) as [contactKey, contactValue], i}
         <a id={`social-link-${i}`}
-            href={item.link}
+            href={contactValue.src}
             target="_blank"
             rel="noopener noreferrer"
             class="social-link bg-primary cursor-pointer"
-            data-enabled={currentlySelected === item.text || currentlyFocused === item.text ? '' : null}
-            onmousemove={() => handleCurrentlyFocused(item)}
+            data-enabled={currentlySelected === contactValue.displayName || currentlyFocused === contactValue.displayName ? '' : null}
+            onmousemove={() => handleCurrentlyFocused(contactValue)}
             onmouseleave={() => handleCurrentlyFocused(null)}
             >
-            <Fa icon={item.icon}
+            <Fa icon={contactValue.icon}
                 size="4x"
                 class={mc("border border-border shadow rounded-md p-2 icon fill-red-200 hover:bg-accent-primary", {
-                    'bg-accent-primary': currentlySelected === item.text,
+                    'bg-accent-primary': currentlySelected === contactValue.displayName,
                 })}
-                color={[currentlySelected, currentlyFocused].includes(item.text) ? '#eeffff' : '#ccddee'}
+                color={[currentlySelected, currentlyFocused].includes(contactKey) ? '#eeffff' : '#ccddee'}
                 style="width: 64px; height: 64px;"
             />
         </a>

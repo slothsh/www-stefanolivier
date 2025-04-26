@@ -23,6 +23,12 @@ declare module 'ziggy-js' {
     "debugbar.queries.explain": [],
     "home.index": [],
     "blog.index": [],
+    "blog.show": [
+        {
+            "name": "slug",
+            "required": true
+        }
+    ],
     "storage.local": [
         {
             "name": "path",

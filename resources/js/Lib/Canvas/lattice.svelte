@@ -5,6 +5,7 @@ import type { CanvasProps } from '@/types';
 type Props = CanvasProps;
 
 let PROGRESS = $state(0);
+let CURSOR_PROGRESS = $state(0.0);
 let CURSOR_VELOCITY = $state(0.0);
 let CURSOR_LAST = $state(Vector.xy(0, 0));
 let BULGE_RESET_DELAY = $state(0);
@@ -44,12 +45,15 @@ export function lattice({
     const cursorMoved = CURSOR_LAST.distance(cursor) >= Math.EPSILON;
     if (cursorMoved) {
         BULGE_RESET_DELAY = 0.0;
+        CURSOR_PROGRESS = 0.0;
     }
 
-    if (BULGE_RESET_DELAY > singleFrameDuration / 2) {
-        CURSOR_VELOCITY -= 0.1;
+    if (BULGE_RESET_DELAY > singleFrameDuration) {
+        CURSOR_VELOCITY *= Anim.easeInOutQuint(1 - CURSOR_PROGRESS);
+        CURSOR_PROGRESS += 1 / (4 * fps);
         if (CURSOR_VELOCITY < Math.EPSILON) {
             CURSOR_VELOCITY = 0.0;
+            CURSOR_PROGRESS = 0.0;
         }
     }
 

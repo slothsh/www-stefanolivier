@@ -18,13 +18,10 @@ let canvasRect = $derived(
     <div class="flex flex-row w-full items-center left-0 min-h-[768px]">
         <div class="relative flex flex-col justify-center items-center w-full px-16 border-border text-center">
             <div class="flex flex-col mb-8 max-w-page">
-                <h1 class="w-full font-bold text-7xl">Stefan Olivier</h1>
-                <h1 class="w-full font-medium text-4xl">Software Engineer</h1>
+                <h1 class="w-full font-bold text-7xl">{Bio.name}</h1>
+                <h1 class="w-full font-medium text-4xl">{Bio.occupation}</h1>
             </div>
-            <p class="font-normal max-w-page mb-16">
-                Diam molestie ipsum nibh feugiat aliquyam. Zzril soluta eu vero
-                nobis. Aliquip in praesent duo enim. Clita feugait luptatum dolore.
-            </p>
+            <p class="font-normal max-w-page mb-16">{Bio.about}</p>
             <SocialLinks />
         </div>
     </div>
