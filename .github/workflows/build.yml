@@ -12,15 +12,13 @@ jobs:
         run: |
           sudo apt-get install unzip php composer sqlite3
           curl -fsSL https://bun.sh/install | bash
-      - name: Optimize Laravel App
-        run: |
-          ls -l
-          composer install
-          php artisan optimize
-      - name: Bundle Javascript Modules
+      - name: Bundle & Optimize Web Application
         env:
           PATH: ~/.bun/bin:$PATH
+        uses: actions/checkout@v4
         run: |
+          composer install
+          php artisan optimize
           bun install
           bun run build
       - name: Post-Build
