@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Install Dependencies
         run: |
-          apt-get install unzip php composer sqlite3
+          sudo apt-get install unzip php composer sqlite3
           curl -fsSL https://bun.sh/install | bash
       - name: Optimize Laravel App
         run: |
