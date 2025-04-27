@@ -12,8 +12,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Dependencies
         run: |
-          sudo apt-get install unzip php composer sqlite3
+          sudo apt-get install unzip php sqlite3
           curl -fsSL https://bun.sh/install | bash
+          curl -sS https://getcomposer.org/installer | php
+          sudo mv composer.phar /usr/local/bin/composer
       - name: Bundle & Optimize Web Application
         env:
           PATH: ~/.bun/bin:$PATH
