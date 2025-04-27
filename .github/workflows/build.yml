@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Dependencies
         run: |
-          sudo apt-get install unzip php sqlite3
+          sudo apt-get install unzip php php-cli sqlite3
           curl -fsSL https://bun.sh/install | bash
           curl -sS https://getcomposer.org/installer | php
           mkdir -p ~/.local/bin
