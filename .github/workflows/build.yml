@@ -19,7 +19,7 @@ jobs:
           sudo mv composer.phar ~/.local/bin/composer
       - name: Bundle & Optimize Web Application
         env:
-          PATH: ~/.bun/bin:~/.local/bin:$PATH
+          PATH: ~/.bun/bin:~/.local/bin:/usr/local/bin:$PATH
         run: |
           composer install
           php artisan optimize
