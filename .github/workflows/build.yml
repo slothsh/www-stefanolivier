@@ -8,6 +8,8 @@ jobs:
     name: Build Web Application
     runs-on: ubuntu-latest
     steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
       - name: Install Dependencies
         run: |
           sudo apt-get install unzip php composer sqlite3
@@ -15,7 +17,6 @@ jobs:
       - name: Bundle & Optimize Web Application
         env:
           PATH: ~/.bun/bin:$PATH
-        uses: actions/checkout@v4
         run: |
           composer install
           php artisan optimize
