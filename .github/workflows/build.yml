@@ -15,10 +15,10 @@ jobs:
           sudo apt-get install unzip php sqlite3
           curl -fsSL https://bun.sh/install | bash
           curl -sS https://getcomposer.org/installer | php
-          sudo mv composer.phar /usr/local/bin/composer
+          sudo mv composer.phar ~/.local/bin/composer
       - name: Bundle & Optimize Web Application
         env:
-          PATH: ~/.bun/bin:$PATH
+          PATH: ~/.bun/bin:~/.local/bin:$PATH
         run: |
           composer install
           php artisan optimize
