@@ -6,7 +6,11 @@ RUN useradd -m app
 # Install dependencies
 ENV BUN_INSTALL=/home/app/.bun
 RUN mkdir /home/app/.composer
-RUN apt-get update && apt-get install -y supervisor curl unzip sqlite3 nginx nginx-extras php php-cli php-mbstring php-xml php-bcmath php-curl php-zip php-mysql php-tokenizer php-ctype php-json php-sqlite3 php-fpm
+RUN apt-get update
+RUN apt-get install -y curl unzip
+RUN apt-get install -y supervisor sqlite3 nginx nginx-extras
+RUN apt-get install -y php php-cli
+RUN apt-get install -y php-mbstring php-xml php-bcmath php-curl php-zip php-mysql php-tokenizer php-ctype php-json php-sqlite3 php-fpm
 RUN curl -fsSL https://bun.sh/install | bash
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir /home/app/.composer --filename composer
 
