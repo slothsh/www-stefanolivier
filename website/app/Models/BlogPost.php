@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CommaListToArray implements CastsAttributes
 {
@@ -21,6 +22,8 @@ class CommaListToArray implements CastsAttributes
 
 class BlogPost extends Model
 {
+    use HasFactory;
+
     protected $table = 'blog_posts';
 
     protected $guarded = ['id'];

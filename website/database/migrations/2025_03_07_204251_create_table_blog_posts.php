@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('blog_posts', function (Blueprint $table) {
             $table->id();
-            $table->json('content');
+            $table->string('title', 128);
+            $table->string('blurb', 512);
+            $table->string('slug', 128);
+            $table->text('content');
+            $table->json('structured_content')->nullable();
+            $table->json('tags')->nullable();
+            $table->text('read_time')->nullable();
+            $table->boolean('live')->default(false);
+            $table->timestamp('posted_at')->nullable();
             $table->timestamps();
         });
     }
