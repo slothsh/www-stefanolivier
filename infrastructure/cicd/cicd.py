@@ -47,12 +47,12 @@ def get_live_container_image_digest():
 
 def reload_website():
     try:
+        print(f'Pulling latest image: {REGISTRY_NAME}/{REPOSITORY}:latest')
+        subprocess.run(['docker', 'pull', f'{REGISTRY_NAME}/{REPOSITORY}:latest'])
         print(f'Killing docker container: {CONTAINER_NAME}')
         subprocess.run(['docker', 'kill', CONTAINER_NAME])
         print(f'Removing docker container: {CONTAINER_NAME}')
         subprocess.run(['docker', 'rm', CONTAINER_NAME])
-        print(f'Pulling latest image: {REGISTRY_NAME}/{REPOSITORY}:latest')
-        subprocess.run(['docker', 'pull', f'{REGISTRY_NAME}/{REPOSITORY}:latest'])
         print(f'Starting image: {REGISTRY_NAME}/{REPOSITORY}:latest with name {CONTAINER_NAME}')
         subprocess.run(['docker', 'run', '--name', CONTAINER_NAME, '-d', '-p', '8000:80', '-p', '13714:13714', f'{REGISTRY_NAME}/{REPOSITORY}:latest'])
     except Exception as e:
