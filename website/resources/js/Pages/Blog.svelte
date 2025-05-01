@@ -64,7 +64,7 @@ function handlePostScroll(slug: string) {
 }
 </script>
 
-<NavigationLayout class="relative">
+<NavigationLayout class="relative" title="Blog">
     <Canvas
         class="fixed top-0 w-full h-full z-[-1]"
         rect={canvasRect}

@@ -12,7 +12,7 @@ let canvasRect = $derived(
 );
 </script>
 
-<NavigationLayout class="relative overflow-hidden h-screen" enableFooter={false}>
+<NavigationLayout class="relative overflow-hidden h-screen" enableFooter={false} title="Home">
     <Canvas class="absolute w-full h-full" rect={canvasRect} program={lattice} />
 
     <div class="flex flex-row w-full items-center left-0 min-h-[768px]">

@@ -4,15 +4,21 @@ import { Link } from "@inertiajs/svelte";
 
 type Props = ComponentProps<{
     enableFooter?: boolean
+    title?: string
 }>;
 
 const {
     enableFooter,
+    title,
     class: _class,
 }: Props = $props();
 
 const enableFooterFlag = $state(enableFooter ?? true);
 </script>
+
+<svelte:head>
+    <title>{`${title ? title + ' | ' : ''}Stefan Olivier`}</title>
+</svelte:head>
 
 <div class={mc('', _class)}>
     <nav class="w-full sticky top-0 left-0 bg-primary h-(--navigation-height) border-b border-b-border flex justify-center items-center z-(--z-navigation)">

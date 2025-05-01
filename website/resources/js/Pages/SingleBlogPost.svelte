@@ -228,10 +228,6 @@ function observeScrollTopOfPage(element: HTMLElement) {
 }
 </script>
 
-<svelte:head>
-    {@html nova}
-</svelte:head>
-
 {#snippet conditionalContent(content: string | undefined)}
     {#if content}
         {content}
@@ -308,7 +304,7 @@ function observeScrollTopOfPage(element: HTMLElement) {
     {/each}
 {/snippet}
 
-<NavigationLayout class="relative">
+<NavigationLayout class="relative" title={post.title}>
     <Canvas
         class="fixed top-0 w-full h-full z-[-1]"
         rect={canvasRect}
