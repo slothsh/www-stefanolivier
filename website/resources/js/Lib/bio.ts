@@ -35,7 +35,7 @@ declare global {
 (globalThis as any).Bio = {
     firstname: 'Stefan',
     surname: 'Olivier',
-    about: 'Et invidunt ut wisi gubergren eu. Invidunt no eos duis kasd doming. Gubergren eros facilisis tempor placerat quis augue facilisi.',
+    about: 'I make websites and applications that have the happiest bits, nibbles, and bytes.',
     occupation: 'Software Engineer',
     contact: {
         Email: {
