@@ -18,15 +18,21 @@ def get_auth():
 
 def get_latest_image_digest(auth):
     try:
-        url = f'{REGISTRY_URL}/v2/{REPOSITORY}/manifests/latest'
         headers = { 'Accept': 'application/vnd.docker.distribution.manifest.v1+json' }
-        response = requests.get(url, auth=auth, headers=headers)
+        manifest_response = requests.get(f'{REGISTRY_URL}/v2/{REPOSITORY}/manifests/latest', auth=auth, headers=headers)
 
-        if response.status_code != 200:
-            print(f'Bad response from registry: {response.status_code} - {response.text}')
+        if manifest_response.status_code != 200:
+            print(f'Bad response for manifest from registry: {manifest_response.status_code} - {manifest_response.text}')
             return ''
 
-        return response.json()['manifests'][0]['digest'].strip().split(':')[1]
+        image_digest = manifest_response.json()['manifests'][0]['digest'].strip()
+        blob_response = requests.get(f'{REGISTRY_URL}/v2/{REPOSITORY}/blobs/{image_digest}', auth=auth, headers=headers)
+
+        if blob_response.status_code != 200:
+            print(f'Bad response for blob from registry: {blob_response.status_code} - {blob_response.text}')
+            return ''
+
+        return blob_response.json()['config']['digest'].strip()
 
     except Exception as e:
         print(f'Failed GET to registry with error: {str(e)}')
@@ -35,10 +41,7 @@ def get_latest_image_digest(auth):
 def get_live_container_image_digest():
     try:
         live_image_id = subprocess.run(['docker', 'inspect', CONTAINER_NAME, '--format="{{.Image}}"'], stdout=subprocess.PIPE)
-        live_image_id_digest = live_image_id.stdout.decode('utf-8').strip()[1:-1].split(':')[1]
-        print(f'Live Image Digest: {live_image_id_digest}')
-        live_image_digest = subprocess.run(['docker', 'image', 'inspect', live_image_id_digest, '--format="{{index .RepoDigests 0}}"'], stdout=subprocess.PIPE)
-        return live_image_digest.stdout.decode('utf-8').strip()[1:-1].split(':')[1]
+        return live_image_id.stdout.decode('utf-8').strip()[1:-1]
     except Exception as e:
         return ''
 
