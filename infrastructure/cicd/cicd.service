@@ -1,0 +1,15 @@
+[Unit]
+Description=CI/CD Service
+After=network.target
+
+[Service]
+Type=simple
+User=slothsh
+WorkingDirectory=/var/cicd
+ExecStart=/var/cicd/cicd.py
+Restart=on-failure
+Environment="PATH=/var/cicd/.venv/bin:/usr/bin:/bin"
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
