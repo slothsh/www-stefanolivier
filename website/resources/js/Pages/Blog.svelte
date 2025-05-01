@@ -5,7 +5,7 @@ import BlogPostCard from "@/Components/BlogPostCard.svelte";
 import Canvas from "@/Components/Canvas.svelte";
 import { lattice } from "@/Lib/Canvas/lattice.svelte";
 import { useClientWindow } from "@/Lib/dom.svelte";
-import { formatDate } from "date-fns";
+import { compareDesc, formatDate, parse } from "date-fns";
 import { forwardClick } from "@/Lib/dom.svelte";
 
 type Props = {
@@ -32,9 +32,10 @@ let canvasRect = $derived(
     ),
 );
 
-const index = Object.groupBy(posts, (post) =>
-    formatDate(post.posted_at, "MMMM, y"),
-);
+const index = Object.entries(
+    Object.groupBy(posts, (post) => formatDate(post.posted_at, 'MMMM, y'))
+).sort(([ka,_], [kb,__]) => compareDesc(parse(ka, 'MMMM, y', new Date()), parse(kb, 'MMMM, y', new Date())));
+console.log(new Date('August, 2022'));
 const blogPostCards: Record<string, HTMLElement | null> =
 Object.fromEntries(posts.map((post) => [post.slug, null]));
 
@@ -78,7 +79,7 @@ function handlePostScroll(slug: string) {
         {:else}
             <div class="sticky col-span-2 top-(--navigation-height) left-0 overflow-y-auto h-full max-h-[calc(100dvh-var(--spacing)*6)] border-r border-border bg-primary mr-16">
                 <ul class="p-6">
-                    {#each Object.entries(index) as [postedAt, postItems]}
+                    {#each index as [postedAt, postItems]}
                         <li class="text-sm not-last:not-only:mb-8">
                             <section>
                                 <h2 class="text-lg font-bold mb-4 brightness-75">

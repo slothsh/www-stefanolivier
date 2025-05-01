@@ -24,6 +24,7 @@ RUN /home/app/.bun/bin/bun run build
 
 # Clean-up
 RUN rm -rf /app/build/node_modules
+RUN apt autoremove --purge
 
 # Server Configuration
 COPY ./infrastructure/nginx.conf /etc/nginx/nginx.conf
