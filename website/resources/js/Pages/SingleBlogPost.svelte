@@ -3,7 +3,6 @@ import NavigationLayout from "@/Components/NavigationLayout.svelte";
 import type { BlogPost } from "@/types";
 import Fa from "svelte-fa";
 import { faExclamationCircle, faQuestionCircle, faWarning, faMagnifyingGlass, type IconDefinition, faLink, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import nova from 'svelte-highlight/styles/nova';
 import Canvas from "@/Components/Canvas.svelte";
 import { lattice } from "@/Lib/Canvas/lattice.svelte";
 import { useClientWindow } from "@/Lib/dom.svelte";
