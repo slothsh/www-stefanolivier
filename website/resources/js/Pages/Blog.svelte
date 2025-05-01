@@ -32,12 +32,16 @@ let canvasRect = $derived(
     ),
 );
 
+posts.sort((a, b) => {
+    return compareDesc(new Date(a.posted_at), new Date(b.posted_at));
+});
+
 const index = Object.entries(
     Object.groupBy(posts, (post) => formatDate(post.posted_at, 'MMMM, y'))
 ).sort(([ka,_], [kb,__]) => compareDesc(parse(ka, 'MMMM, y', new Date()), parse(kb, 'MMMM, y', new Date())));
-console.log(new Date('August, 2022'));
+
 const blogPostCards: Record<string, HTMLElement | null> =
-Object.fromEntries(posts.map((post) => [post.slug, null]));
+    Object.fromEntries(posts.map((post) => [post.slug, null]));
 
 function handlePostScroll(slug: string) {
     const offset = [
