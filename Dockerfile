@@ -22,6 +22,9 @@ RUN php artisan optimize
 RUN /home/app/.bun/bin/bun install
 RUN /home/app/.bun/bin/bun run build
 
+# Clean-up
+RUN rm -rf /app/build/node_modules
+
 # Server Configuration
 COPY ./infrastructure/nginx.conf /etc/nginx/nginx.conf
 COPY ./infrastructure/php-fpm-www.conf /etc/php/8.3/fpm/pool.d/www.conf
