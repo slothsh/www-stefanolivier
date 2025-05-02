@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'website/**'
+      - 'infrastructure/website/**'
+      - 'Dockerfile'
+      - '.dockerignore'
 
 jobs:
   build-docker:

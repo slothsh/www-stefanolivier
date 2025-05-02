@@ -31,10 +31,10 @@ RUN rm -rf /app/build/node_modules
 RUN apt autoremove --purge
 
 # Server Configuration
-COPY ./infrastructure/nginx.conf /etc/nginx/nginx.conf
-COPY ./infrastructure/php-fpm-www.conf /etc/php/8.3/fpm/pool.d/www.conf
-COPY ./infrastructure/php-fpm.conf /etc/php/8.3/fpm/php-fpm.conf
-COPY ./infrastructure/supervisord.conf /etc/supervisor/supervisord.conf
+COPY ./infrastructure/website/nginx.conf /etc/nginx/nginx.conf
+COPY ./infrastructure/website/php-fpm-www.conf /etc/php/8.3/fpm/pool.d/www.conf
+COPY ./infrastructure/website/php-fpm.conf /etc/php/8.3/fpm/php-fpm.conf
+COPY ./infrastructure/website/supervisord.conf /etc/supervisor/supervisord.conf
 
 # Server logs
 RUN mkdir -p /app/logs/nginx && mkdir -p /app/logs/php && mkdir /app/logs/supervisord
