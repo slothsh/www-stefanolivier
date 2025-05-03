@@ -34,7 +34,7 @@ let canvasRect = $derived(
 );
 </script>
 
-<div id={post.slug} bind:this={root} class={mc("group relative border border-border rounded-md shadow-lg overflow-hidden min-w-[640px] h-[360px] cursor-pointer", _class)}>
+<div id={post.slug} bind:this={root} class={mc("group relative border border-border rounded-md shadow-lg overflow-hidden min-w-[640px] min-h-[360px] cursor-pointer", _class)}>
     <Link href={route('blog.show', post.slug)}>
         <div class="absolute top-0 left-0 w-full h-full bg-primary"></div>
         <div class="absolute top-0 left-0 w-[calc(100%-var(--spacing)*12)] h-[calc(100%-var(--spacing)*12)] group-hover:w-full group-hover:h-full mt-6 ml-6 group-hover:m-0 bg-primary group-hover:border-0 border border-border rounded-md group-hover:animate-(--animate-border) group-hover:shadow-xl transition-all duration-150 [transition-timing-function:ease-out] z-10"></div>
