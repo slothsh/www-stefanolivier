@@ -25,7 +25,7 @@ class DatabaseMonitor:
         backup_database = Path(self.backup_directory) / Path('database-latest.sqlite')
         if backup_database.exists():
             return backup_database.stat().st_mtime
-        return 0.0
+        return time.time()
 
 
     def backup(self: Self) -> None:
@@ -52,9 +52,9 @@ class DatabaseMonitor:
 
 
     def status(self: Self) -> DatabaseStatus:
-        self.backup_db_time = self._get_backup_db_time()
+        self.live_db_time = self._get_live_db_time()
 
-        if self.backup_db_time + self.stale_period >= time.time():
+        if time.time() - self.live_db_time >= self.stale_period:
             return DatabaseStatus.STALE
 
         return DatabaseStatus.FRESH
