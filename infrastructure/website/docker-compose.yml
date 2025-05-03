@@ -1,0 +1,7 @@
+services:
+  website:
+    image: registry.stefanolivier.com/www-stefanolivier:latest
+    restart: always
+    ports:
+      - "8000:80"
+      - "13714:13714"
