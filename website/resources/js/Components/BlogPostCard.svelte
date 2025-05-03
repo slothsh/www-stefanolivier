@@ -1,13 +1,13 @@
 <script lang="ts">
+import Canvas from "@/Components/Canvas.svelte";
+import Fa from "svelte-fa";
+import Tag from "@/Components/Tag.svelte";
+import User from "@/Components/User.svelte";
 import type { ComponentProps, BlogPostSnippet } from "@/types";
 import { Link } from "@inertiajs/svelte";
-import Fa from "svelte-fa";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
-import Tag from "@/Components/Tag.svelte";
-import { format as formatDate } from 'date-fns';
-import Canvas from "@/Components/Canvas.svelte";
 import { crossHatch } from "@/Lib/Canvas/crossHatch.svelte";
-import User from "@/Components/User.svelte";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
+import { format as formatDate } from 'date-fns';
 import { secondsToMinutes } from "date-fns";
 
 type Props = {

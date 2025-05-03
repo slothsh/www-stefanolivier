@@ -1,6 +1,6 @@
 <script lang="ts">
-import { useClientCursor, useClientWindow } from '@/Lib/dom.svelte';
 import type { CanvasProps, ComponentProps } from '@/types';
+import { useClientCursor, useClientWindow } from '@/Lib/dom.svelte';
 
 const clientWindow = useClientWindow();
 

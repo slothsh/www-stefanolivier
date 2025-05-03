@@ -1,19 +1,19 @@
 <script lang="ts">
-import NavigationLayout from "@/Components/NavigationLayout.svelte";
-import type { BlogPost } from "@/types";
-import Fa from "svelte-fa";
-import { faExclamationCircle, faQuestionCircle, faWarning, faMagnifyingGlass, type IconDefinition, faLink, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import Canvas from "@/Components/Canvas.svelte";
-import { lattice } from "@/Lib/Canvas/lattice.svelte";
-import { useClientWindow } from "@/Lib/dom.svelte";
-import hljs from "highlight.js/lib/core";
-import typescript from 'highlight.js/lib/languages/typescript';
 import CopyButton from "@/Components/CopyButton.svelte";
-import { forwardClick, scrollOnClick, scrollToTop } from "@/Lib/dom.svelte";
+import Fa from "svelte-fa";
 import Image from "@/Components/Image.svelte";
+import NavigationLayout from "@/Components/NavigationLayout.svelte";
 import User from "@/Components/User.svelte";
-import { secondsToMinutes } from "date-fns";
+import hljs from "highlight.js/lib/core";
+import type { BlogPost } from "@/types";
+import typescript from 'highlight.js/lib/languages/typescript';
+import { faExclamationCircle, faQuestionCircle, faWarning, faMagnifyingGlass, type IconDefinition, faLink, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { format as formatDate } from 'date-fns';
+import { forwardClick, scrollOnClick, scrollToTop } from "@/Lib/dom.svelte";
+import { lattice } from "@/Lib/Canvas/lattice.svelte";
+import { secondsToMinutes } from "date-fns";
+import { useClientWindow } from "@/Lib/dom.svelte";
 
 type Props = {
     post: BlogPost,
