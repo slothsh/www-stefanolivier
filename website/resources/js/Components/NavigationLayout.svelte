@@ -25,7 +25,6 @@ const enableFooterFlag = $state(enableFooter ?? true);
         <div class="w-page">
             <Link class="px-4" href={route('home.index')}>Home</Link>
             <Link class="px-4" href={route('blog.index')}>Blog</Link>
-            <a class="px-4" href="contact">Contact</a>
         </div>
     </nav>
 
