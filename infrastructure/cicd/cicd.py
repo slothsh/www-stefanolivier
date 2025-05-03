@@ -26,10 +26,14 @@ def main():
             case ContainerStatus.STALE:
                 Log.info(f'unmatched image digests: live: [{docker_monitor.live_image_digest}] latest: [{docker_monitor.latest_image_digest}]')
                 docker_monitor.refresh_live_image()
-            case ContainerStatus.NO_LIVE_IMAGE | ContainerStatus.NO_REGISTRY_IMAGE:
-                Log.warn('no live image or registry image available:', f'live({docker_monitor.live_image_digest})', f'latest({docker_monitor.latest_image_digest})')
+            case ContainerStatus.NO_LIVE_IMAGE:
+                Log.warn('no live image available:', f'live({docker_monitor.live_image_digest})', f'latest({docker_monitor.latest_image_digest})')
+                Log.info('restaring...')
+                docker_monitor.refresh_live_image()
+            case ContainerStatus.NO_REGISTRY_IMAGE:
+                Log.error('no registry image available:', f'live({docker_monitor.live_image_digest})', f'latest({docker_monitor.latest_image_digest})')
             case ContainerStatus.FRESH:
-                Log.info(f'live container is fresh: [{docker_monitor.live_image_digest}] latest: [{docker_monitor.latest_image_digest}]')
+                Log.info(f'live container is fresh({docker_monitor.live_image_digest}) latest({docker_monitor.latest_image_digest})')
             case status:
                 Log.warn(f'unknown docker status: {status}')
 

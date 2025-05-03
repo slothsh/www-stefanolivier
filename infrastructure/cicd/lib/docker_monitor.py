@@ -25,8 +25,6 @@ class DockerMonitor:
 
     def __post_init__(self: Self):
         self.registry_url = f'https://{self.registry_name}'
-        super()
-
 
     def _get_latest_image_digest(self: Self) -> str:
         try:
@@ -64,12 +62,10 @@ class DockerMonitor:
         try:
             Log.info(f'pulling latest image: {self.registry_name}/{self.repository}:latest')
             subprocess.run(['docker', 'pull', f'{self.registry_name}/{self.repository}:latest'])
-            Log.info(f'killing docker container: {self.container_name}')
-            subprocess.run(['docker', 'kill', self.container_name])
-            Log.info(f'removing docker container: {self.container_name}')
-            subprocess.run(['docker', 'rm', self.container_name])
+            Log.info(f'killing & removing docker container: {self.container_name}')
+            subprocess.run(['docker', 'compose', '--project-directory=/var/website', 'down'])
             Log.info(f'starting image: {self.registry_name}/{self.repository}:latest with name {self.container_name}')
-            subprocess.run(['docker', 'run', '--name', self.container_name, '-d', '-p', '8000:80', '-p', '13714:13714', f'{self.registry_name}/{self.repository}:latest'])
+            subprocess.run(['docker', 'compose', '--project-directory=/var/website', 'up', '-d'])
         except Exception as e:
             Log.error(f'failed to reload docker container with image: {str(e)}')
 
