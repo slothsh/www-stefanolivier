@@ -19,8 +19,8 @@ COPY ./website /app/build
 WORKDIR /app/build
 RUN /home/app/.composer/composer update
 RUN /home/app/.composer/composer install
-RUN php artisan migrate --env=production --force
-RUN php artisan cache:clear
+RUN touch ./storage/framework/cache/cache.sqlite
+RUN php artisan migrate --database=cache_sqlite
 RUN php artisan config:clear
 RUN php artisan optimize
 RUN /home/app/.bun/bin/bun install
