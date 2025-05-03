@@ -3,7 +3,7 @@ services:
     image: registry.stefanolivier.com/www-stefanolivier:latest
     restart: always
     volumes:
-      - /var/website/data:/app/build/database/data
+      - /var/website/data/database.sqlite:/app/build/database/database.sqlite:rw
     ports:
     - "8000:80"
     - "13714:13714"
