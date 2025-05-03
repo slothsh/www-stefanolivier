@@ -29,7 +29,7 @@ class BlogPost extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'body_structured' => 'object',
+        'structured_content' => 'object',
         'tags' => CommaListToArray::class,
     ];
 }

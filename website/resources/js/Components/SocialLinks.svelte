@@ -121,17 +121,17 @@ async function handleCopyLink(): Promise<void> {
             href={contactValue.src}
             target="_blank"
             rel="noopener noreferrer"
-            class="social-link bg-primary cursor-pointer"
+            class="social-link cursor-pointer"
             data-enabled={currentlySelected === contactValue.displayName || currentlyFocused === contactValue.displayName ? '' : null}
             onmousemove={() => handleCurrentlyFocused(contactValue)}
             onmouseleave={() => handleCurrentlyFocused(null)}
             >
             <Fa icon={contactValue.icon}
                 size="4x"
-                class={mc("border border-border shadow rounded-md p-2 icon fill-red-200 hover:bg-accent-primary", {
-                    'bg-accent-primary': currentlySelected === contactValue.displayName,
+                class={mc("border border-border shadow rounded-md p-2 icon hover:bg-accent-primary bg-darkest overflow-hidden", {
+                    'bg-darkest': currentlySelected === contactValue.displayName,
                 })}
-                color={[currentlySelected, currentlyFocused].includes(contactKey) ? '#eeffff' : '#ccddee'}
+                color={currentlyFocused === contactValue.displayName ? '#72c282' : '#ccddee'}
                 style="width: 64px; height: 64px;"
             />
         </a>
@@ -156,20 +156,21 @@ async function handleCopyLink(): Promise<void> {
         })}
         style:left={`${arrowX}px`}
     >
-        <path d="M21.5359 2C23.0755 -0.666669 26.9245 -0.666667 28.4641 2L49.2487 38C50.7883 40.6667 48.8638 44 45.7846 44H4.21539C1.13619 44 -0.788312 40.6667 0.751289 38L21.5359 2Z" fill="#102530" stroke="#203545" stroke-width="4px"/>
+        <path d="M21.5359 2C23.0755 -0.666669 26.9245 -0.666667 28.4641 2L49.2487 38C50.7883 40.6667 48.8638 44 45.7846 44H4.21539C1.13619 44 -0.788312 40.6667 0.751289 38L21.5359 2Z" fill="#081012" stroke="#203545" stroke-width="4px"/>
     </svg>
-    <div class="relative w-[400px] h-16 text-md font-light border border-border rounded-md bg-primary flex justify-center items-center gap-4">
-        <div class="absolute top-0 rounded-t left-0 w-full h-(--radius-md) bg-none">
-            <div class={mc("bg-accent-primary h-1/2 [animation-duration:5000ms]", { 'animate-progress': isLoading, 'w-0': !isLoading })}></div>
-        </div>
+    <div class="relative w-[400px] h-16 text-md font-light border border-border rounded-md bg-darkest flex justify-center items-center gap-4 overflow-hidden">
         <button class="absolute left-0 border-r border-border w-16 h-full flex justify-center items-center hover:bg-accent-primary cursor-pointer"
             onclick={handleCopyLink}
         >
             <Fa icon={isRecentlyCopied ? faClipboardCheck : faPaste}
                 size="sm"
+                color={isRecentlyCopied ? '#72c282' : ''}
                 class={mc('[animation-duration:200ms]', { 'animate-scale-out-in': isRecentlyCopied, 'animate-scale-out-in-again': !isRecentlyCopied })}
             />
         </button>
+        <div class="absolute top-0 rounded-t left-0 w-full h-(--radius-md) bg-none">
+            <div class={mc("bg-[#72c282] h-1/2 [animation-duration:5000ms]", { 'animate-progress': isLoading, 'w-0': !isLoading })}></div>
+        </div>
         <div class="block w-[calc(100%-var(--spacing)*16)] translate-x-[calc(var(--spacing)*8)]">{lastSelected}</div>
     </div>
 </div>

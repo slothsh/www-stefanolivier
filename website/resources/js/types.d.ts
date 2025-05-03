@@ -14,7 +14,7 @@ export interface BlogPostSnippet {
 export interface BlogPost {
     title: string,
     body_text: string,
-    body_structured: {},
+    structured_content: object,
     tldr?: string,
     posted_at: string,
     tags: string[],
@@ -34,6 +34,6 @@ export type CanvasProps<T = {}> = {
     clientCursor: { position: Vec2, offset: Vec2 },
 } & T;
 
-export type IndexItem {
+export type IndexItem = {
     date: string,
 }

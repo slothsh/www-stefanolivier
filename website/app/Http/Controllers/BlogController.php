@@ -17,7 +17,7 @@ class BlogController extends Controller {
 
     public function show(string $slug): Response {
         return inertia('SingleBlogPost.svelte', [
-            'post' => BlogPost::query()->select('title', 'body_text', 'body_structured', 'tags', 'posted_at', 'read_time')->where('slug', $slug)->firstOrFail(),
+            'post' => BlogPost::query()->select('title', 'body_text', 'structured_content', 'tags', 'posted_at', 'read_time')->where('slug', $slug)->firstOrFail(),
         ]);
     }
 }

@@ -81,7 +81,7 @@ function handlePostScroll(slug: string) {
                 <p>Please visit again soon</p>
             </div>
         {:else}
-            <div class="sticky col-span-2 top-(--navigation-height) left-0 overflow-y-auto h-full max-h-[calc(100dvh-var(--spacing)*6)] border-r border-border bg-primary mr-16">
+            <div class="sticky col-span-2 top-(--navigation-height) left-0 overflow-y-auto h-full max-h-[calc(100dvh-var(--spacing)*6)] border-r border-border bg-darkest mr-16">
                 <ul class="p-6">
                     {#each index as [postedAt, postItems]}
                         <li class="text-sm not-last:not-only:mb-8">
@@ -91,7 +91,7 @@ function handlePostScroll(slug: string) {
                                 </h2>
                                 <ul>
                                     {#each postItems ?? [] as post}
-                                        <li use:forwardClick class="group py-2 indent-4 border-l border-border hover:border-l hover:border-secondary cursor-pointer">
+                                        <li use:forwardClick class="group py-2 indent-4 border-l border-border hover:border-l hover:border-accent-secondary cursor-pointer">
                                             <button class="group-hover:brightness-125 cursor-pointer" onclick={(e) => { e.preventDefault(); handlePostScroll(post.slug); }}>
                                                 {post.title}
                                             </button>

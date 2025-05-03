@@ -38,15 +38,19 @@ hljs.registerLanguage('typescript', typescript);
 
 const calloutColors = {
     'info': '#72c282',
+    'warning': '#c2c282',
+    'error': '#c27272',
+    'hint': '#c2c2c2',
+    'question': '#7272c2',
 }
 
 const defaultAttributes = {
     section: {
-        class: 'font-bold [&>*:first-child]:mb-16',
+        class: 'font-bold [&>*:first-child]:mb-16 [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16',
     },
 
     heading: {
-        class: 'font-bold not-last:mb-8 tracking-widest uppercase text-accent-secondary',
+        class: 'font-bold not-last:mb-8 tracking-widest uppercase text-secondary',
     },
 
     h1: {
@@ -62,86 +66,25 @@ const defaultAttributes = {
     },
 
     image: {
-        class: 'rounded-xl shadow-[10px_10px_30px_rgba(0,0,0,0.2)] overflow-hidden [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16',
+        class: 'rounded-xl shadow-[10px_10px_30px_rgba(0,0,0,0.2)] overflow-hidden [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16 w-fit m-auto',
     },
 
     paragraph: {
-        class: 'not-last:mb-8 leading-8 font-light text-muted text-[1.15rem]'
+        class: 'not-last:mb-8 leading-8 font-light text-muted text-[1.15rem] [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16'
     },
 
     callout: {
-        class: 'relative bg-primary-1 border border-border rounded-md shadow-lg p-8 pl-12 [&>*:first-child]:mb-4 [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16 overflow-hidden'
+        class: 'relative bg-primary border border-border rounded-md shadow-lg p-8 pl-12 [&>*:first-child]:mb-4 [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16 overflow-hidden'
     },
 
     divider: {
         class: 'text-border [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16'
     },
 
-    code: {},
+    code: {
+        class: '[&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16',
+    },
 };
-
-const mockStructuredBody = [
-    {
-        kind: 'section',
-        content: 'Section 1',
-        children: [
-            {
-                kind: 'heading',
-                content: 'Foo Bar Baz',
-            },
-            {
-                kind: 'paragraph',
-                content: 'Accumsan delenit amet enim imperdiet eu. Lobortis elit accumsan elitr hendrerit nobis. Ut nam sanctus kasd blandit. Sea veniam consectetuer accusam augue. Nisl consetetur takimata esse dolores. Illum aliquyam ex exerci placerat. In sed takimata sit nulla. Feugait minim nulla facilisi qui. Hendrerit congue eos nonummy exerci feugiat. Odio voluptua.',
-            },
-            {
-                kind: 'heading',
-                content: 'Foo Bar Baz',
-            },
-            {
-                kind: 'code',
-                content: 'const foo = "bar";\nconsole.log(foo); // bar',
-                language: 'typescript',
-            },
-        ]
-    },
-    {
-        kind: 'divider',
-    },
-    {
-        kind: 'section',
-        content: 'Section 2',
-        children: [
-            {
-                kind: 'heading',
-                content: 'Accumsan Delenit',
-            },
-            {
-                kind: 'paragraph',
-                content: 'Accumsan delenit amet enim imperdiet eu. Lobortis elit accumsan elitr hendrerit nobis. Ut nam sanctus kasd blandit. Sea veniam consectetuer accusam augue. Nisl consetetur takimata esse dolores. Illum aliquyam ex exerci placerat. In sed takimata sit nulla. Feugait minim nulla facilisi qui. Hendrerit congue eos nonummy exerci feugiat. Odio voluptua.',
-            },
-            {
-                kind: 'image',
-                source: 'https://images.unsplash.com/photo-1523633589114-88eaf4b4f1a8?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                height: 500,
-                caption: 'Water'
-            },
-            {
-                kind: 'callout',
-                content: 'Callout 1',
-                icon: 'info',
-                children: [
-                    {
-                        kind: 'paragraph',
-                        content: 'Nobis eleifend adipiscing tation soluta duis. Laoreet odio id dolor tincidunt rebum tincidunt consequat. Te gubergren eleifend clita option. Hendrerit.',
-                    }
-                ],
-            },
-        ],
-    },
-    {
-        kind: 'divider',
-    },
-]
 
 function mergeAttributes(...attributeObjects: { class?: string }[]) {
     const merged = {};
@@ -287,14 +230,14 @@ function observeScrollTopOfPage(element: HTMLElement) {
                 <Image src={node.source} alt={node.caption} caption={node.caption} width={node.width} height={node.height} />
             </div>
         {:else if node.kind === 'code'}
-            <div class="border border-border rounded-md shadow-lg text-sm font-mono" {...defaultAttributes['code']}>
-                <div class="flex justify-end items-center h-8 w-full border-b border-border">
+            <div {...mergeAttributes({ class: "border border-border rounded-md shadow-lg text-sm font-mono overflow-hidden" }, defaultAttributes['code'])}>
+                <div class="flex justify-end items-center h-8 w-full border-b border-border bg-primary">
                     <div use:forwardClick class="group flex justify-between items-center border-l border-border h-full">
                         <span class="text-xs text-muted h-full pl-3 content-center group-hover:bg-accent-primary group-hover:cursor-pointer">{Str.lowerCase(node.language)}</span>
                         <CopyButton content={node.content} class="w-8 h-full rounded-tr" />
                     </div>
                 </div>
-                <pre class="p-6 whitespace-pre-line bg-primary-1">
+                <pre class="p-6 whitespace-pre-line bg-primary">
                     <code>{@html hljs.highlight(node.content, { language: node.language }).value}</code>
                 </pre>
             </div>
@@ -312,16 +255,16 @@ function observeScrollTopOfPage(element: HTMLElement) {
     />
 
     <div use:observeScroll class={mc("fixed left-0 top-[calc(var(--navigation-height)+32px)] z-(--z-page) ml-48 opacity-0 transition-all", { 'opacity-100 -translate-x-1/2': scrollToTopButtonVisible })}>
-        <div use:forwardClick class="w-12 h-12 rounded-md bg-primary border border-border flex items-center cursor-pointer shadow-lg mb-4 hover:brightness-125">
+        <div use:forwardClick class="w-12 h-12 rounded-md bg-darkest border border-border flex items-center cursor-pointer shadow-lg mb-4 hover:brightness-125">
             <button use:scrollToTop />
             <Fa icon={faArrowUp} size="sm" class="w-full h-full" />
         </div>
-        <div class="w-12 h-[200px] bg-primary border border-border rounded-md shadow-lg">
+        <div class="w-12 h-[200px] bg-darkest border border-border rounded-md shadow-lg">
         </div>
     </div>
 
     <main class="relative w-screen px-48 flex justify-center flex-col">
-        <div class="relative bg-primary border-r border-l border-border">
+        <div class="relative bg-darkest border-r border-l border-border">
             <div use:observeScrollTopOfPage bind:this={mainSectionElement} class="group relative w-full h-[300px] mb-16 shadow-lg border-b border-border overflow-hidden" >
                 <img src="https://picsum.photos/1000/300" alt="random image" height={300} class={mc("absolute top-0 left-0 object-fill object-center w-full h-[300px] mix-blend-multiply pb-px z-9 transition-transform duration-2000", { 'scale-110': topOfPage })}>
                 <div class="absolute top-0 left-0 w-full h-full [background-image:linear-gradient(180deg,rgba(255,255,255,0),rgba(0,0,0,0.5))]" style:background-color="#72a2b2"></div>
@@ -335,7 +278,7 @@ function observeScrollTopOfPage(element: HTMLElement) {
                 </div>
             </div>
             <div class="px-28">
-                {@render structuredBlock(mockStructuredBody)}
+                {@render structuredBlock(post.structured_content)}
             </div>
         </div>
     </main>
