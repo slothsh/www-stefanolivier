@@ -35,7 +35,7 @@ def main():
             case ContainerStatus.FRESH:
                 Log.info(f'live container is fresh({docker_monitor.live_image_digest}) latest({docker_monitor.latest_image_digest})')
             case status:
-                Log.warn(f'unknown docker status: {status}')
+                Log.warn('unknown docker status:', status)
 
 if __name__ == '__main__':
     main()
