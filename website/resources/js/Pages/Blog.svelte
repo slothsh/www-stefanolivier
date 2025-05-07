@@ -78,23 +78,19 @@ const { darkMode } = clientDarkMode;
                 <p>Please visit again soon</p>
             </div>
         {:else}
-            <div class="sticky col-span-2 top-(--navigation-height) left-0 overflow-y-auto h-full max-h-[calc(100dvh-var(--spacing)*6)] border-r border-border bg-primary mr-16">
-                <ul class="p-6">
+            <div class="sticky col-span-2 p-6 top-(--navigation-height) left-0 overflow-y-auto h-full max-h-[calc(100dvh-var(--spacing)*6)] border-r border-border bg-primary mr-16">
+                <h2 class="mb-4">Index</h2>
+                <ul>
                     {#each index as [postedAt, postItems]}
-                        <li class="text-sm not-last:not-only:mb-8">
+                        {@const totalPosts = postItems?.length.toString() ?? ''}
+                        <li class="text-sm">
                             <section>
-                                <h2 class="text-lg font-bold mb-4 brightness-75">
-                                    {postedAt}
-                                </h2>
-                                <ul>
-                                    {#each postItems ?? [] as post}
-                                        <li use:forwardClick class="group py-2 indent-4 border-l border-border hover:border-l hover:border-accent-light cursor-pointer">
-                                            <button class="group-hover:brightness-125 cursor-pointer" onclick={(e) => { e.preventDefault(); handlePostScroll(post.slug); }}>
-                                                {post.title}
-                                            </button>
-                                        </li>
-                                    {/each}
-                                </ul>
+                                <button class="text-md cursor-pointer flex justify-between w-full py-1 indent-4 border-l border-border hover:border-accent-light hover:text-font-highlight"
+                                    onclick={(e) => { e.preventDefault(); handlePostScroll(postItems?.at(0)?.slug ?? ''); }}
+                                >
+                                    <span>{postedAt}</span>
+                                    <span>{totalPosts}</span>
+                                </button>
                             </section>
                         </li>
                     {/each}
