@@ -2,19 +2,16 @@
 import '@/Lib/lib';
 import type { CanvasProps } from '@/types';
 
-type Props = CanvasProps;
+type Props = CanvasProps & {
+    fill?: Vec3,
+    stroke?: Vec3,
+};
 
 let PROGRESS = $state(0);
 let CURSOR_PROGRESS = $state(0.0);
 let CURSOR_VELOCITY = $state(0.0);
 let CURSOR_LAST = $state(Vector.xy(0, 0));
 let BULGE_RESET_DELAY = $state(0);
-
-// Wave Parameters
-type WavePoint = {
-    position: Vec2,
-    falloff: number,
-};
 
 export function lattice({
     ctx,
@@ -24,6 +21,8 @@ export function lattice({
     deltaTime,
     clientWindow,
     clientCursor,
+    fill = Vector.xyz(0),
+    stroke = Vector.xyz(255),
 }: Props) {
     // Grid Parameters
     const gridSize = 25;
@@ -59,7 +58,8 @@ export function lattice({
 
     for (let y = 0 - Math.floor(extraSize / 2); y < grid.y; ++y) {
         for (let x = 0 - Math.floor(extraSize / 2); x < grid.x; ++x) {
-            const sizeFactor = Math.min(0.95, y / totalRows + 0.05);
+            const sizeFactor = 0.25;
+            // const sizeFactor = Math.min(0.95, y / totalRows + 0.05);
             const halfSize = gridSize * sizeFactor / 2;
 
             // 1
@@ -88,8 +88,8 @@ export function lattice({
             let alphaVelocity = Math.max(0, 1 - CURSOR_VELOCITY);
             const fillOpacity = Math.max(alphaVelocity, cursor.withDiv(256.0).distance(Vector.xy(ox / 256.0, oy / 256.0)));
             const strokeOpacity = fillOpacity;
-            ctx.fillStyle = `rgba(32, 53, 69, ${fillOpacity})`;
-            ctx.strokeStyle = `rgba(21, 48, 64, ${strokeOpacity})`
+            ctx.fillStyle = `rgba(${fill.x}, ${fill.y}, ${fill.z}, ${fillOpacity})`;
+            ctx.strokeStyle = `rgba(${stroke.x}, ${stroke.y}, ${stroke.z}, ${strokeOpacity})`
 
             ctx.beginPath();
             ctx.moveTo(ox + tx + srx + halfSize, oy + ty + sry + halfSize);

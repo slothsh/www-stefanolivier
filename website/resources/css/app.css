@@ -9,46 +9,64 @@
 
 @layer base {
     :root {
-        --primary: #162024;
-        --primary-1: #072030;
-        --secondary: #ccddee;
-        --secondary-1: #d0e0f2;
-        --accent-primary: #002202;
-        --accent-secondary: #72c282;
-        --muted-primary: #aabbcc;
-        --muted-secondary: #304555;
-        --border-primary: #203545;
-        --border-secondary: #bbccdd;
+        /* Colors */
+        --green: #72c282;
+        --greener: #52d282;
+        --greenest: #42d262;
+
+        --dark-green: #204222;
+        --darker-green: #103212;
+        --darkest-green: #002202;
+
+        --blue: #66aacc;
+        --bluer: #4499dd;
+        --bluest: #4499ff;
+
+        --dark-blue: #324050;
+        --darker-blue: #203545;
+        --darkest-blue: #081012;
+
+        --dark: #6a6f6f;
+        --darker: #2a2a2f;
+        --darkest: #0a0a0f;
+
+        --light: #a0bed2;
+        --lighter: #d0e0f2;
+        --lightest: #fafaff;
+
+        --gray: #808a99;
+        --grayer: #607a77;
+        --grayest: #505a66;
+
+        /* Sizing */
         --navigation-height: 40px;
         --footer-height: 80px;
 
-        --dark: #324048;
-        --darker: #162024;
-        --darkest: #081012;
-
+        /* Layering */
         --z-navigation: 100;
         --z-page: 10;
     }
 
     html {
-        --background: var(--secondary);
-        --background-1: var(--secondary-1);
-        --accent-background: var(--accent-secondary);
-        --foreground: var(--primary);
-        --foreground-1: var(--primary-1);
-        --accent-foreground: var(--accent-primary);
-        --border: var(--border-secondary);
-        --muted: var(--muted-secondary);
+        --font: var(--darker);
+        --font-muted: var(--dark);
+        --font-highlight: var(--darkest);
+        --background: var(--lightest);
+        --foreground: var(--darkest);
+        --border: var(--light);
+        --accent-light: var(--darker-green);
+        --accent-dark: var(--green);
+
 
         &[data-theme=dark] {
-            --background: var(--primary);
-            --background-1: var(--primary-1);
-            --accent-background: var(--accent-primary);
-            --foreground: var(--secondary);
-            --foreground-1: var(--secondary-1);
-            --accent-background: var(--accent-secondary);
-            --border: var(--border-primary);
-            --muted: var(--muted-primary);
+            --font: var(--lighter);
+            --font-muted: var(--light);
+            --font-highlight: var(--lightest);
+            --background: var(--darkest-blue);
+            --foreground: var(--lightest);
+            --border: var(--darker-blue);
+            --accent-light: var(--green);
+            --accent-dark: var(--darker-green);
         }
     }
 
@@ -57,7 +75,7 @@
     }
 
     body {
-        @apply bg-darkest;
+        @apply bg-primary;
         @apply font-main;
         @apply text-font;
         font-size: 20px;
@@ -65,23 +83,25 @@
 }
 
 @theme {
-    --color-font: var(--foreground);
+    --color-font: var(--font);
+    --color-font-muted: var(--font-muted);
+    --color-font-highlight: var(--font-highlight);
+
     --color-primary: var(--background);
-    --color-primary-1: var(--background-1);
     --color-secondary: var(--foreground);
-    --color-secondary-1: var(--foreground-1);
     --color-border: var(--border);
-    --color-accent-primary: var(--accent-primary);
-    --color-accent-secondary: var(--accent-secondary);
-    --color-muted: var(--muted);
-    --font-main: 'Rethink Sans', sans-serif;
-    --font-8bit: 'Bytesized', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --spacing-page: 960px;
+
+    --color-accent-light: var(--accent-light);
+    --color-accent-dark: var(--accent-dark);
 
     --color-dark: var(--dark);
     --color-darker: var(--darker);
     --color-darkest: var(--darkest);
+
+    --font-main: 'Rethink Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --spacing-page: 960px;
 
     --animate-in-up: in-up 300ms ease-in-out 1;
     --animate-out-down: out-down 300ms ease-in-out 1;

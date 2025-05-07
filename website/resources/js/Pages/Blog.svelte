@@ -6,7 +6,7 @@ import type { BlogPostSnippet } from "@/types";
 import { compareDesc, formatDate, parse } from "date-fns";
 import { forwardClick } from "@/Lib/dom.svelte";
 import { lattice } from "@/Lib/Canvas/lattice.svelte";
-import { useClientWindow } from "@/Lib/dom.svelte";
+import { useClientWindow, clientDarkMode } from "@/Lib/dom.svelte";
 
 type Props = {
     name: string;
@@ -14,12 +14,6 @@ type Props = {
 };
 
 let { posts }: Props = $props();
-
-const COLORS = [
-    '#446484',
-    '#346484',
-    '#348484',
-]
 
 const clientWindow = useClientWindow();
 
@@ -62,6 +56,8 @@ function handlePostScroll(slug: string) {
         behavior: "smooth",
     });
 }
+
+const { darkMode } = clientDarkMode;
 </script>
 
 <NavigationLayout class="relative" title="Blog">
@@ -69,6 +65,7 @@ function handlePostScroll(slug: string) {
         class="fixed top-0 w-full h-full z-[-1]"
         rect={canvasRect}
         program={lattice}
+        programArgs={{ fill: Theme.colors.darker($darkMode).vec, stroke: Theme.colors.border($darkMode).vec }}
     />
 
     <div class={mc("w-screen min-h-[calc(100dvh-var(--navigation-height))] z-(--z-page)", {
@@ -81,7 +78,7 @@ function handlePostScroll(slug: string) {
                 <p>Please visit again soon</p>
             </div>
         {:else}
-            <div class="sticky col-span-2 top-(--navigation-height) left-0 overflow-y-auto h-full max-h-[calc(100dvh-var(--spacing)*6)] border-r border-border bg-darkest mr-16">
+            <div class="sticky col-span-2 top-(--navigation-height) left-0 overflow-y-auto h-full max-h-[calc(100dvh-var(--spacing)*6)] border-r border-border bg-primary mr-16">
                 <ul class="p-6">
                     {#each index as [postedAt, postItems]}
                         <li class="text-sm not-last:not-only:mb-8">
@@ -91,7 +88,7 @@ function handlePostScroll(slug: string) {
                                 </h2>
                                 <ul>
                                     {#each postItems ?? [] as post}
-                                        <li use:forwardClick class="group py-2 indent-4 border-l border-border hover:border-l hover:border-accent-secondary cursor-pointer">
+                                        <li use:forwardClick class="group py-2 indent-4 border-l border-border hover:border-l hover:border-accent-light cursor-pointer">
                                             <button class="group-hover:brightness-125 cursor-pointer" onclick={(e) => { e.preventDefault(); handlePostScroll(post.slug); }}>
                                                 {post.title}
                                             </button>
@@ -108,10 +105,7 @@ function handlePostScroll(slug: string) {
                 <section class="w-full min-h-[calc(100dvh-var(--footer-height)*2-var(--navigation-height)*2)]">
                     {#each posts as post}
                         <div id={post.slug} bind:this={blogPostCards[post.slug]}>
-                            <BlogPostCard class="mb-10 min-h-[240px]"
-                                {post}
-                                color={Arr.randomItem(COLORS)}
-                            />
+                            <BlogPostCard class="mb-10 min-h-[240px]" {post} />
                         </div>
                     {/each}
                 </section>

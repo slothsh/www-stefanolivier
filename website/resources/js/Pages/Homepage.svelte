@@ -3,17 +3,19 @@ import Canvas from '@/Components/Canvas.svelte';
 import NavigationLayout from '@/Components/NavigationLayout.svelte';
 import SocialLinks from '@/Components/SocialLinks.svelte';
 import { lattice } from '@/Lib/Canvas/lattice.svelte';
-import { useClientWindow } from '@/Lib/dom.svelte';
+import { useClientWindow, clientDarkMode } from '@/Lib/dom.svelte';
 
 const clientWindow = useClientWindow();
 
 let canvasRect = $derived(
     Vector.xwyh(0, $clientWindow.width * $clientWindow.scale, 0, $clientWindow.height * $clientWindow.scale)
 );
+
+const { darkMode } = clientDarkMode;
 </script>
 
 <NavigationLayout class="relative overflow-hidden h-screen" enableFooter={false} title="Home">
-    <Canvas class="absolute w-full h-full" rect={canvasRect} program={lattice} />
+    <Canvas class="absolute w-full h-full" rect={canvasRect} program={lattice} programArgs={{ fill: Theme.colors.darker($darkMode).vec, stroke: Theme.colors.darker($darkMode).vec }} />
 
     <div class="flex flex-row w-full items-center left-0 min-h-[768px]">
         <div class="relative flex flex-col justify-center items-center w-full px-16 border-border text-center">

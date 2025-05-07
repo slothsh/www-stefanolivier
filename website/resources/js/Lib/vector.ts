@@ -7,7 +7,7 @@ declare global {
 
     let Vector: {
         xy(x: number, y?: number): Vector2;
-        xyz(x: number, y?: number, z?: number): Vector2;
+        xyz(x: number, y?: number, z?: number): Vector3;
         xwyh(x: number, w: number, y?: number, h?: number): Rectangle;
     };
 }

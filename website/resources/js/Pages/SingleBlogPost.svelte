@@ -13,7 +13,7 @@ import { format as formatDate } from 'date-fns';
 import { forwardClick, scrollOnClick, scrollToTop } from "@/Lib/dom.svelte";
 import { lattice } from "@/Lib/Canvas/lattice.svelte";
 import { secondsToMinutes } from "date-fns";
-import { useClientWindow } from "@/Lib/dom.svelte";
+import { useClientWindow, clientDarkMode } from "@/Lib/dom.svelte";
 
 type Props = {
     post: BlogPost,
@@ -24,6 +24,7 @@ let {
 }: Props = $props();
 
 const clientWindow = useClientWindow();
+const { darkMode } = clientDarkMode;
 
 let canvasRect = $derived(
     Vector.xwyh(
@@ -50,7 +51,7 @@ const defaultAttributes = {
     },
 
     heading: {
-        class: 'font-bold not-last:mb-8 tracking-widest uppercase text-secondary',
+        class: 'font-bold not-last:mb-8 tracking-widest uppercase text-font',
     },
 
     h1: {
@@ -70,7 +71,7 @@ const defaultAttributes = {
     },
 
     paragraph: {
-        class: 'not-last:mb-8 leading-8 font-light text-muted text-[1.15rem] [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16'
+        class: 'not-last:mb-8 leading-8 font-light text-primary text-[1.15rem] [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16'
     },
 
     callout: {
@@ -233,7 +234,7 @@ function observeScrollTopOfPage(element: HTMLElement) {
             <div {...mergeAttributes({ class: "border border-border rounded-md shadow-lg text-sm font-mono overflow-hidden" }, defaultAttributes['code'])}>
                 <div class="flex justify-end items-center h-8 w-full border-b border-border bg-primary">
                     <div use:forwardClick class="group flex justify-between items-center border-l border-border h-full">
-                        <span class="text-xs text-muted h-full pl-3 content-center group-hover:bg-accent-primary group-hover:cursor-pointer">{Str.lowerCase(node.language)}</span>
+                        <span class="text-xs text-primary h-full pl-3 content-center group-hover:bg-accent-dark group-hover:cursor-pointer">{Str.lowerCase(node.language)}</span>
                         <CopyButton content={node.content} class="w-8 h-full rounded-tr" />
                     </div>
                 </div>
@@ -252,19 +253,18 @@ function observeScrollTopOfPage(element: HTMLElement) {
         class="fixed top-0 w-full h-full z-[-1]"
         rect={canvasRect}
         program={lattice}
+        programArgs={{ fill: Theme.colors.darker($darkMode).vec, stroke: Theme.colors.border($darkMode).vec }}
     />
 
     <div use:observeScroll class={mc("fixed left-0 top-[calc(var(--navigation-height)+32px)] z-(--z-page) ml-48 opacity-0 transition-all", { 'opacity-100 -translate-x-1/2': scrollToTopButtonVisible })}>
-        <div use:forwardClick class="w-12 h-12 rounded-md bg-darkest border border-border flex items-center cursor-pointer shadow-lg mb-4 hover:brightness-125">
+        <div use:forwardClick class="group w-12 h-12 rounded-md bg-primary border border-border flex items-center cursor-pointer shadow-lg mb-4 hover:bg-accent-dark hover:border-accent-light">
             <button use:scrollToTop />
-            <Fa icon={faArrowUp} size="sm" class="w-full h-full" />
-        </div>
-        <div class="w-12 h-[200px] bg-darkest border border-border rounded-md shadow-lg">
+            <Fa icon={faArrowUp} size="sm" class="w-full h-full group-hover:text-accent-light" />
         </div>
     </div>
 
     <main class="relative w-screen px-48 flex justify-center flex-col">
-        <div class="relative bg-darkest border-r border-l border-border">
+        <div class="relative bg-primary border-r border-l border-border">
             <div use:observeScrollTopOfPage bind:this={mainSectionElement} class="group relative w-full h-[300px] mb-16 shadow-lg border-b border-border overflow-hidden" >
                 <img src="https://picsum.photos/1000/300" alt="random image" height={300} class={mc("absolute top-0 left-0 object-fill object-center w-full h-[300px] mix-blend-multiply pb-px z-9 transition-transform duration-2000", { 'scale-110': topOfPage })}>
                 <div class="absolute top-0 left-0 w-full h-full [background-image:linear-gradient(180deg,rgba(255,255,255,0),rgba(0,0,0,0.5))]" style:background-color="#72a2b2"></div>

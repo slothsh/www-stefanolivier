@@ -1,5 +1,12 @@
 <script lang="ts" context="module">
-import { readable } from "svelte/store";
+import { readable, writable } from "svelte/store";
+
+const darkMode = writable(true);
+
+export const clientDarkMode = {
+    darkMode,
+    toggleDarkMode: () => darkMode.update((mode) => !mode),
+};
 
 export function useClientWindow() {
     return readable(

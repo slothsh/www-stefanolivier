@@ -4,6 +4,7 @@ import './bio';
 import './math';
 import './string';
 import './vector';
+import './theme';
 import { route as routeFn } from 'ziggy-js';
 
 type ConditionalClass = string | Record<string, boolean>;

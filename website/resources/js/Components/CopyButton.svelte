@@ -28,12 +28,11 @@ async function handleCopyLink(): Promise<void> {
 }
 </script>
 
-<button class={mc("flex justify-center items-center hover:bg-accent-primary group-hover:bg-accent-primary cursor-pointer", _class)}
+<button class={mc("flex justify-center items-center hover:bg-accent-dark group-hover:bg-accent-dark cursor-pointer", _class)}
     onclick={handleCopyLink}
 >
     <Fa icon={isRecentlyCopied ? faClipboardCheck : faPaste}
         size="sm"
-        color={isRecentlyCopied ? '#72c282' : ''}
-        class={mc('[animation-duration:200ms]', { 'animate-scale-out-in': isRecentlyCopied, 'animate-scale-out-in-again': !isRecentlyCopied })}
+        class={mc('[animation-duration:200ms] text-accent-light', { 'animate-scale-out-in': isRecentlyCopied, 'animate-scale-out-in-again': !isRecentlyCopied })}
     />
 </button>
