@@ -102,8 +102,8 @@
     --color-darker: var(--darker);
     --color-darkest: var(--darkest);
 
-    --font-main: 'Inter', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+    --font-main: 'League Spartan', sans-serif;
+    --font-mono: 'Google Sans Code', monospace;
 
     --spacing-page: 960px;
 
