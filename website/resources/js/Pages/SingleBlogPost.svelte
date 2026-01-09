@@ -71,11 +71,11 @@ const defaultAttributes = {
     },
 
     paragraph: {
-        class: 'not-last:mb-8 leading-8 font-light text-primary text-[1.15rem] [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16'
+        class: 'not-last:mb-8 leading-8 font-light text-font text-[1.15rem] [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16'
     },
 
     callout: {
-        class: 'relative bg-primary border border-border rounded-md shadow-lg p-8 pl-12 [&>*:first-child]:mb-4 [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16 overflow-hidden'
+        class: 'relative bg-tertiary border border-border rounded-md shadow-lg p-8 pl-12 [&>*:first-child]:mb-4 [&:not(:first-child):not(:last-child)]:my-16 first:mb-16 last:mt-16 overflow-hidden'
     },
 
     divider: {
@@ -232,14 +232,14 @@ function observeScrollTopOfPage(element: HTMLElement) {
             </div>
         {:else if node.kind === 'code'}
             <div {...mergeAttributes({ class: "border border-border rounded-md shadow-lg text-sm font-mono overflow-hidden" }, defaultAttributes['code'])}>
-                <div class="flex justify-end items-center h-8 w-full border-b border-border bg-primary">
+                <div class="flex justify-end items-center h-8 w-full border-b border-border bg-tertiary">
                     <div use:forwardClick class="group flex justify-between items-center border-l border-border h-full">
-                        <span class="text-xs text-primary h-full pl-3 content-center group-hover:bg-accent-dark group-hover:cursor-pointer">{Str.lowerCase(node.language)}</span>
+                        <span class="text-xs text-font h-full pl-3 content-center group-hover:bg-accent-dark group-hover:cursor-pointer">{Str.lowerCase(node.language)}</span>
                         <CopyButton content={node.content} class="w-8 h-full rounded-tr" />
                     </div>
                 </div>
-                <pre class="p-6 whitespace-pre-line bg-primary">
-                    <code>{@html hljs.highlight(node.content, { language: node.language }).value}</code>
+                <pre class="p-6 whitespace-pre-line bg-tertiary">
+                    <code class="font-normal">{@html hljs.highlight(node.content, { language: node.language }).value}</code>
                 </pre>
             </div>
         {:else if node.kind === 'divider'}
@@ -266,14 +266,14 @@ function observeScrollTopOfPage(element: HTMLElement) {
     <main class="relative w-screen px-48 flex justify-center flex-col">
         <div class="relative bg-primary border-r border-l border-border">
             <div use:observeScrollTopOfPage bind:this={mainSectionElement} class="group relative w-full h-[300px] mb-16 shadow-lg border-b border-border overflow-hidden" >
-                <img src="https://picsum.photos/1000/300" alt="random image" height={300} class={mc("absolute top-0 left-0 object-fill object-center w-full h-[300px] mix-blend-multiply pb-px z-9 transition-transform duration-2000", { 'scale-110': topOfPage })}>
-                <div class="absolute top-0 left-0 w-full h-full [background-image:linear-gradient(180deg,rgba(255,255,255,0),rgba(0,0,0,0.5))]" style:background-color="#72a2b2"></div>
+                <img src="https://picsum.photos/1000/300" alt="random image" height={300} class={mc("absolute top-0 left-0 object-fill object-center w-full h-[300px] pb-px z-9 transition-transform duration-2000", { 'scale-110': topOfPage })}>
+                <div class="absolute top-0 left-0 w-full h-full" style:background-color="#72a2b2"></div>
                 <div class="pt-16 mx-28 relative flex flex-col justify-start gap-4 h-full">
-                    <h1 class="text-5xl z-(--z-page) relative font-bold mix-blend-plus-lighter text-shadow-lg">{post.title}</h1>
-                    <User firstname={Bio.firstname} lastname={Bio.surname} avatar="https://avatar.iran.liara.run/public" avatar_alt={Bio.name} class="relative w-full z-(--z-page)" classText="mix-blend-plus-lighter text-shadow-lg" />
-                    <div class="mt-8 justify-self-end flex flex-col items-start">
-                        <span class="text-sm mix-blend-plus-lighter z-(--z-page) text-shadow-lg">Posted: {formatDate(post.posted_at, 'yyyy-MM-dd')}</span>
-                        <span class="z-(--z-page) text-sm mix-blend-plus-lighter text-shadow-lg">Read Time: {secondsToMinutes(post.read_time)} Minutes</span>
+                    <h1 class="text-5xl z-(--z-page) relative font-bold">{post.title}</h1>
+                    <User firstname={Bio.firstname} lastname={Bio.surname} avatar={Bio.avatarUrl} avatar_alt={Bio.name} class="relative w-full z-(--z-page) uppercase font-mono text-sm" />
+                    <div class="mt-8 justify-self-end flex flex-col items-start font-mono uppercase text-sm">
+                        <span class="z-(--z-page)">Posted <time>{formatDate(post.posted_at, 'MMMM, y')}</time></span>
+                        <span class="z-(--z-page)">Read Time {secondsToMinutes(post.read_time)} Minutes</span>
                     </div>
                 </div>
             </div>

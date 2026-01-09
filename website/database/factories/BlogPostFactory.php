@@ -45,7 +45,7 @@ class BlogPostFactory extends Factory
             ],
             'code' => [
                 'kind' => 'code',
-                'content' => $this->faker->text(64),
+                'content' => collect(range(1, $this->faker->numberBetween(1, 8)))->map(fn ($item) => '// ' . $this->faker->text(64))->join("\n"),
                 'language' => 'typescript',
             ],
             'image' => [

@@ -53,6 +53,7 @@
         --font-highlight: var(--darkest);
         --background: var(--lightest);
         --foreground: var(--darkest);
+        --alternative: #f0f5ff;
         --border: var(--light);
         --accent-light: var(--darker-green);
         --accent-dark: var(--green);
@@ -64,6 +65,7 @@
             --font-highlight: var(--lightest);
             --background: var(--darkest-blue);
             --foreground: var(--lightest);
+            --alternative: #121620;
             --border: var(--darker-blue);
             --accent-light: var(--green);
             --accent-dark: var(--darker-green);
@@ -78,6 +80,7 @@
         @apply bg-primary;
         @apply font-main;
         @apply text-font;
+        letter-spacing: 0.5px;
         font-size: 20px;
     }
 }
@@ -89,6 +92,7 @@
 
     --color-primary: var(--background);
     --color-secondary: var(--foreground);
+    --color-tertiary: var(--alternative);
     --color-border: var(--border);
 
     --color-accent-light: var(--accent-light);
@@ -98,7 +102,7 @@
     --color-darker: var(--darker);
     --color-darkest: var(--darkest);
 
-    --font-main: 'Rethink Sans', sans-serif;
+    --font-main: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
     --spacing-page: 960px;

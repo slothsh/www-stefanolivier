@@ -27,6 +27,7 @@ declare global {
         occupation: string,
         contact: { [K in Contact]: ContactItem },
         name: string,
+        avatarUrl: SrcWeb | `/${string}`,
     }
 
     var Bio: Bio;
@@ -37,6 +38,7 @@ declare global {
     surname: 'Olivier',
     about: 'I make websites and applications that have the happiest bits, nibbles, and bytes.',
     occupation: 'Software Engineer',
+    avatarUrl: '/images/avatar.png',
     contact: {
         Email: {
             icon: faEnvelope,

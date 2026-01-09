@@ -35,15 +35,13 @@ let rootRect = $derived(root?.getBoundingClientRect() ?? { top: 0, left: 0, bott
                         {post.title}
                     </h2>
                 </div>
-                <small class="text-sm italic">Read Time: {secondsToMinutes(post.read_time)} Minutes</small>
+                <small class="text-sm font-mono uppercase">Read Time {secondsToMinutes(post.read_time)} Minutes</small>
             </div>
             <div class="flex justify-between items-center mb-8">
-                <div class="flex flex-col justify-center gap-4">
-                    <User firstname={Bio.firstname} lastname={Bio.surname} avatar="https://avatar.iran.liara.run/public" avatar_alt={Bio.name} class="w-full" />
-                    <div class="flex items-center">
-                        <span class="mr-4">Posted:</span>
-                        {' '}
-                        <time class="text-sm italic">{formatDate(post.posted_at, 'yyyy-MM-dd')}</time>
+                <div class="flex flex-col justify-center gap-4 uppercase font-mono">
+                    <User firstname={Bio.firstname} lastname={Bio.surname} avatar={Bio.avatarUrl} avatar_alt={Bio.name} class="w-full text-sm" />
+                    <div class="text-sm">
+                        Posted <time>{formatDate(post.posted_at, 'MMMM, y')}</time>
                     </div>
                 </div>
                 <div class="flex justify-end items-center gap-2 self-start">
