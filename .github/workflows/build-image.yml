@@ -1,10 +1,11 @@
-name: Build Website
+name: Build Production Website
 
 on:
   push:
     branches:
       - main
     paths:
+      - '.github/workflows/build-image-production.yml'
       - 'website/**'
       - 'infrastructure/website/**'
       - 'Dockerfile'
@@ -17,17 +18,101 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq wget gpg coreutils lsb-release
+          wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt-get update && sudo apt-get install consul-template nomad
+
+      - name: Set build environment
+        run: |
+          export VAULT_TOKEN=$(curl -X POST -H 'Content-Type: application/json' -d '{ "role_id": "${{secrets.VAULT_ROLE_ID}}", "secret_id":"${{secrets.VAULT_SECRET_ID}}" }' https://vault.stefanolivier.com/v1/auth/approle/login | jq -r '.auth.client_token')
+          echo "VAULT_TOKEN=$VAULT_TOKEN" >> $GITHUB_ENV
+          echo "APP_NAME=website-stefanolivier" >> $GITHUB_ENV
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Add registry certificate
+        run: |
+          sudo mkdir -p /etc/docker/certs.d/registry.stefanolivier.com
+          echo "${{ secrets.REGISTRY_CA_CERT }}" | sudo tee /etc/docker/certs.d/registry.stefanolivier.com/ca.pem
+          echo "${{ secrets.REGISTRY_CERT }}" | sudo tee /etc/docker/certs.d/registry.stefanolivier.com/cert.crt
+          echo "${{ secrets.REGISTRY_CERT_PRIVATE_KEY }}" | sudo tee /etc/docker/certs.d/registry.stefanolivier.com/cert.pem
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          buildkitd-config-inline: |
+            [registry."registry.stefanolivier.com"]
+              ca=["/etc/docker/certs.d/registry.stefanolivier.com/ca.pem"]
+              [[registry."registry.stefanolivier.com".keypair]]
+                cert="/etc/docker/certs.d/registry.stefanolivier.com/cert.crt"
+                key="/etc/docker/certs.d/registry.stefanolivier.com/cert.pem"
 
-      - name: Configure Build Environment
-        run: echo "${{secrets.WEBSITE_ENVIRONMENT}}" > ./website/.env
+      - name: Render website environment file
+        run: |
+          consul-template -once -template ./website/.env.production.tpl:./website/.env -vault-addr=https://vault.stefanolivier.com -vault-token="$VAULT_TOKEN" -consul-ssl -consul-addr=https://consul.stefanolivier.com -consul-token="${{ secrets.CONSUL_CI_TOKEN }}"
 
       - name: Build Docker image
         run: |
           docker login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }} https://registry.stefanolivier.com
-          docker buildx build --platform=linux/amd64 --label commit=${GITHUB_SHA} -t registry.stefanolivier.com/www-stefanolivier:latest . --push
+          docker buildx build --platform=linux/amd64 --label commit=${GITHUB_SHA} --secret id=VAULT_TOKEN --build-arg APP_NAME="$APP_NAME" -t registry.stefanolivier.com/website-stefanolivier:latest . --push
 
+      - name: Submit Nomad job
+        run: |
+          nomad job run -detach -token="${{ secrets.NOMAD_CI_TOKEN }}" -var="REGISTRY_USER=${{ secrets.REGISTRY_USER }}" -var="REGISTRY_PASSWORD=${{ secrets.REGISTRY_PASSWORD }}" -address=https://nomad.stefanolivier.com ./infrastructure/website/production.nomad.hcl
+
+      - name: Notify build deployed
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const githubServerUrl = process.env.GH_SERVER_URL;
+            const webhookUrl = process.env.WEBHOOK_URL;
+            const repository = process.env.REPOSITORY;
+            const repoOwner = process.env.REPOSITORY_OWNER;
+            const repoOwnerId = process.env.REPOSITORY_OWNER_ID;
+            const repoName = repository.split('/')[1];
+            const branchName = process.env.BRANCH_NAME;
+            const commitHash = process.env.COMMIT_SHA;
+            const commitUrl = `${githubServerUrl}/${repository}/commit/${commitHash}`;
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: 'GitHub',
+                    avatar_url: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png',
+                    embeds: [
+                        {
+                            color: 62824,
+                            title: `[${repoName}:${branchName}] New build deployed!`,
+                            fields: [
+                                {
+                                    name: 'Commit',
+                                    value: `[\`${commitHash.slice(0, 7)}\`](${commitUrl})`,
+                                }
+                            ],
+                            url: 'https://stefanolivier.com',
+                            author: {
+                                name: repoOwner,
+                                url: `${githubServerUrl}/${repoOwner}/`,
+                                icon_url: `https://avatars.githubusercontent.com/u/${repoOwnerId}?v=4`,
+                            }
+                        },
+                    ]
+                }),
+            });
+
+        env:
+          GH_SERVER_URL: ${{ github.server_url }}
+          WEBHOOK_URL: ${{ secrets.NOTIFICATION_WEBHOOK_URL }}
+          REPOSITORY: ${{ github.repository }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+          REPOSITORY_OWNER_ID: ${{ github.repository_owner_id }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          COMMIT_SHA: ${{ github.sha }}

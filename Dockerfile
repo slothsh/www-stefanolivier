@@ -1,7 +1,27 @@
+FROM ubuntu:latest AS environment
+
+ARG APP_NAME="website-stefanolivier"
+
+# Install utilities
+RUN apt-get update
+RUN apt-get install -y curl jq
+
+# Copy DB certificates to the build
+RUN mkdir -p /secrets/certs/
+RUN --mount=type=secret,id=VAULT_TOKEN,env=VAULT_TOKEN curl -X GET -H "X-Vault-Token: ${VAULT_TOKEN}" "https://vault.stefanolivier.com/v1/kv/data/default/${APP_NAME}/certs/postgres" | jq -r '.data.data.ca' > /secrets/certs/postgres-ca.crt
+RUN --mount=type=secret,id=VAULT_TOKEN,env=VAULT_TOKEN curl -X GET -H "X-Vault-Token: ${VAULT_TOKEN}" "https://vault.stefanolivier.com/v1/kv/data/default/${APP_NAME}/certs/postgres" | jq -r '.data.data.cert' > /secrets/certs/postgres.crt
+RUN --mount=type=secret,id=VAULT_TOKEN,env=VAULT_TOKEN curl -X GET -H "X-Vault-Token: ${VAULT_TOKEN}" "https://vault.stefanolivier.com/v1/kv/data/default/${APP_NAME}/certs/postgres" | jq -r '.data.data.key' > /secrets/certs/postgres.key
+
+# Main build
 FROM ubuntu:latest
 
 # Add app User
 RUN useradd -m app
+
+# Fetch certs
+RUN mkdir -p /secrets/certs
+COPY --from=environment /secrets/certs/* /secrets/certs/
+RUN chown app:app /secrets/certs/* && chmod 600 /secrets/certs/*
 
 # Install dependencies
 ENV BUN_INSTALL=/home/app/.bun
@@ -10,7 +30,7 @@ RUN apt-get update
 RUN apt-get install -y curl unzip
 RUN apt-get install -y supervisor sqlite3 nginx nginx-extras
 RUN apt-get install -y php php-cli
-RUN apt-get install -y php-mbstring php-xml php-bcmath php-curl php-zip php-mysql php-tokenizer php-ctype php-json php-sqlite3 php-fpm
+RUN apt-get install -y php-mbstring php-xml php-bcmath php-curl php-zip php-sqlite3 php-pgsql php-tokenizer php-ctype php-json php-fpm
 RUN curl -fsSL https://bun.sh/install | bash
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir /home/app/.composer --filename composer
 
@@ -20,14 +40,13 @@ WORKDIR /app/build
 RUN /home/app/.composer/composer update
 RUN /home/app/.composer/composer install
 RUN touch ./storage/framework/cache/cache.sqlite
-RUN php artisan migrate --database=cache_sqlite
+RUN php artisan migrate --path=database/migrations/cache --database=cache_sqlite
 RUN php artisan config:clear
 RUN php artisan optimize
 RUN /home/app/.bun/bin/bun install
 RUN /home/app/.bun/bin/bun run build
 
 # Clean-up
-RUN rm -rf /app/build/node_modules
 RUN apt autoremove --purge
 
 # Server Configuration
@@ -42,6 +61,9 @@ RUN mkdir -p /app/logs/nginx && mkdir -p /app/logs/php && mkdir /app/logs/superv
 # Set app permissions
 RUN chown -R app:app /app /home/app
 RUN chmod -R 755 /app /home/app
+
+# Clear build secrets
+RUN rm -rf /secrets
 
 # Set app environment
 USER app
