@@ -1,6 +1,7 @@
 services:
-  website:
+  website-stefanolivier:
     image: registry.stefanolivier.com/www-stefanolivier:latest
+    container_name: website-stefanolivier
     restart: always
     volumes:
       - /var/website/data/database.sqlite:/app/build/database/database.sqlite:rw

@@ -16,6 +16,7 @@ class DatabaseMonitor:
     live_database: str
     backup_directory: str
     stale_period: int = 600
+    directory: str = ''
 
     def _get_live_db_time(self: Self) -> float:
         return os.path.getmtime(self.live_database)
@@ -36,7 +37,7 @@ class DatabaseMonitor:
             backup_database = Path(self.backup_directory) / Path('database-latest.sqlite')
 
             if backup_database.exists():
-                temp_backup_database = backup_database.rename('/var/website/backup/database-latest.tmp.sqlite')
+                temp_backup_database = backup_database.rename(f'{self.backup_directory}/database-latest.tmp.sqlite')
 
             if live_database.exists():
                 subprocess.run(["sqlite3", str(live_database.absolute()), f"VACUUM INTO '{str(backup_database.absolute())}';"])
@@ -48,7 +49,7 @@ class DatabaseMonitor:
         except Exception as e:
             Log.error(f'failed to backup live database: {self.live_database}:', str(e))
             if temp_backup_database is not None:
-                temp_backup_database.rename('/var/website/backup/database-latest.sqlite')
+                temp_backup_database.rename(f'{self.backup_directory}/database-latest.sqlite')
 
 
     def status(self: Self) -> DatabaseStatus:

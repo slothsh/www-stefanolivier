@@ -19,9 +19,11 @@ class DockerMonitor:
     registry_name: str
     repository: str
     authentication: UserAuthentication
+    verify_tls: bool = True;
 
     live_image_digest: str = ''
     latest_image_digest: str = ''
+    directory: str = ''
 
     def __post_init__(self: Self):
         self.registry_url = f'https://{self.registry_name}'
@@ -29,14 +31,14 @@ class DockerMonitor:
     def _get_latest_image_digest(self: Self) -> str:
         try:
             headers = { 'Accept': 'application/vnd.docker.distribution.manifest.v1+json' }
-            manifest_response = requests.get(f'{self.registry_url}/v2/{self.repository}/manifests/latest', auth=self.authentication, headers=headers)
+            manifest_response = requests.get(f'{self.registry_url}/v2/{self.repository}/manifests/latest', auth=self.authentication, headers=headers, verify=self.verify_tls)
 
             if manifest_response.status_code != 200:
                 Log.error(f'bad response for manifest from registry: {manifest_response.status_code} - {manifest_response.text}')
                 return ''
 
             image_digest = manifest_response.json()['manifests'][0]['digest'].strip()
-            blob_response = requests.get(f'{self.registry_url}/v2/{self.repository}/blobs/{image_digest}', auth=self.authentication, headers=headers)
+            blob_response = requests.get(f'{self.registry_url}/v2/{self.repository}/blobs/{image_digest}', auth=self.authentication, headers=headers, verify=self.verify_tls)
 
             if blob_response.status_code != 200:
                 Log.error(f'bad response for blob from registry: {blob_response.status_code} - {blob_response.text}')
@@ -63,9 +65,9 @@ class DockerMonitor:
             Log.info(f'pulling latest image: {self.registry_name}/{self.repository}:latest')
             subprocess.run(['docker', 'pull', f'{self.registry_name}/{self.repository}:latest'])
             Log.info(f'killing & removing docker container: {self.container_name}')
-            subprocess.run(['docker', 'compose', '--project-directory=/var/website', 'down'])
+            subprocess.run(['docker', 'compose', f'--project-directory={self.directory}', 'down'])
             Log.info(f'starting image: {self.registry_name}/{self.repository}:latest with name {self.container_name}')
-            subprocess.run(['docker', 'compose', '--project-directory=/var/website', 'up', '-d'])
+            subprocess.run(['docker', 'compose', f'--project-directory={self.directory}', 'up', '-d'])
         except Exception as e:
             Log.error(f'failed to reload docker container with image: {str(e)}')
 
