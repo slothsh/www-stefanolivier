@@ -1,7 +1,7 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faXmark } from '@fortawesome/free-solid-svg-icons';
 import ContactForm from './ContactForm.svelte';
 import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Lib/contactFormAnimation';
 import { tick } from 'svelte';
@@ -104,13 +104,22 @@ $effect(() => {
     ></div>
     <div 
         bind:this={formRef}
-        class="fixed inset-0 z-[60] flex items-center justify-center p-4"
+        class="fixed inset-0 z-[60]"
     >
-        <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-md shadow-xl">
-            <ContactForm
-                isVisible={showContactForm}
-                onClose={handleFormClose}
-            />
+        <button
+            type="button"
+            onclick={handleFormClose}
+            class="absolute top-6 left-6 text-text-muted hover:text-text transition-colors"
+        >
+            <Fa icon={faXmark} class="text-3xl" />
+        </button>
+        <div class="flex items-center justify-center h-full p-4">
+            <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-md shadow-xl">
+                <ContactForm
+                    isVisible={showContactForm}
+                    onClose={handleFormClose}
+                />
+            </div>
         </div>
     </div>
 {/if}
