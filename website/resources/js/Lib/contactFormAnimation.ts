@@ -15,7 +15,8 @@ export function animateFormOpen(
     originY: number,
     overlayEl: HTMLElement,
     formEl: HTMLElement,
-    triggerEl?: HTMLElement | null
+    triggerEl?: HTMLElement | null,
+    onComplete?: () => void
 ): void {
     storedOrigin = { x: originX, y: originY };
     storedTriggerEl = triggerEl || null;
@@ -44,6 +45,7 @@ export function animateFormOpen(
         clipPath: `circle(${CIRCLE_MAX_RADIUS} at ${originX}px ${originY}px)`,
         duration: OVERLAY_DURATION,
         ease: 'outExpo',
+        ...(onComplete ? { onComplete } : {}),
     });
 
     animate(formElements, {

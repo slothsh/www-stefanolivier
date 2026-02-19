@@ -7,6 +7,7 @@ import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Li
 import { tick } from 'svelte';
 
 let showContactForm = $state(false);
+let showSocialIcons = $state(true);
 let overlayRef: HTMLElement | undefined = $state();
 let formRef: HTMLElement | undefined = $state();
 let clickOrigin = $state({ x: 0, y: 0 });
@@ -21,12 +22,15 @@ async function handleEmailClick(e: MouseEvent) {
     showContactForm = true;
     await tick();
     if (overlayRef && formRef) {
-        animateFormOpen(clickOrigin.x, clickOrigin.y, overlayRef, formRef, target);
+        animateFormOpen(clickOrigin.x, clickOrigin.y, overlayRef, formRef, target, () => {
+            showSocialIcons = false;
+        });
     }
 }
 
 function handleFormClose() {
     if (overlayRef && formRef) {
+        showSocialIcons = true;
         animateFormClose(overlayRef, formRef, () => {
             showContactForm = false;
         });
@@ -70,7 +74,7 @@ $effect(() => {
         </div>
     </main>
 
-    <footer class="flex gap-4 sm:gap-5 justify-end relative z-[55]">
+    <footer class="flex gap-4 sm:gap-5 justify-end relative z-[55]" class:invisible={!showSocialIcons}>
         <a
             href={Bio.contact.GitHub.src}
             target="_blank"
