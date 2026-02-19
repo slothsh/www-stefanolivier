@@ -7,6 +7,7 @@ const OVERLAY_BG_COLOR = '#252b25';
 const CIRCLE_MAX_RADIUS = '150%';
 
 let storedOrigin = { x: 0, y: 0 };
+let isOpen = false;
 
 export function animateFormOpen(
     originX: number,
@@ -15,6 +16,7 @@ export function animateFormOpen(
     formEl: HTMLElement
 ): void {
     storedOrigin = { x: originX, y: originY };
+    isOpen = true;
 
     overlayEl.style.clipPath = `circle(0% at ${originX}px ${originY}px)`;
     overlayEl.style.backgroundColor = OVERLAY_BG_COLOR;
@@ -55,6 +57,7 @@ export function animateFormClose(
     formEl: HTMLElement,
     onComplete: () => void
 ): void {
+    isOpen = false;
     const { x: originX, y: originY } = storedOrigin;
 
     const formElements = formEl.querySelectorAll<HTMLElement>(
@@ -82,4 +85,12 @@ export function animateFormClose(
         ease: 'inOutQuad',
         onComplete,
     });
+}
+
+export function updateClipPathOnResize(overlayEl: HTMLElement, formEl: HTMLElement): void {
+    if (!isOpen) return;
+    
+    const { x: originX, y: originY } = storedOrigin;
+    overlayEl.style.clipPath = `circle(${CIRCLE_MAX_RADIUS} at ${originX}px ${originY}px)`;
+    formEl.style.clipPath = `circle(${CIRCLE_MAX_RADIUS} at ${originX}px ${originY}px)`;
 }

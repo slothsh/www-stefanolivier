@@ -3,7 +3,7 @@ import Fa from 'svelte-fa';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import ContactForm from './ContactForm.svelte';
-import { animateFormOpen, animateFormClose } from '../Lib/contactFormAnimation';
+import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Lib/contactFormAnimation';
 import { tick } from 'svelte';
 
 let showContactForm = $state(false);
@@ -34,6 +34,19 @@ function handleFormClose() {
         showContactForm = false;
     }
 }
+
+function handleResize() {
+    if (overlayRef && formRef) {
+        updateClipPathOnResize(overlayRef, formRef);
+    }
+}
+
+$effect(() => {
+    if (showContactForm) {
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }
+});
 </script>
 
 <svelte:head>
