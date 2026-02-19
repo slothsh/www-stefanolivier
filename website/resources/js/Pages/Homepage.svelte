@@ -21,7 +21,7 @@ async function handleEmailClick(e: MouseEvent) {
     showContactForm = true;
     await tick();
     if (overlayRef && formRef) {
-        animateFormOpen(clickOrigin.x, clickOrigin.y, overlayRef, formRef);
+        animateFormOpen(clickOrigin.x, clickOrigin.y, overlayRef, formRef, target);
     }
 }
 

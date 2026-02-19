@@ -7,15 +7,18 @@ const OVERLAY_BG_COLOR = '#252b25';
 const CIRCLE_MAX_RADIUS = '150%';
 
 let storedOrigin = { x: 0, y: 0 };
+let storedTriggerEl: HTMLElement | null = null;
 let isOpen = false;
 
 export function animateFormOpen(
     originX: number,
     originY: number,
     overlayEl: HTMLElement,
-    formEl: HTMLElement
+    formEl: HTMLElement,
+    triggerEl?: HTMLElement | null
 ): void {
     storedOrigin = { x: originX, y: originY };
+    storedTriggerEl = triggerEl || null;
     isOpen = true;
 
     overlayEl.style.clipPath = `circle(0% at ${originX}px ${originY}px)`;
@@ -90,7 +93,20 @@ export function animateFormClose(
 export function updateClipPathOnResize(overlayEl: HTMLElement, formEl: HTMLElement): void {
     if (!isOpen) return;
     
-    const { x: originX, y: originY } = storedOrigin;
-    overlayEl.style.clipPath = `circle(${CIRCLE_MAX_RADIUS} at ${originX}px ${originY}px)`;
-    formEl.style.clipPath = `circle(${CIRCLE_MAX_RADIUS} at ${originX}px ${originY}px)`;
+    requestAnimationFrame(() => {
+        if (!isOpen) return;
+        
+        let originX = storedOrigin.x;
+        let originY = storedOrigin.y;
+        
+        if (storedTriggerEl) {
+            const rect = storedTriggerEl.getBoundingClientRect();
+            originX = rect.left + rect.width / 2;
+            originY = rect.top + rect.height / 2;
+            storedOrigin = { x: originX, y: originY };
+        }
+        
+        overlayEl.style.clipPath = `circle(${CIRCLE_MAX_RADIUS} at ${originX}px ${originY}px)`;
+        formEl.style.clipPath = `circle(${CIRCLE_MAX_RADIUS} at ${originX}px ${originY}px)`;
+    });
 }
