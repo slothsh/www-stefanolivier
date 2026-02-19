@@ -11,10 +11,12 @@ var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "
 var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
 var _out, _on_destroy, _is_component_body, _parent, _Renderer_instances, collect_on_destroy_fn, traverse_components_fn, collect_ondestroy_fn, _Renderer_static, render_fn, render_async_fn, collect_content_fn, collect_content_async_fn, collect_hydratables_fn, open_render_fn, close_render_fn, hydratable_block_fn, _title;
 import { clsx as clsx$1 } from "clsx";
-import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { z } from "zod";
 import { router, getInitialPageFromDOM, setupProgress, config as config$1 } from "@inertiajs/core";
 import "laravel-precognition";
+import { FieldApi, FormApi } from "@tanstack/form-core";
+import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import createServer from "@inertiajs/core/server";
 import { escape } from "lodash-es";
 const HYDRATION_START = "[";
@@ -179,6 +181,8 @@ function to_style(value, styles) {
   }
   return value == null ? null : String(value);
 }
+const noop = () => {
+};
 function fallback(value, fallback2, lazy = false) {
   return value === void 0 ? lazy ? (
     /** @type {() => V} */
@@ -976,169 +980,95 @@ function ensure_array_like(array_like_or_iterator) {
   }
   return [];
 }
-function getTransform(scale, translateX, translateY, rotate, flip, translateTimes = 1, translateUnit = "", rotateUnit = "") {
-  let flipX = 1;
-  let flipY = 1;
-  if (flip) {
-    if (flip == "horizontal") {
-      flipX = -1;
-    } else if (flip == "vertical") {
-      flipY = -1;
-    } else {
-      flipX = flipY = -1;
+function useStore(store, selector = (d) => d, options = {}) {
+  options.equal ?? shallow;
+  let slice = selector(store.state);
+  return {
+    get current() {
+      return slice;
+    }
+  };
+}
+function shallow(objA, objB) {
+  if (Object.is(objA, objB)) {
+    return true;
+  }
+  if (typeof objA !== "object" || objA === null || typeof objB !== "object" || objB === null) {
+    return false;
+  }
+  if (objA instanceof Map && objB instanceof Map) {
+    if (objA.size !== objB.size) return false;
+    for (const [k, v] of objA) {
+      if (!objB.has(k) || !Object.is(v, objB.get(k))) return false;
+    }
+    return true;
+  }
+  if (objA instanceof Set && objB instanceof Set) {
+    if (objA.size !== objB.size) return false;
+    for (const v of objA) {
+      if (!objB.has(v)) return false;
+    }
+    return true;
+  }
+  if (objA instanceof Date && objB instanceof Date) {
+    if (objA.getTime() !== objB.getTime()) return false;
+    return true;
+  }
+  const keysA = Object.keys(objA);
+  if (keysA.length !== Object.keys(objB).length) {
+    return false;
+  }
+  for (let i = 0; i < keysA.length; i++) {
+    if (!Object.prototype.hasOwnProperty.call(objB, keysA[i]) || !Object.is(objA[keysA[i]], objB[keysA[i]])) {
+      return false;
     }
   }
-  if (typeof scale === "string") {
-    scale = parseFloat(scale);
-  }
-  if (typeof translateX === "string") {
-    translateX = parseFloat(translateX);
-  }
-  if (typeof translateY === "string") {
-    translateY = parseFloat(translateY);
-  }
-  const x = `${translateX * translateTimes}${translateUnit}`;
-  const y = `${translateY * translateTimes}${translateUnit}`;
-  let output = `translate(${x},${y}) scale(${flipX * scale},${flipY * scale})`;
-  if (rotate) {
-    output += ` rotate(${rotate}${rotateUnit})`;
-  }
-  return output;
+  return true;
 }
-function Fa($$renderer, $$props) {
+function createField(opts) {
+  const options = opts();
+  const api = new FieldApi(options);
+  const extendedApi = api;
+  extendedApi.Field = Field_1;
+  const storeSub = useStore(api.store);
+  Object.defineProperty(extendedApi, "state", {
+    get() {
+      return storeSub.current;
+    }
+  });
+  return extendedApi;
+}
+function Field_1($$renderer, $$props) {
   $$renderer.component(($$renderer2) => {
-    let i, transform;
-    let clazz = fallback($$props["class"], () => void 0, true);
-    let id = fallback($$props["id"], () => void 0, true);
-    let style = fallback($$props["style"], () => void 0, true);
-    let icon = $$props["icon"];
-    let title = fallback($$props["title"], () => void 0, true);
-    let size = fallback($$props["size"], () => void 0, true);
-    let color = fallback($$props["color"], () => void 0, true);
-    let fw = fallback($$props["fw"], false);
-    let pull = fallback($$props["pull"], () => void 0, true);
-    let scale = fallback($$props["scale"], 1);
-    let translateX = fallback($$props["translateX"], 0);
-    let translateY = fallback($$props["translateY"], 0);
-    let rotate = fallback($$props["rotate"], () => void 0, true);
-    let flip = fallback($$props["flip"], () => void 0, true);
-    let spin = fallback($$props["spin"], false);
-    let pulse = fallback($$props["pulse"], false);
-    let primaryColor = fallback($$props["primaryColor"], "");
-    let secondaryColor = fallback($$props["secondaryColor"], "");
-    let primaryOpacity = fallback($$props["primaryOpacity"], 1);
-    let secondaryOpacity = fallback($$props["secondaryOpacity"], 0.4);
-    let swapOpacity = fallback($$props["swapOpacity"], false);
-    i = icon && icon.icon || [0, 0, "", [], ""];
-    transform = getTransform(scale, translateX, translateY, rotate, flip, 512);
-    if (i[4]) {
-      $$renderer2.push("<!--[-->");
-      $$renderer2.push(`<svg${attr("id", id)}${attr_class(`svelte-fa svelte-fa-base ${stringify(clazz)}`, "svelte-q6zoq1", {
-        "pulse": pulse,
-        "svelte-fa-size-lg": size === "lg",
-        "svelte-fa-size-sm": size === "sm",
-        "svelte-fa-size-xs": size === "xs",
-        "svelte-fa-fw": fw,
-        "svelte-fa-pull-left": pull === "left",
-        "svelte-fa-pull-right": pull === "right",
-        "spin": spin
-      })}${attr_style(style)}${attr("viewBox", `0 0 ${stringify(i[0])} ${stringify(i[1])}`)}${attr("aria-hidden", title === void 0)} role="img" xmlns="http://www.w3.org/2000/svg">`);
-      if (title) {
-        $$renderer2.push("<!--[-->");
-        $$renderer2.push(`<title class="svelte-q6zoq1">${escape_html(title)}</title>`);
-      } else {
-        $$renderer2.push("<!--[!-->");
-      }
-      $$renderer2.push(`<!--]--><g${attr("transform", `translate(${stringify(i[0] / 2)} ${stringify(i[1] / 2)})`)}${attr("transform-origin", `${stringify(i[0] / 4)} 0`)} class="svelte-q6zoq1"><g${attr("transform", transform)} class="svelte-q6zoq1">`);
-      if (typeof i[4] == "string") {
-        $$renderer2.push("<!--[-->");
-        $$renderer2.push(`<path${attr("d", i[4])}${attr("fill", color || primaryColor || "currentColor")}${attr("transform", `translate(${stringify(i[0] / -2)} ${stringify(i[1] / -2)})`)} class="svelte-q6zoq1"></path>`);
-      } else {
-        $$renderer2.push("<!--[!-->");
-        $$renderer2.push(`<path${attr("d", i[4][0])}${attr("fill", secondaryColor || color || "currentColor")}${attr("fill-opacity", swapOpacity != false ? primaryOpacity : secondaryOpacity)}${attr("transform", `translate(${stringify(i[0] / -2)} ${stringify(i[1] / -2)})`)} class="svelte-q6zoq1"></path><path${attr("d", i[4][1])}${attr("fill", primaryColor || color || "currentColor")}${attr("fill-opacity", swapOpacity != false ? secondaryOpacity : primaryOpacity)}${attr("transform", `translate(${stringify(i[0] / -2)} ${stringify(i[1] / -2)})`)} class="svelte-q6zoq1"></path>`);
-      }
-      $$renderer2.push(`<!--]--></g></g></svg>`);
-    } else {
-      $$renderer2.push("<!--[!-->");
-    }
-    $$renderer2.push(`<!--]-->`);
-    bind_props($$props, {
-      class: clazz,
-      id,
-      style,
-      icon,
-      title,
-      size,
-      color,
-      fw,
-      pull,
-      scale,
-      translateX,
-      translateY,
-      rotate,
-      flip,
-      spin,
-      pulse,
-      primaryColor,
-      secondaryColor,
-      primaryOpacity,
-      secondaryOpacity,
-      swapOpacity
+    let { children, $$slots, $$events, ...fieldOptions } = $$props;
+    const fieldApi = createField(() => {
+      return fieldOptions;
     });
+    children($$renderer2, fieldApi);
+    $$renderer2.push(`<!---->`);
   });
 }
-function Homepage($$renderer) {
-  head("1pj6qmx", $$renderer, ($$renderer2) => {
-    $$renderer2.title(($$renderer3) => {
-      $$renderer3.push(`<title>Stefan Olivier</title>`);
-    });
+function Subscribe($$renderer, $$props) {
+  $$renderer.component(($$renderer2) => {
+    let { children, store, selector = (state) => state } = $$props;
+    const value = useStore(store, selector);
+    children($$renderer2, value.current);
+    $$renderer2.push(`<!---->`);
   });
-  $$renderer.push(`<div class="min-h-screen bg-bg flex flex-col justify-between p-6 md:p-8 lg:p-12"><main class="flex-1 flex items-center justify-center"><div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10"><div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border"><img src="https://stefanolivier.imgix.net/img/owlsh.jpg" alt="Avatar" class="w-full h-full object-cover"/></div> <div class="flex flex-col items-center sm:items-start text-center sm:text-left"><h1 class="font-semibold text-4xl sm:text-5xl lg:text-6xl text-text tracking-tight">${escape_html(Bio.name)}</h1> <p class="text-base sm:text-lg lg:text-xl text-text-muted mt-1 sm:mt-1.5">${escape_html(Bio.occupation)}</p></div></div></main> <footer class="flex gap-4 sm:gap-5 justify-end"><a${attr("href", Bio.contact.GitHub.src)} target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">`);
-  Fa($$renderer, { icon: faGithub, size: "lg" });
-  $$renderer.push(`<!----></a> <a${attr("href", Bio.contact.LinkedIn.src)} target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">`);
-  Fa($$renderer, { icon: faLinkedin, size: "lg" });
-  $$renderer.push(`<!----></a> <a${attr("href", Bio.contact.Email.src)} class="text-text-muted hover:text-accent transition-colors">`);
-  Fa($$renderer, { icon: faEnvelope, size: "lg" });
-  $$renderer.push(`<!----></a></footer></div>`);
 }
-const __vite_glob_0_0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  default: Homepage
-}, Symbol.toStringTag, { value: "Module" }));
-globalThis.Bio = {
-  firstname: "Stefan",
-  surname: "Olivier",
-  about: "I make websites and applications that have the happiest bits, nibbles, and bytes.",
-  occupation: "Software Engineer",
-  avatarUrl: "https://stefanolivier.imgix.net/img/owlsh.jpg",
-  contact: {
-    Email: {
-      icon: faEnvelope,
-      src: "mailto:dev@stefanolivier.com",
-      displayName: "dev@stefanolivier.com"
-    },
-    GitHub: {
-      icon: faGithub,
-      src: "https://github.com/slothsh",
-      displayName: "/slothsh"
-    },
-    LinkedIn: {
-      icon: faLinkedin,
-      src: "https://linkedin.com/in/stefan-olivier-628261145",
-      displayName: "Stefan Olivier"
-    }
-  }
-};
-Object.defineProperty(globalThis.Bio, "name", {
-  get() {
-    return [this.firstname, this.surname].join(" ");
-  }
-});
-(function() {
-  const t = [];
-  for (let e = 0; e < 256; ++e) t.push("%" + ((e < 16 ? "0" : "") + e.toString(16)).toUpperCase());
-  return t;
-})();
+function createForm(opts) {
+  const options = opts == null ? void 0 : opts();
+  const api = new FormApi(options);
+  const extendedApi = api;
+  extendedApi.Field = (internal, props) => Field_1(internal, { ...props, form: api });
+  extendedApi.createField = (props) => createField(() => {
+    return { ...props(), form: api };
+  });
+  extendedApi.useStore = (selector) => useStore(api.store, selector);
+  extendedApi.Subscribe = (internal, props) => Subscribe(internal, { ...props, store: api.store });
+  noop(api.mount);
+  return extendedApi;
+}
 const h = (component, propsOrChildren, childrenOrKey, key = null) => {
   const hasProps = typeof propsOrChildren === "object" && propsOrChildren !== null && !Array.isArray(propsOrChildren);
   return {
@@ -1269,6 +1199,305 @@ async function createInertiaApp({ id = "app", resolve, setup, progress = {}, pag
   }
 }
 const config = config$1.extend({});
+function ContactForm($$renderer, $$props) {
+  $$renderer.component(($$renderer2) => {
+    let { onClose, isVisible } = $$props;
+    const contactSchema = z.object({
+      name: z.string().min(1, "Name is required").max(255, "Name must be 255 characters or less"),
+      email: z.string().min(1, "Email is required").email("Please enter a valid email address"),
+      message: z.string().min(10, "Message must be at least 10 characters").max(5e3, "Message must be 5000 characters or less")
+    });
+    let isSubmitting = false;
+    let successMessage = null;
+    let serverErrors = {};
+    const form = createForm(() => ({
+      defaultValues: { name: "", email: "", message: "" },
+      validators: { onChange: contactSchema },
+      onSubmit: async ({ value }) => {
+        isSubmitting = true;
+        serverErrors = {};
+        router.post(route("contact.store"), value, {
+          onSuccess: () => {
+            successMessage = "Your message has been sent successfully!";
+            setTimeout(
+              () => {
+                onClose();
+              },
+              2e3
+            );
+          },
+          onError: (errors) => {
+            if (errors && typeof errors === "object") {
+              serverErrors = errors;
+            }
+          },
+          onFinish: () => {
+            isSubmitting = false;
+          }
+        });
+      }
+    }));
+    if (successMessage) {
+      $$renderer2.push("<!--[-->");
+      $$renderer2.push(`<div class="text-center py-8"><p class="text-accent text-lg font-medium">${escape_html(successMessage)}</p></div>`);
+    } else {
+      $$renderer2.push("<!--[!-->");
+      $$renderer2.push(`<h2 class="text-xl font-semibold text-text mb-6">Send a Message</h2> <form class="space-y-5"><div><label for="name" class="block text-sm font-medium text-text-muted mb-1.5">Name</label> <!---->`);
+      {
+        let children = function($$renderer3, field) {
+          var _a;
+          $$renderer3.push(`<input type="text" id="name"${attr("name", field.name)}${attr("value", field.state.value)} class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors" placeholder="Your name"/> `);
+          if (field.state.meta.errors && field.state.meta.errors.length > 0) {
+            $$renderer3.push("<!--[-->");
+            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html((_a = field.state.meta.errors[0]) == null ? void 0 : _a.message)}</p>`);
+          } else {
+            $$renderer3.push("<!--[!-->");
+          }
+          $$renderer3.push(`<!--]--> `);
+          if (serverErrors.name) {
+            $$renderer3.push("<!--[-->");
+            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html(serverErrors.name)}</p>`);
+          } else {
+            $$renderer3.push("<!--[!-->");
+          }
+          $$renderer3.push(`<!--]-->`);
+        };
+        form.Field($$renderer2, { name: "name", children, $$slots: { default: true } });
+      }
+      $$renderer2.push(`<!----></div> <div><label for="email" class="block text-sm font-medium text-text-muted mb-1.5">Email</label> <!---->`);
+      {
+        let children = function($$renderer3, field) {
+          var _a;
+          $$renderer3.push(`<input type="email" id="email"${attr("name", field.name)}${attr("value", field.state.value)} class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors" placeholder="you@example.com"/> `);
+          if (field.state.meta.errors && field.state.meta.errors.length > 0) {
+            $$renderer3.push("<!--[-->");
+            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html((_a = field.state.meta.errors[0]) == null ? void 0 : _a.message)}</p>`);
+          } else {
+            $$renderer3.push("<!--[!-->");
+          }
+          $$renderer3.push(`<!--]--> `);
+          if (serverErrors.email) {
+            $$renderer3.push("<!--[-->");
+            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html(serverErrors.email)}</p>`);
+          } else {
+            $$renderer3.push("<!--[!-->");
+          }
+          $$renderer3.push(`<!--]-->`);
+        };
+        form.Field($$renderer2, { name: "email", children, $$slots: { default: true } });
+      }
+      $$renderer2.push(`<!----></div> <div><label for="message" class="block text-sm font-medium text-text-muted mb-1.5">Message</label> <!---->`);
+      {
+        let children = function($$renderer3, field) {
+          var _a;
+          $$renderer3.push(`<textarea id="message"${attr("name", field.name)} rows="4" class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors resize-none" placeholder="Your message...">`);
+          const $$body = escape_html(field.state.value);
+          if ($$body) {
+            $$renderer3.push(`${$$body}`);
+          }
+          $$renderer3.push(`</textarea> `);
+          if (field.state.meta.errors && field.state.meta.errors.length > 0) {
+            $$renderer3.push("<!--[-->");
+            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html((_a = field.state.meta.errors[0]) == null ? void 0 : _a.message)}</p>`);
+          } else {
+            $$renderer3.push("<!--[!-->");
+          }
+          $$renderer3.push(`<!--]--> `);
+          if (serverErrors.message) {
+            $$renderer3.push("<!--[-->");
+            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html(serverErrors.message)}</p>`);
+          } else {
+            $$renderer3.push("<!--[!-->");
+          }
+          $$renderer3.push(`<!--]-->`);
+        };
+        form.Field($$renderer2, { name: "message", children, $$slots: { default: true } });
+      }
+      $$renderer2.push(`<!----></div> `);
+      if (Object.keys(serverErrors).length > 0 && !serverErrors.name && !serverErrors.email && !serverErrors.message) {
+        $$renderer2.push("<!--[-->");
+        $$renderer2.push(`<p class="text-sm text-red-400">An error occurred. Please try again.</p>`);
+      } else {
+        $$renderer2.push("<!--[!-->");
+      }
+      $$renderer2.push(`<!--]--> <div class="flex gap-3 pt-2"><button type="button" class="flex-1 px-4 py-2 border border-border rounded-md text-text-muted hover:text-text hover:border-text-muted transition-colors"${attr("disabled", isSubmitting, true)}>Cancel</button> <button type="submit" class="flex-1 px-4 py-2 bg-accent text-bg rounded-md font-medium hover:opacity-90 transition-opacity disabled:opacity-50"${attr("disabled", isSubmitting, true)}>${escape_html(isSubmitting ? "Sending..." : "Send Message")}</button></div></form>`);
+    }
+    $$renderer2.push(`<!--]-->`);
+  });
+}
+const __vite_glob_0_0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: ContactForm
+}, Symbol.toStringTag, { value: "Module" }));
+function getTransform(scale, translateX, translateY, rotate, flip, translateTimes = 1, translateUnit = "", rotateUnit = "") {
+  let flipX = 1;
+  let flipY = 1;
+  if (flip) {
+    if (flip == "horizontal") {
+      flipX = -1;
+    } else if (flip == "vertical") {
+      flipY = -1;
+    } else {
+      flipX = flipY = -1;
+    }
+  }
+  if (typeof scale === "string") {
+    scale = parseFloat(scale);
+  }
+  if (typeof translateX === "string") {
+    translateX = parseFloat(translateX);
+  }
+  if (typeof translateY === "string") {
+    translateY = parseFloat(translateY);
+  }
+  const x = `${translateX * translateTimes}${translateUnit}`;
+  const y = `${translateY * translateTimes}${translateUnit}`;
+  let output = `translate(${x},${y}) scale(${flipX * scale},${flipY * scale})`;
+  if (rotate) {
+    output += ` rotate(${rotate}${rotateUnit})`;
+  }
+  return output;
+}
+function Fa($$renderer, $$props) {
+  $$renderer.component(($$renderer2) => {
+    let i, transform;
+    let clazz = fallback($$props["class"], () => void 0, true);
+    let id = fallback($$props["id"], () => void 0, true);
+    let style = fallback($$props["style"], () => void 0, true);
+    let icon = $$props["icon"];
+    let title = fallback($$props["title"], () => void 0, true);
+    let size = fallback($$props["size"], () => void 0, true);
+    let color = fallback($$props["color"], () => void 0, true);
+    let fw = fallback($$props["fw"], false);
+    let pull = fallback($$props["pull"], () => void 0, true);
+    let scale = fallback($$props["scale"], 1);
+    let translateX = fallback($$props["translateX"], 0);
+    let translateY = fallback($$props["translateY"], 0);
+    let rotate = fallback($$props["rotate"], () => void 0, true);
+    let flip = fallback($$props["flip"], () => void 0, true);
+    let spin = fallback($$props["spin"], false);
+    let pulse = fallback($$props["pulse"], false);
+    let primaryColor = fallback($$props["primaryColor"], "");
+    let secondaryColor = fallback($$props["secondaryColor"], "");
+    let primaryOpacity = fallback($$props["primaryOpacity"], 1);
+    let secondaryOpacity = fallback($$props["secondaryOpacity"], 0.4);
+    let swapOpacity = fallback($$props["swapOpacity"], false);
+    i = icon && icon.icon || [0, 0, "", [], ""];
+    transform = getTransform(scale, translateX, translateY, rotate, flip, 512);
+    if (i[4]) {
+      $$renderer2.push("<!--[-->");
+      $$renderer2.push(`<svg${attr("id", id)}${attr_class(`svelte-fa svelte-fa-base ${stringify(clazz)}`, "svelte-q6zoq1", {
+        "pulse": pulse,
+        "svelte-fa-size-lg": size === "lg",
+        "svelte-fa-size-sm": size === "sm",
+        "svelte-fa-size-xs": size === "xs",
+        "svelte-fa-fw": fw,
+        "svelte-fa-pull-left": pull === "left",
+        "svelte-fa-pull-right": pull === "right",
+        "spin": spin
+      })}${attr_style(style)}${attr("viewBox", `0 0 ${stringify(i[0])} ${stringify(i[1])}`)}${attr("aria-hidden", title === void 0)} role="img" xmlns="http://www.w3.org/2000/svg">`);
+      if (title) {
+        $$renderer2.push("<!--[-->");
+        $$renderer2.push(`<title class="svelte-q6zoq1">${escape_html(title)}</title>`);
+      } else {
+        $$renderer2.push("<!--[!-->");
+      }
+      $$renderer2.push(`<!--]--><g${attr("transform", `translate(${stringify(i[0] / 2)} ${stringify(i[1] / 2)})`)}${attr("transform-origin", `${stringify(i[0] / 4)} 0`)} class="svelte-q6zoq1"><g${attr("transform", transform)} class="svelte-q6zoq1">`);
+      if (typeof i[4] == "string") {
+        $$renderer2.push("<!--[-->");
+        $$renderer2.push(`<path${attr("d", i[4])}${attr("fill", color || primaryColor || "currentColor")}${attr("transform", `translate(${stringify(i[0] / -2)} ${stringify(i[1] / -2)})`)} class="svelte-q6zoq1"></path>`);
+      } else {
+        $$renderer2.push("<!--[!-->");
+        $$renderer2.push(`<path${attr("d", i[4][0])}${attr("fill", secondaryColor || color || "currentColor")}${attr("fill-opacity", swapOpacity != false ? primaryOpacity : secondaryOpacity)}${attr("transform", `translate(${stringify(i[0] / -2)} ${stringify(i[1] / -2)})`)} class="svelte-q6zoq1"></path><path${attr("d", i[4][1])}${attr("fill", primaryColor || color || "currentColor")}${attr("fill-opacity", swapOpacity != false ? secondaryOpacity : primaryOpacity)}${attr("transform", `translate(${stringify(i[0] / -2)} ${stringify(i[1] / -2)})`)} class="svelte-q6zoq1"></path>`);
+      }
+      $$renderer2.push(`<!--]--></g></g></svg>`);
+    } else {
+      $$renderer2.push("<!--[!-->");
+    }
+    $$renderer2.push(`<!--]-->`);
+    bind_props($$props, {
+      class: clazz,
+      id,
+      style,
+      icon,
+      title,
+      size,
+      color,
+      fw,
+      pull,
+      scale,
+      translateX,
+      translateY,
+      rotate,
+      flip,
+      spin,
+      pulse,
+      primaryColor,
+      secondaryColor,
+      primaryOpacity,
+      secondaryOpacity,
+      swapOpacity
+    });
+  });
+}
+function Homepage($$renderer, $$props) {
+  $$renderer.component(($$renderer2) => {
+    head("1pj6qmx", $$renderer2, ($$renderer3) => {
+      $$renderer3.title(($$renderer4) => {
+        $$renderer4.push(`<title>Stefan Olivier</title>`);
+      });
+    });
+    $$renderer2.push(`<div class="min-h-screen bg-bg flex flex-col justify-between p-6 md:p-8 lg:p-12"><main class="flex-1 flex items-center justify-center"><div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10"><div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border"><img src="https://stefanolivier.imgix.net/img/owlsh.jpg" alt="Avatar" class="w-full h-full object-cover"/></div> <div class="flex flex-col items-center sm:items-start text-center sm:text-left"><h1 class="font-semibold text-4xl sm:text-5xl lg:text-6xl text-text tracking-tight">${escape_html(Bio.name)}</h1> <p class="text-base sm:text-lg lg:text-xl text-text-muted mt-1 sm:mt-1.5">${escape_html(Bio.occupation)}</p></div></div></main> <footer class="flex gap-4 sm:gap-5 justify-end relative z-[55]"><a${attr("href", Bio.contact.GitHub.src)} target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">`);
+    Fa($$renderer2, { icon: faGithub, size: "lg" });
+    $$renderer2.push(`<!----></a> <a${attr("href", Bio.contact.LinkedIn.src)} target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">`);
+    Fa($$renderer2, { icon: faLinkedin, size: "lg" });
+    $$renderer2.push(`<!----></a> <button type="button" class="text-text-muted hover:text-accent transition-colors cursor-pointer">`);
+    Fa($$renderer2, { icon: faEnvelope, size: "lg" });
+    $$renderer2.push(`<!----></button></footer></div> `);
+    {
+      $$renderer2.push("<!--[!-->");
+    }
+    $$renderer2.push(`<!--]-->`);
+  });
+}
+const __vite_glob_0_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: Homepage
+}, Symbol.toStringTag, { value: "Module" }));
+globalThis.Bio = {
+  firstname: "Stefan",
+  surname: "Olivier",
+  about: "I make websites and applications that have the happiest bits, nibbles, and bytes.",
+  occupation: "Software Engineer",
+  avatarUrl: "https://stefanolivier.imgix.net/img/owlsh.jpg",
+  contact: {
+    Email: {
+      icon: faEnvelope,
+      src: "mailto:dev@stefanolivier.com",
+      displayName: "dev@stefanolivier.com"
+    },
+    GitHub: {
+      icon: faGithub,
+      src: "https://github.com/slothsh",
+      displayName: "/slothsh"
+    },
+    LinkedIn: {
+      icon: faLinkedin,
+      src: "https://linkedin.com/in/stefan-olivier-628261145",
+      displayName: "Stefan Olivier"
+    }
+  }
+};
+Object.defineProperty(globalThis.Bio, "name", {
+  get() {
+    return [this.firstname, this.surname].join(" ");
+  }
+});
+(function() {
+  const t = [];
+  for (let e = 0; e < 256; ++e) t.push("%" + ((e < 16 ? "0" : "") + e.toString(16)).toUpperCase());
+  return t;
+})();
 async function resolvePageComponent(path, pages) {
   for (const p of Array.isArray(path) ? path : [path]) {
     const page = pages[p];
@@ -1283,7 +1512,7 @@ createServer(
   (page) => createInertiaApp({
     page,
     resolve: (name) => {
-      return resolvePageComponent(`./Pages/${name}`, /* @__PURE__ */ Object.assign({ "./Pages/Homepage.svelte": __vite_glob_0_0 }));
+      return resolvePageComponent(`./Pages/${name}`, /* @__PURE__ */ Object.assign({ "./Pages/ContactForm.svelte": __vite_glob_0_0, "./Pages/Homepage.svelte": __vite_glob_0_1 }));
     },
     setup({ App: App2, props }) {
       return render(App2, { props });

@@ -2,6 +2,38 @@
 import Fa from 'svelte-fa';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import ContactForm from './ContactForm.svelte';
+import { animateFormOpen, animateFormClose } from '../Lib/contactFormAnimation';
+import { tick } from 'svelte';
+
+let showContactForm = $state(false);
+let overlayRef: HTMLElement | undefined = $state();
+let formRef: HTMLElement | undefined = $state();
+let clickOrigin = $state({ x: 0, y: 0 });
+
+async function handleEmailClick(e: MouseEvent) {
+    const target = e.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    clickOrigin = {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+    };
+    showContactForm = true;
+    await tick();
+    if (overlayRef && formRef) {
+        animateFormOpen(clickOrigin.x, clickOrigin.y, overlayRef, formRef);
+    }
+}
+
+function handleFormClose() {
+    if (overlayRef && formRef) {
+        animateFormClose(overlayRef, formRef, () => {
+            showContactForm = false;
+        });
+    } else {
+        showContactForm = false;
+    }
+}
 </script>
 
 <svelte:head>
@@ -12,9 +44,9 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
     <main class="flex-1 flex items-center justify-center">
         <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10">
             <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border">
-                <img 
-                    src="https://stefanolivier.imgix.net/img/owlsh.jpg" 
-                    alt="Avatar" 
+                <img
+                    src="https://stefanolivier.imgix.net/img/owlsh.jpg"
+                    alt="Avatar"
                     class="w-full h-full object-cover"
                 />
             </div>
@@ -25,8 +57,8 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
         </div>
     </main>
 
-    <footer class="flex gap-4 sm:gap-5 justify-end">
-        <a 
+    <footer class="flex gap-4 sm:gap-5 justify-end relative z-[55]">
+        <a
             href={Bio.contact.GitHub.src}
             target="_blank"
             rel="noopener noreferrer"
@@ -34,7 +66,7 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
         >
             <Fa icon={faGithub} size="lg" />
         </a>
-        <a 
+        <a
             href={Bio.contact.LinkedIn.src}
             target="_blank"
             rel="noopener noreferrer"
@@ -42,11 +74,30 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
         >
             <Fa icon={faLinkedin} size="lg" />
         </a>
-        <a 
-            href={Bio.contact.Email.src}
-            class="text-text-muted hover:text-accent transition-colors"
+        <button
+            type="button"
+            onclick={handleEmailClick}
+            class="text-text-muted hover:text-accent transition-colors cursor-pointer"
         >
             <Fa icon={faEnvelope} size="lg" />
-        </a>
+        </button>
     </footer>
 </div>
+
+{#if showContactForm}
+    <div
+        bind:this={overlayRef}
+        class="fixed inset-0 z-50"
+    ></div>
+    <div 
+        bind:this={formRef}
+        class="fixed inset-0 z-[60] flex items-center justify-center p-4"
+    >
+        <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-md shadow-xl">
+            <ContactForm
+                isVisible={showContactForm}
+                onClose={handleFormClose}
+            />
+        </div>
+    </div>
+{/if}

@@ -22,6 +22,7 @@ declare module 'ziggy-js' {
     ],
     "debugbar.queries.explain": [],
     "home.index": [],
+    "contact.store": [],
     "blog.index": [],
     "blog.show": [
         {

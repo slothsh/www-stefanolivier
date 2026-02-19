@@ -3,6 +3,10 @@
   "node_modules/@inertiajs/svelte/dist/components/Render.svelte": [],
   "node_modules/@inertiajs/svelte/dist/createInertiaApp.js": [],
   "node_modules/@inertiajs/svelte/dist/index.js": [],
+  "node_modules/@tanstack/svelte-form/dist/Field.svelte": [],
+  "node_modules/@tanstack/svelte-form/dist/Subscribe.svelte": [],
+  "node_modules/@tanstack/svelte-form/dist/createForm.svelte.js": [],
+  "node_modules/@tanstack/svelte-store/dist/index.svelte.js": [],
   "node_modules/laravel-vite-plugin/inertia-helpers/index.js": [],
   "node_modules/svelte-fa/dist/fa-layers-text.svelte?svelte&type=style&lang.css": [],
   "node_modules/svelte-fa/dist/fa-layers.svelte?svelte&type=style&lang.css": [],
@@ -25,6 +29,7 @@
   "node_modules/svelte/src/internal/shared/utils.js": [],
   "node_modules/svelte/src/utils.js": [],
   "resources/js/Lib/bio.ts": [],
+  "resources/js/Pages/ContactForm.svelte": [],
   "resources/js/Pages/Homepage.svelte": [],
   "resources/js/ssr.ts": [],
   "vendor/tightenco/ziggy/dist/index.js": []
