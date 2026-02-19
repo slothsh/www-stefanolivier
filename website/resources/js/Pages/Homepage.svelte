@@ -1,30 +1,52 @@
 <script lang="ts">
-import Canvas from '@/Components/Canvas.svelte';
-import NavigationLayout from '@/Components/NavigationLayout.svelte';
-import SocialLinks from '@/Components/SocialLinks.svelte';
-import { lattice } from '@/Lib/Canvas/lattice.svelte';
-import { useClientWindow, clientDarkMode } from '@/Lib/dom.svelte';
-
-const clientWindow = useClientWindow();
-
-let canvasRect = $derived(
-    Vector.xwyh(0, $clientWindow.width * $clientWindow.scale, 0, $clientWindow.height * $clientWindow.scale)
-);
-
-const { darkMode } = clientDarkMode;
+import Fa from 'svelte-fa';
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 </script>
 
-<NavigationLayout class="relative overflow-hidden h-screen" enableFooter={false} title="Home">
-    <Canvas class="absolute w-full h-full" rect={canvasRect} program={lattice} programArgs={{ fill: Theme.colors.darker($darkMode).vec, stroke: Theme.colors.darker($darkMode).vec }} />
+<svelte:head>
+    <title>Stefan Olivier</title>
+</svelte:head>
 
-    <div class="flex flex-row w-full items-center left-0 min-h-[768px]">
-        <div class="relative flex flex-col justify-center items-center w-full px-16 border-border text-center">
-            <div class="flex flex-col mb-8 max-w-page">
-                <h1 class="w-full font-bold text-7xl">{Bio.name}</h1>
-                <h1 class="w-full font-medium text-4xl">{Bio.occupation}</h1>
+<div class="min-h-screen bg-bg flex flex-col justify-between p-6 md:p-8 lg:p-12">
+    <main class="flex-1 flex items-center justify-center">
+        <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10">
+            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border">
+                <img 
+                    src="https://stefanolivier.imgix.net/img/owlsh.jpg" 
+                    alt="Avatar" 
+                    class="w-full h-full object-cover"
+                />
             </div>
-            <p class="font-normal max-w-page mb-16">{Bio.about}</p>
-            <SocialLinks />
+            <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
+                <h1 class="font-semibold text-4xl sm:text-5xl lg:text-6xl text-text tracking-tight">{Bio.name}</h1>
+                <p class="text-base sm:text-lg lg:text-xl text-text-muted mt-1 sm:mt-1.5">{Bio.occupation}</p>
+            </div>
         </div>
-    </div>
-</NavigationLayout>
+    </main>
+
+    <footer class="flex gap-4 sm:gap-5 justify-end">
+        <a 
+            href={Bio.contact.GitHub.src}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-text-muted hover:text-accent transition-colors"
+        >
+            <Fa icon={faGithub} size="lg" />
+        </a>
+        <a 
+            href={Bio.contact.LinkedIn.src}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-text-muted hover:text-accent transition-colors"
+        >
+            <Fa icon={faLinkedin} size="lg" />
+        </a>
+        <a 
+            href={Bio.contact.Email.src}
+            class="text-text-muted hover:text-accent transition-colors"
+        >
+            <Fa icon={faEnvelope} size="lg" />
+        </a>
+    </footer>
+</div>

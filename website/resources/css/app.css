@@ -1,74 +1,20 @@
-@import "./fonts.css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
-
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source "../**/*.blade.php";
-@source "../**/*.js";
-@source "../**/*.vue";
 
 @layer base {
     :root {
-        /* Colors */
-        --green: #72c282;
-        --greener: #52d282;
-        --greenest: #42d262;
+        --bg: #1a1f1a;
+        --text: #f0f0f0;
+        --text-muted: #9ca39c;
+        --accent: #6b8f71;
+        --border: #2a352a;
 
-        --dark-green: #204222;
-        --darker-green: #103212;
-        --darkest-green: #002202;
-
-        --blue: #66aacc;
-        --bluer: #4499dd;
-        --bluest: #4499ff;
-
-        --dark-blue: #324050;
-        --darker-blue: #203545;
-        --darkest-blue: #081012;
-
-        --dark: #6a6f6f;
-        --darker: #2a2a2f;
-        --darkest: #0a0a0f;
-
-        --light: #a0bed2;
-        --lighter: #d0e0f2;
-        --lightest: #fafaff;
-
-        --gray: #808a99;
-        --grayer: #607a77;
-        --grayest: #505a66;
-
-        /* Sizing */
-        --navigation-height: 40px;
-        --footer-height: 80px;
-
-        /* Layering */
-        --z-navigation: 100;
-        --z-page: 10;
-    }
-
-    html {
-        --font: var(--darker);
-        --font-muted: var(--dark);
-        --font-highlight: var(--darkest);
-        --background: var(--lightest);
-        --foreground: var(--darkest);
-        --alternative: #f0f5ff;
-        --border: var(--light);
-        --accent-light: var(--darker-green);
-        --accent-dark: var(--green);
-
-
-        &[data-theme=dark] {
-            --font: var(--lighter);
-            --font-muted: var(--light);
-            --font-highlight: var(--lightest);
-            --background: var(--darkest-blue);
-            --foreground: var(--lightest);
-            --alternative: #121620;
-            --border: var(--darker-blue);
-            --accent-light: var(--green);
-            --accent-dark: var(--darker-green);
+        @media (prefers-color-scheme: dark) {
+            --bg: #0f140f;
+            --text: #e8e8e8;
+            --text-muted: #8a918a;
+            --accent: #7a9f7f;
+            --border: #1f2a1f;
         }
     }
 
@@ -77,102 +23,20 @@
     }
 
     body {
-        @apply bg-primary;
-        @apply font-main;
-        @apply text-font;
-        letter-spacing: 0.5px;
-        font-size: 20px;
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        letter-spacing: -0.01em;
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 }
 
 @theme {
-    --color-font: var(--font);
-    --color-font-muted: var(--font-muted);
-    --color-font-highlight: var(--font-highlight);
-
-    --color-primary: var(--background);
-    --color-secondary: var(--foreground);
-    --color-tertiary: var(--alternative);
+    --color-bg: var(--bg);
+    --color-text: var(--text);
+    --color-text-muted: var(--text-muted);
+    --color-accent: var(--accent);
     --color-border: var(--border);
-
-    --color-accent-light: var(--accent-light);
-    --color-accent-dark: var(--accent-dark);
-
-    --color-dark: var(--dark);
-    --color-darker: var(--darker);
-    --color-darkest: var(--darkest);
-
-    --font-main: 'League Spartan', sans-serif;
-    --font-mono: 'Google Sans Code', monospace;
-
-    --spacing-page: 960px;
-
-    --animate-in-up: in-up 300ms ease-in-out 1;
-    --animate-out-down: out-down 300ms ease-in-out 1;
-    --animate-progress: progress-width linear 1;
-    --animate-scale-out-in: scale-out-in ease-in-out 1;
-    --animate-scale-out-in-again: scale-out-in-again ease-in-out 1;
-
-    @keyframes in-up {
-        0% {
-            opacity: 0%;
-            transform: translateY(50%);
-        }
-        100% {
-            opacity: 100%;
-            transform: translateY(0%);
-        }
-    }
-
-    @keyframes out-down {
-        0% {
-            opacity: 100%;
-            transform: translateY(0%);
-        }
-        100% {
-            opacity: 0%;
-            transform: translateY(50%);
-        }
-    }
-
-    @keyframes scale-out-in {
-        0% {
-            transform: scale(100%);
-            opacity: 100%;
-        }
-        50% {
-            transform: scale(0%);
-            opacity: 50%;
-        }
-        100% {
-            transform: scale(100%);
-            opacity: 100%;
-        }
-    }
-
-    @keyframes scale-out-in-again {
-        0% {
-            transform: scale(100%);
-            opacity: 100%;
-        }
-        50% {
-            transform: scale(0%);
-            opacity: 50%;
-        }
-        100% {
-            transform: scale(100%);
-            opacity: 100%;
-        }
-    }
-
-    @keyframes progress-width {
-        0% {
-            width: 0%;
-        }
-        100% {
-            width: 100%;
-        }
-    }
 }
-
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));

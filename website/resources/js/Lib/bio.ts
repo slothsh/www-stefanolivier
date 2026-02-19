@@ -1,6 +1,6 @@
 import { type IconDefinition } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { faGithub, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 export {};
 
@@ -8,7 +8,7 @@ declare global {
     type SrcMail = `mailto:${string}@${string}.${'com' | 'co.za' | 'net'}`;
     type SrcWeb = `${'https' | 'http'}://${string}`;
 
-    type Contact = 'LinkedIn' | 'GitHub' | 'Instagram' | 'Email';
+    type Contact = 'LinkedIn' | 'GitHub' | 'Email';
 
     type ContactIcon = {
         [K in Contact]: IconDefinition
@@ -38,7 +38,7 @@ declare global {
     surname: 'Olivier',
     about: 'I make websites and applications that have the happiest bits, nibbles, and bytes.',
     occupation: 'Software Engineer',
-    avatarUrl: '/images/avatar.png',
+    avatarUrl: 'https://stefanolivier.imgix.net/img/owlsh.jpg',
     contact: {
         Email: {
             icon: faEnvelope,
@@ -55,11 +55,6 @@ declare global {
             src: 'https://linkedin.com/in/stefan-olivier-628261145',
             displayName: 'Stefan Olivier',
         },
-        Instagram: {
-            icon: faInstagram,
-            src: 'https://instagram.com/@stefan_is_stevey',
-            displayName: '@stefan_is_stevey',
-        }
     },
 };
 
