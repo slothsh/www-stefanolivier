@@ -1208,7 +1208,6 @@ function ContactForm($$renderer, $$props) {
       message: z.string().min(10, "Message must be at least 10 characters").max(5e3, "Message must be 5000 characters or less")
     });
     let isSubmitting = false;
-    let successMessage = null;
     let serverErrors = {};
     const form = createForm(() => ({
       defaultValues: { name: "", email: "", message: "" },
@@ -1218,13 +1217,6 @@ function ContactForm($$renderer, $$props) {
         serverErrors = {};
         router.post(route("contact.store"), value, {
           onSuccess: () => {
-            successMessage = "Your message has been sent successfully!";
-            setTimeout(
-              () => {
-                onClose();
-              },
-              2e3
-            );
           },
           onError: (errors) => {
             if (errors && typeof errors === "object") {
@@ -1232,97 +1224,104 @@ function ContactForm($$renderer, $$props) {
             }
           },
           onFinish: () => {
-            isSubmitting = false;
+            setTimeout(
+              () => {
+                isSubmitting = false;
+                onClose();
+              },
+              2e3
+            );
           }
         });
       }
     }));
-    if (successMessage) {
-      $$renderer2.push("<!--[-->");
-      $$renderer2.push(`<div class="text-center py-8"><p class="text-accent text-lg font-medium">${escape_html(successMessage)}</p></div>`);
-    } else {
-      $$renderer2.push("<!--[!-->");
-      $$renderer2.push(`<h2 class="text-xl font-semibold text-text mb-6">Send a Message</h2> <form class="space-y-5"><div><label for="name" class="block text-sm font-medium text-text-muted mb-1.5">Name</label> <!---->`);
-      {
-        let children = function($$renderer3, field) {
-          var _a;
-          $$renderer3.push(`<input type="text" id="name"${attr("name", field.name)}${attr("value", field.state.value)} class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors" placeholder="Your name"/> `);
-          if (field.state.meta.errors && field.state.meta.errors.length > 0) {
-            $$renderer3.push("<!--[-->");
-            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html((_a = field.state.meta.errors[0]) == null ? void 0 : _a.message)}</p>`);
-          } else {
-            $$renderer3.push("<!--[!-->");
-          }
-          $$renderer3.push(`<!--]--> `);
+    $$renderer2.push(`<h2 class="text-xl font-semibold text-text mb-6">Send a Message</h2> <form class="space-y-5"><div><label for="name" class="block text-sm font-medium text-text-muted mb-1.5">Name</label> <!---->`);
+    {
+      let children = function($$renderer3, field) {
+        var _a;
+        $$renderer3.push(`<input type="text" id="name"${attr("name", field.name)}${attr("value", field.state.value)} class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors" placeholder="Your name"/> <div class="min-h-5 mt-1">`);
+        if (field.state.meta.errors && field.state.meta.errors.length > 0) {
+          $$renderer3.push("<!--[-->");
+          $$renderer3.push(`<p class="text-sm text-red-400">${escape_html((_a = field.state.meta.errors[0]) == null ? void 0 : _a.message)}</p>`);
+        } else {
+          $$renderer3.push("<!--[!-->");
           if (serverErrors.name) {
             $$renderer3.push("<!--[-->");
-            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html(serverErrors.name)}</p>`);
+            $$renderer3.push(`<p class="text-sm text-red-400">${escape_html(serverErrors.name)}</p>`);
           } else {
             $$renderer3.push("<!--[!-->");
           }
           $$renderer3.push(`<!--]-->`);
-        };
-        form.Field($$renderer2, { name: "name", children, $$slots: { default: true } });
-      }
-      $$renderer2.push(`<!----></div> <div><label for="email" class="block text-sm font-medium text-text-muted mb-1.5">Email</label> <!---->`);
-      {
-        let children = function($$renderer3, field) {
-          var _a;
-          $$renderer3.push(`<input type="email" id="email"${attr("name", field.name)}${attr("value", field.state.value)} class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors" placeholder="you@example.com"/> `);
-          if (field.state.meta.errors && field.state.meta.errors.length > 0) {
-            $$renderer3.push("<!--[-->");
-            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html((_a = field.state.meta.errors[0]) == null ? void 0 : _a.message)}</p>`);
-          } else {
-            $$renderer3.push("<!--[!-->");
-          }
-          $$renderer3.push(`<!--]--> `);
+        }
+        $$renderer3.push(`<!--]--></div>`);
+      };
+      form.Field($$renderer2, { name: "name", children, $$slots: { default: true } });
+    }
+    $$renderer2.push(`<!----></div> <div><label for="email" class="block text-sm font-medium text-text-muted mb-1.5">Email</label> <!---->`);
+    {
+      let children = function($$renderer3, field) {
+        var _a;
+        $$renderer3.push(`<input type="email" id="email"${attr("name", field.name)}${attr("value", field.state.value)} class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors" placeholder="you@example.com"/> <div class="min-h-5 mt-1">`);
+        if (field.state.meta.errors && field.state.meta.errors.length > 0) {
+          $$renderer3.push("<!--[-->");
+          $$renderer3.push(`<p class="text-sm text-red-400">${escape_html((_a = field.state.meta.errors[0]) == null ? void 0 : _a.message)}</p>`);
+        } else {
+          $$renderer3.push("<!--[!-->");
           if (serverErrors.email) {
             $$renderer3.push("<!--[-->");
-            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html(serverErrors.email)}</p>`);
+            $$renderer3.push(`<p class="text-sm text-red-400">${escape_html(serverErrors.email)}</p>`);
           } else {
             $$renderer3.push("<!--[!-->");
           }
           $$renderer3.push(`<!--]-->`);
-        };
-        form.Field($$renderer2, { name: "email", children, $$slots: { default: true } });
-      }
-      $$renderer2.push(`<!----></div> <div><label for="message" class="block text-sm font-medium text-text-muted mb-1.5">Message</label> <!---->`);
-      {
-        let children = function($$renderer3, field) {
-          var _a;
-          $$renderer3.push(`<textarea id="message"${attr("name", field.name)} rows="4" class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors resize-none" placeholder="Your message...">`);
-          const $$body = escape_html(field.state.value);
-          if ($$body) {
-            $$renderer3.push(`${$$body}`);
-          }
-          $$renderer3.push(`</textarea> `);
-          if (field.state.meta.errors && field.state.meta.errors.length > 0) {
-            $$renderer3.push("<!--[-->");
-            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html((_a = field.state.meta.errors[0]) == null ? void 0 : _a.message)}</p>`);
-          } else {
-            $$renderer3.push("<!--[!-->");
-          }
-          $$renderer3.push(`<!--]--> `);
+        }
+        $$renderer3.push(`<!--]--></div>`);
+      };
+      form.Field($$renderer2, { name: "email", children, $$slots: { default: true } });
+    }
+    $$renderer2.push(`<!----></div> <div><label for="message" class="block text-sm font-medium text-text-muted mb-1.5">Message</label> <!---->`);
+    {
+      let children = function($$renderer3, field) {
+        var _a;
+        $$renderer3.push(`<textarea id="message"${attr("name", field.name)} rows="4" class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors resize-none" placeholder="Your message...">`);
+        const $$body = escape_html(field.state.value);
+        if ($$body) {
+          $$renderer3.push(`${$$body}`);
+        }
+        $$renderer3.push(`</textarea> <div class="min-h-5 mt-1">`);
+        if (field.state.meta.errors && field.state.meta.errors.length > 0) {
+          $$renderer3.push("<!--[-->");
+          $$renderer3.push(`<p class="text-sm text-red-400">${escape_html((_a = field.state.meta.errors[0]) == null ? void 0 : _a.message)}</p>`);
+        } else {
+          $$renderer3.push("<!--[!-->");
           if (serverErrors.message) {
             $$renderer3.push("<!--[-->");
-            $$renderer3.push(`<p class="mt-1 text-sm text-red-400">${escape_html(serverErrors.message)}</p>`);
+            $$renderer3.push(`<p class="text-sm text-red-400">${escape_html(serverErrors.message)}</p>`);
           } else {
             $$renderer3.push("<!--[!-->");
           }
           $$renderer3.push(`<!--]-->`);
-        };
-        form.Field($$renderer2, { name: "message", children, $$slots: { default: true } });
-      }
-      $$renderer2.push(`<!----></div> `);
-      if (Object.keys(serverErrors).length > 0 && !serverErrors.name && !serverErrors.email && !serverErrors.message) {
-        $$renderer2.push("<!--[-->");
-        $$renderer2.push(`<p class="text-sm text-red-400">An error occurred. Please try again.</p>`);
-      } else {
-        $$renderer2.push("<!--[!-->");
-      }
-      $$renderer2.push(`<!--]--> <div class="flex gap-3 pt-2"><button type="button" class="flex-1 px-4 py-2 border border-border rounded-md text-text-muted hover:text-text hover:border-text-muted transition-colors"${attr("disabled", isSubmitting, true)}>Cancel</button> <button type="submit" class="flex-1 px-4 py-2 bg-accent text-bg rounded-md font-medium hover:opacity-90 transition-opacity disabled:opacity-50"${attr("disabled", isSubmitting, true)}>${escape_html(isSubmitting ? "Sending..." : "Send Message")}</button></div></form>`);
+        }
+        $$renderer3.push(`<!--]--></div>`);
+      };
+      form.Field($$renderer2, { name: "message", children, $$slots: { default: true } });
     }
-    $$renderer2.push(`<!--]-->`);
+    $$renderer2.push(`<!----></div> `);
+    if (Object.keys(serverErrors).length > 0 && !serverErrors.name && !serverErrors.email && !serverErrors.message) {
+      $$renderer2.push("<!--[-->");
+      $$renderer2.push(`<p class="text-sm text-red-400">An error occurred. Please try again.</p>`);
+    } else {
+      $$renderer2.push("<!--[!-->");
+    }
+    $$renderer2.push(`<!--]--> <div class="flex gap-3 pt-2"><button type="button" class="flex-1 px-4 py-2 border border-border rounded-md text-text-muted hover:text-text hover:border-text-muted transition-colors cursor-pointer"${attr("disabled", isSubmitting, true)}>Cancel</button> <button type="submit" class="flex-1 px-4 py-2 bg-accent text-bg rounded-md font-medium hover:opacity-90 transition-opacity disabled:opacity-50 cursor-pointer relative"${attr("disabled", isSubmitting, true)}>`);
+    if (isSubmitting) {
+      $$renderer2.push("<!--[-->");
+      $$renderer2.push(`<div class="flex items-center justify-center"><div class="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2"></div> Sending</div>`);
+    } else {
+      $$renderer2.push("<!--[!-->");
+      $$renderer2.push(`Send Message`);
+    }
+    $$renderer2.push(`<!--]--></button></div></form>`);
   });
 }
 const __vite_glob_0_0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -1447,7 +1446,7 @@ function Homepage($$renderer, $$props) {
         $$renderer4.push(`<title>Stefan Olivier</title>`);
       });
     });
-    $$renderer2.push(`<div class="min-h-screen bg-bg flex flex-col justify-between p-6 md:p-8 lg:p-12"><main class="flex-1 flex items-center justify-center"><div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10"><div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border"><img src="https://stefanolivier.imgix.net/img/owlsh.jpg" alt="Avatar" class="w-full h-full object-cover"/></div> <div class="flex flex-col items-center sm:items-start text-center sm:text-left"><h1 class="font-semibold text-4xl sm:text-5xl lg:text-6xl text-text tracking-tight">${escape_html(Bio.name)}</h1> <p class="text-base sm:text-lg lg:text-xl text-text-muted mt-1 sm:mt-1.5">${escape_html(Bio.occupation)}</p></div></div></main> <footer class="flex gap-4 sm:gap-5 justify-end relative z-[55]"><a${attr("href", Bio.contact.GitHub.src)} target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">`);
+    $$renderer2.push(`<div class="min-h-screen bg-bg flex flex-col justify-between p-6 md:p-8 lg:p-12"><main class="flex-1 flex items-center justify-center"><div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10"><div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border"><img src="https://stefanolivier.imgix.net/img/owlsh.jpg" alt="Avatar" class="w-full h-full object-cover"/></div> <div class="flex flex-col items-center sm:items-start text-center sm:text-left"><h1 class="font-semibold text-4xl sm:text-5xl lg:text-6xl text-text tracking-tight">${escape_html(Bio.name)}</h1> <p class="text-base sm:text-lg lg:text-xl text-text-muted mt-1 sm:mt-1.5">${escape_html(Bio.occupation)}</p></div></div></main> <footer${attr_class("flex gap-4 sm:gap-5 justify-end relative z-[55] transition-opacity duration-300", void 0, { "opacity-0": false })}><a${attr("href", Bio.contact.GitHub.src)} target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">`);
     Fa($$renderer2, { icon: faGithub, size: "lg" });
     $$renderer2.push(`<!----></a> <a${attr("href", Bio.contact.LinkedIn.src)} target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">`);
     Fa($$renderer2, { icon: faLinkedin, size: "lg" });

@@ -20,11 +20,10 @@ async function handleEmailClick(e: MouseEvent) {
         y: rect.top + rect.height / 2,
     };
     showContactForm = true;
+    showSocialIcons = false;
     await tick();
     if (overlayRef && formRef) {
-        animateFormOpen(clickOrigin.x, clickOrigin.y, overlayRef, formRef, target, () => {
-            showSocialIcons = false;
-        });
+        animateFormOpen(clickOrigin.x, clickOrigin.y, overlayRef, formRef, target);
     }
 }
 
@@ -74,7 +73,7 @@ $effect(() => {
         </div>
     </main>
 
-    <footer class="flex gap-4 sm:gap-5 justify-end relative z-[55]" class:invisible={!showSocialIcons}>
+    <footer class="flex gap-4 sm:gap-5 justify-end relative z-[55] transition-opacity duration-300" class:opacity-0={!showSocialIcons}>
         <a
             href={Bio.contact.GitHub.src}
             target="_blank"
