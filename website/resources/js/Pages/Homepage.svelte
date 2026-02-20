@@ -106,14 +106,14 @@ $effect(() => {
         bind:this={overlayRef}
         class="fixed inset-0 z-50"
     ></div>
-    <div 
+    <div
         bind:this={formRef}
         class="fixed inset-0 z-[60]"
     >
         <button
             type="button"
             onclick={handleFormClose}
-            class="absolute top-6 left-6 text-text-muted hover:text-text transition-colors"
+            class="absolute top-6 left-6 text-text-muted hover:text-text transition-colors cursor-pointer"
         >
             <Fa icon={faXmark} class="text-3xl" />
         </button>

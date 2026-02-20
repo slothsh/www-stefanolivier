@@ -159,14 +159,14 @@ const form = createForm(() => ({
             <button
                 type="button"
                 onclick={onClose}
-                class="flex-1 px-4 py-2 border border-border rounded-md text-text-muted hover:text-text hover:border-text-muted transition-colors"
+                class="flex-1 px-4 py-2 border border-border rounded-md text-text-muted hover:text-text hover:border-text-muted transition-colors cursor-pointer"
                 disabled={isSubmitting}
             >
                 Cancel
             </button>
             <button
                 type="submit"
-                class="flex-1 px-4 py-2 bg-accent text-bg rounded-md font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+                class="flex-1 px-4 py-2 bg-accent text-bg rounded-md font-medium hover:opacity-90 transition-opacity disabled:opacity-50 cursor-pointer"
                 disabled={isSubmitting}
             >
                 {isSubmitting ? 'Sending...' : 'Send Message'}
