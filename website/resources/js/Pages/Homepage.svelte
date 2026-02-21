@@ -66,8 +66,8 @@ $effect(() => {
 
 <div class="min-h-screen bg-bg flex flex-col p-6 md:p-8 lg:p-12">
     <main class="flex-1">
-        <div class="flex flex-col items-center text-center mb-12">
-            <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10 mb-8">
+        <div class="flex flex-col items-center text-center justify-center mb-12 translate-y-32">
+            <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10 mb-24 md:mb-48">
                 <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border">
                     <img
                         src="https://stefanolivier.imgix.net/img/owlsh.jpg"
@@ -83,7 +83,6 @@ $effect(() => {
 
             {#if featuredItems.length > 0}
                 <section class="w-full max-w-4xl">
-                    <h2 class="text-lg font-medium text-text-muted mb-4">Featured Projects</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {#each featuredItems as item}
                             <FeaturedItemCard {item} />
