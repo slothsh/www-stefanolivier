@@ -1,5 +1,5 @@
 import { type IconDefinition } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 export {};
@@ -7,15 +7,16 @@ export {};
 declare global {
     type SrcMail = `mailto:${string}@${string}.${'com' | 'co.za' | 'net'}`;
     type SrcWeb = `${'https' | 'http'}://${string}`;
+    type SrcTel = `tel:${string}`;
 
-    type Contact = 'LinkedIn' | 'GitHub' | 'Email';
+    type Contact = 'LinkedIn' | 'GitHub' | 'Email' | 'Phone';
 
     type ContactIcon = {
         [K in Contact]: IconDefinition
     }
 
     type ContactItem = {
-        src: SrcMail | SrcWeb,
+        src: SrcMail | SrcWeb | SrcTel,
         icon: IconDefinition,
         displayName: string,
     }
@@ -40,6 +41,11 @@ declare global {
     occupation: 'Software Engineer',
     avatarUrl: 'https://stefanolivier.imgix.net/img/owlsh.jpg',
     contact: {
+        Phone: {
+            icon: faPhone,
+            src: 'tel:+27612345678',
+            displayName: '+27 61 234 5678',
+        },
         Email: {
             icon: faEnvelope,
             src: 'mailto:dev@stefanolivier.com',

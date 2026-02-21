@@ -32,7 +32,6 @@ const form = createForm(() => ({
         onChange: contactSchema,
     },
     onSubmit: async ({ value }) => {
-        hasSubmitted = true;
         isSubmitting = true;
         serverErrors = {};
 
@@ -55,6 +54,7 @@ const form = createForm(() => ({
     onsubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
+        hasSubmitted = true;
         form.handleSubmit();
     }}
     class="space-y-5"
