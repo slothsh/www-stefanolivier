@@ -105,7 +105,7 @@ $effect(() => {
     </main>
 
     {#if featuredItems.length > 0}
-        <Footer className="mt-16" />
+        <Footer class="mt-16" />
     {:else}
         <SocialLinks
             variant="bottom"
