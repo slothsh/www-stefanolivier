@@ -30,6 +30,7 @@ const form = createForm(() => ({
     } as ContactFormValues,
     validators: {
         onChange: contactSchema,
+        onSubmit: contactSchema,
     },
     onSubmit: async ({ value }) => {
         isSubmitting = true;
