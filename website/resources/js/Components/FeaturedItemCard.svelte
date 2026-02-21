@@ -20,7 +20,7 @@ function getSourceIcon(sourceType: string) {
 }
 </script>
 
-<article class="group bg-bg border border-border rounded-lg overflow-hidden hover:border-accent/50 transition-colors">
+<article class="group bg-bg border border-border rounded-lg overflow-hidden hover:border-accent/50 transition-colors cursor-pointer">
     {#if item.imageUrl}
         <div class="aspect-video bg-border overflow-hidden">
             <img
