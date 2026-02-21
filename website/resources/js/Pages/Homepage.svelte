@@ -4,6 +4,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import ContactForm from './ContactForm.svelte';
 import FeaturedItemCard from '../Components/FeaturedItemCard.svelte';
 import SocialLinks from '../Components/SocialLinks.svelte';
+import Footer from '../Components/Footer.svelte';
 import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Lib/contactFormAnimation';
 import { tick } from 'svelte';
 import type { FeaturedItem } from '@/types';
@@ -33,7 +34,6 @@ async function handleEmailClick(e: MouseEvent) {
         y: rect.top + rect.height / 2,
     };
     showContactForm = true;
-    showSocialIcons = false;
     await tick();
     if (overlayRef && formRef) {
         animateFormOpen(clickOrigin.x, clickOrigin.y, overlayRef, formRef, target);
@@ -42,7 +42,6 @@ async function handleEmailClick(e: MouseEvent) {
 
 function handleFormClose() {
     if (overlayRef && formRef) {
-        showSocialIcons = true;
         animateFormClose(overlayRef, formRef, () => {
             showContactForm = false;
         });
@@ -119,6 +118,7 @@ $effect(() => {
             />
         </footer>
     {/if}
+    <Footer />
 </div>
 
 {#if showContactForm}
