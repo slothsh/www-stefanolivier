@@ -30,9 +30,9 @@ const form = createForm(() => ({
     } as ContactFormValues,
     validators: {
         onChange: contactSchema,
+        onSubmit: contactSchema,
     },
     onSubmit: async ({ value }) => {
-        hasSubmitted = true;
         isSubmitting = true;
         serverErrors = {};
 
@@ -55,6 +55,7 @@ const form = createForm(() => ({
     onsubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
+        hasSubmitted = true;
         form.handleSubmit();
     }}
     class="space-y-5"
@@ -75,7 +76,7 @@ const form = createForm(() => ({
                     class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
                     placeholder="Your name"
                 />
-                <div class="min-h-5 mt-1">
+                <div class="min-h-5 mt-1 form-hint">
                     {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
                         <p class="text-sm text-red-400">{field.state.meta.errors[0]?.message}</p>
                     {:else if serverErrors.name}
@@ -102,7 +103,7 @@ const form = createForm(() => ({
                     class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
                     placeholder="you@example.com"
                 />
-                <div class="min-h-5 mt-1">
+                <div class="min-h-5 mt-1 form-hint">
                     {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
                         <p class="text-sm text-red-400">{field.state.meta.errors[0]?.message}</p>
                     {:else if serverErrors.email}
@@ -129,7 +130,7 @@ const form = createForm(() => ({
                     class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors resize-none"
                     placeholder="Your message..."
                 ></textarea>
-                <div class="min-h-5 mt-1">
+                <div class="min-h-5 mt-1 form-hint">
                     {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
                         <p class="text-sm text-red-400">{field.state.meta.errors[0]?.message}</p>
                     {:else if serverErrors.message}

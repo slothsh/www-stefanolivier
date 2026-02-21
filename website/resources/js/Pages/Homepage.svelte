@@ -137,11 +137,82 @@ $effect(() => {
             <Fa icon={faXmark} class="text-3xl" />
         </button>
         <div class="flex items-center justify-center h-full p-4">
-            <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-md shadow-xl">
-                <ContactForm
-                    isVisible={showContactForm}
-                    onClose={handleFormClose}
-                />
+            <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-4xl shadow-xl flex flex-col">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="flex-1 md:flex-[2]">
+                        <ContactForm
+                            isVisible={showContactForm}
+                            onClose={handleFormClose}
+                        />
+                    </div>
+                    <div class="hidden md:flex flex-1 flex-col border-l border-border pl-8">
+                        <h2 class="contact-detail text-xl font-semibold text-text mb-6">Contact</h2>
+                        <div class="space-y-4">
+                            <a
+                                href={Bio.contact.Phone.src}
+                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                            >
+                                <Fa icon={Bio.contact.Phone.icon} class="text-lg w-5" />
+                                <span>{Bio.contact.Phone.displayName}</span>
+                            </a>
+                            <a
+                                href={Bio.contact.Email.src}
+                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                            >
+                                <Fa icon={Bio.contact.Email.icon} class="text-lg w-5" />
+                                <span>{Bio.contact.Email.displayName}</span>
+                            </a>
+                            <a
+                                href={Bio.contact.GitHub.src}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                            >
+                                <Fa icon={Bio.contact.GitHub.icon} class="text-lg w-5" />
+                                <span>{Bio.contact.GitHub.displayName}</span>
+                            </a>
+                            <a
+                                href={Bio.contact.LinkedIn.src}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                            >
+                                <Fa icon={Bio.contact.LinkedIn.icon} class="text-lg w-5" />
+                                <span>{Bio.contact.LinkedIn.displayName}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:hidden flex flex-row gap-4 justify-center pt-6 mt-6 border-t border-border">
+                    <a
+                        href={Bio.contact.Phone.src}
+                        class="contact-detail text-text-muted hover:text-accent transition-colors text-sm"
+                    >
+                        {Bio.contact.Phone.displayName}
+                    </a>
+                    <a
+                        href={Bio.contact.Email.src}
+                        class="contact-detail text-text-muted hover:text-accent transition-colors text-sm"
+                    >
+                        {Bio.contact.Email.displayName}
+                    </a>
+                    <a
+                        href={Bio.contact.GitHub.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="contact-detail text-text-muted hover:text-accent transition-colors"
+                    >
+                        <Fa icon={Bio.contact.GitHub.icon} class="text-lg" />
+                    </a>
+                    <a
+                        href={Bio.contact.LinkedIn.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="contact-detail text-text-muted hover:text-accent transition-colors"
+                    >
+                        <Fa icon={Bio.contact.LinkedIn.icon} class="text-lg" />
+                    </a>
+                </div>
             </div>
         </div>
     </div>
