@@ -5,6 +5,7 @@ import ContactForm from './ContactForm.svelte';
 import FeaturedItemCard from '../Components/FeaturedItemCard.svelte';
 import SocialLinks from '../Components/SocialLinks.svelte';
 import Footer from '../Components/Footer.svelte';
+import Header from '../Components/Header.svelte';
 import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Lib/contactFormAnimation';
 import { lockScroll, unlockScroll } from '../Lib/scrollLock';
 import { cn } from '../Lib/cn';
@@ -18,15 +19,9 @@ interface Props {
 let { featuredItems = [] }: Props = $props();
 
 let showContactForm = $state(false);
-let showSocialIcons = $state(true);
-let isScrollable = $state(false);
 let overlayRef: HTMLElement | undefined = $state();
 let formRef: HTMLElement | undefined = $state();
 let clickOrigin = $state({ x: 0, y: 0 });
-
-function checkScrollable() {
-    isScrollable = document.documentElement.scrollHeight > window.innerHeight;
-}
 
 async function handleEmailClick(e: MouseEvent) {
     const target = e.currentTarget as HTMLElement;
@@ -68,12 +63,6 @@ $effect(() => {
         };
     }
 });
-
-$effect(() => {
-    checkScrollable();
-    window.addEventListener('resize', checkScrollable);
-    return () => window.removeEventListener('resize', checkScrollable);
-});
 </script>
 
 <svelte:head>
@@ -81,6 +70,9 @@ $effect(() => {
 </svelte:head>
 
 <div class="min-h-screen bg-bg flex flex-col p-6 md:p-8 lg:p-12">
+    {#if featuredItems.length > 0}
+        <Header onEmailClick={handleEmailClick} />
+    {/if}
     <main class="flex-1 flex flex-col items-center justify-center">
         <div class="flex flex-col items-center text-center justify-center">
             <div class={cn(
@@ -112,18 +104,12 @@ $effect(() => {
         </div>
     </main>
 
-    {#if isScrollable}
-        <SocialLinks
-            variant="sticky-top"
-            onEmailClick={handleEmailClick}
-            class={!showSocialIcons ? 'opacity-0' : ''}
-        />
+    {#if featuredItems.length > 0}
         <Footer className="mt-16" />
     {:else}
         <SocialLinks
             variant="bottom"
             onEmailClick={handleEmailClick}
-            class={!showSocialIcons ? 'opacity-0' : ''}
         />
     {/if}
 </div>
