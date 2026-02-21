@@ -117,9 +117,9 @@ $effect(() => {
             <Fa icon={faXmark} class="text-3xl" />
         </button>
         <div class="flex items-center justify-center h-full p-4">
-            <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-3xl shadow-xl flex flex-col">
+            <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-4xl shadow-xl flex flex-col">
                 <div class="flex flex-col md:flex-row gap-8">
-                    <div class="flex-1">
+                    <div class="flex-1 md:flex-[2]">
                         <ContactForm
                             isVisible={showContactForm}
                             onClose={handleFormClose}
