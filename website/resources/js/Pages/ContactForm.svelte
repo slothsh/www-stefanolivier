@@ -8,19 +8,19 @@ interface Props {
     isVisible: boolean;
 }
 
-let { onClose, isVisible }: Props = $props();
+let { onClose }: Props = $props();
 
 const contactSchema = z.object({
     name: z.string().min(1, 'Name is required').max(255, 'Name must be 255 characters or less'),
-    email: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
+    email: z.string().regex(/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/, "Email is required"),
     message: z.string().min(10, 'Message must be at least 10 characters').max(5000, 'Message must be 5000 characters or less'),
 });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
 
 let isSubmitting = $state(false);
-let successMessage = $state<string | null>(null);
 let serverErrors = $state<Record<string, string>>({});
+let hasSubmitted = $state(false);
 
 const form = createForm(() => ({
     defaultValues: {
@@ -32,24 +32,19 @@ const form = createForm(() => ({
         onChange: contactSchema,
     },
     onSubmit: async ({ value }) => {
+        hasSubmitted = true;
         isSubmitting = true;
         serverErrors = {};
 
         router.post(route('contact.store'), value, {
-            onSuccess: () => {
-                successMessage = 'Your message has been sent successfully!';
-            },
             onError: (errors) => {
                 if (errors && typeof errors === 'object') {
                     serverErrors = errors as Record<string, string>;
                 }
             },
-            onFinish: () => {
-                setTimeout(() => {
-                    isSubmitting = false;
-                    onClose();
-                }, 2000);
-            },
+            onFinish: () => setTimeout(() => {
+                isSubmitting = false;
+            }, 2000),
         });
     },
 }));
@@ -81,7 +76,7 @@ const form = createForm(() => ({
                     placeholder="Your name"
                 />
                 <div class="min-h-5 mt-1">
-                    {#if field.state.meta.errors && field.state.meta.errors.length > 0}
+                    {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
                         <p class="text-sm text-red-400">{field.state.meta.errors[0]?.message}</p>
                     {:else if serverErrors.name}
                         <p class="text-sm text-red-400">{serverErrors.name}</p>
@@ -108,7 +103,7 @@ const form = createForm(() => ({
                     placeholder="you@example.com"
                 />
                 <div class="min-h-5 mt-1">
-                    {#if field.state.meta.errors && field.state.meta.errors.length > 0}
+                    {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
                         <p class="text-sm text-red-400">{field.state.meta.errors[0]?.message}</p>
                     {:else if serverErrors.email}
                         <p class="text-sm text-red-400">{serverErrors.email}</p>
@@ -135,7 +130,7 @@ const form = createForm(() => ({
                     placeholder="Your message..."
                 ></textarea>
                 <div class="min-h-5 mt-1">
-                    {#if field.state.meta.errors && field.state.meta.errors.length > 0}
+                    {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
                         <p class="text-sm text-red-400">{field.state.meta.errors[0]?.message}</p>
                     {:else if serverErrors.message}
                         <p class="text-sm text-red-400">{serverErrors.message}</p>
@@ -169,7 +164,7 @@ const form = createForm(() => ({
                         Sending
                     </div>
                 {:else}
-                    Send Message
+                    Send
                 {/if}
             </button>
     </div>
