@@ -118,7 +118,7 @@ $effect(() => {
             onEmailClick={handleEmailClick}
             class={!showSocialIcons ? 'opacity-0' : ''}
         />
-        <Footer />
+        <Footer className="mt-16" />
     {:else}
         <SocialLinks
             variant="bottom"

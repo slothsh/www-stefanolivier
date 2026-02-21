@@ -2,9 +2,14 @@
 import Fa from 'svelte-fa';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+    import { cn } from '@/Lib/cn';
 
 let isVisible = $state(false);
-let footerRef: HTMLElement | undefined = $state();
+let {
+    className
+}: {
+    className: string
+} = $props();
 
 function checkScrollable() {
     const scrollHeight = document.documentElement.scrollHeight;
@@ -20,9 +25,11 @@ $effect(() => {
 </script>
 
 <footer
-    bind:this={footerRef}
-    class="flex flex-col sm:flex-row items-center justify-between gap-4 py-6 border-t border-border transition-opacity duration-300 {isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}"
->
+    class={cn(
+        "flex flex-col sm:flex-row items-center justify-between gap-4 py-6 border-t border-border transition-opacity duration-300",
+        {'opacity-100': isVisible, 'opacity-0 pointer-events-none': !isVisible},
+        className
+    )}>
     <span class="text-sm text-text-muted">
         {Bio.firstname} {Bio.surname}
     </span>
