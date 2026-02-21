@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { FeaturedItem } from '@/types';
 import Fa from 'svelte-fa';
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
@@ -20,7 +20,12 @@ function getSourceIcon(sourceType: string) {
 }
 </script>
 
-<article class="group bg-bg border border-border rounded-lg overflow-hidden hover:border-accent/50 transition-colors cursor-pointer">
+<a
+    href={item.linkUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="block group bg-bg border border-border rounded-lg overflow-hidden hover:border-accent/50 transition-colors"
+>
     {#if item.imageUrl}
         <div class="aspect-video bg-border overflow-hidden">
             <img
@@ -42,14 +47,9 @@ function getSourceIcon(sourceType: string) {
         <p class="text-sm text-text-muted mb-3 line-clamp-2">
             {item.description}
         </p>
-        <a
-            href={item.linkUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 text-sm text-accent hover:text-accent/80 transition-colors"
-        >
+        <span class="inline-flex items-center gap-2 text-sm text-accent">
             <span>{item.linkText}</span>
             <Fa icon={faArrowUpRightFromSquare} class="text-xs" />
-        </a>
+        </span>
     </div>
-</article>
+</a>
