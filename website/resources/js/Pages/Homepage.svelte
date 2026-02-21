@@ -126,18 +126,18 @@ $effect(() => {
                         />
                     </div>
                     <div class="hidden md:flex flex-1 flex-col border-l border-border pl-8">
-                        <h2 class="text-xl font-semibold text-text mb-6">Contact</h2>
+                        <h2 class="contact-detail text-xl font-semibold text-text mb-6">Contact</h2>
                         <div class="space-y-4">
                             <a
                                 href={Bio.contact.Phone.src}
-                                class="flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
                             >
                                 <Fa icon={Bio.contact.Phone.icon} class="text-lg w-5" />
                                 <span>{Bio.contact.Phone.displayName}</span>
                             </a>
                             <a
                                 href={Bio.contact.Email.src}
-                                class="flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
                             >
                                 <Fa icon={Bio.contact.Email.icon} class="text-lg w-5" />
                                 <span>{Bio.contact.Email.displayName}</span>
@@ -146,7 +146,7 @@ $effect(() => {
                                 href={Bio.contact.GitHub.src}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
                             >
                                 <Fa icon={Bio.contact.GitHub.icon} class="text-lg w-5" />
                                 <span>{Bio.contact.GitHub.displayName}</span>
@@ -155,7 +155,7 @@ $effect(() => {
                                 href={Bio.contact.LinkedIn.src}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
                             >
                                 <Fa icon={Bio.contact.LinkedIn.icon} class="text-lg w-5" />
                                 <span>{Bio.contact.LinkedIn.displayName}</span>
@@ -166,13 +166,13 @@ $effect(() => {
                 <div class="md:hidden flex flex-row gap-4 justify-center pt-6 mt-6 border-t border-border">
                     <a
                         href={Bio.contact.Phone.src}
-                        class="text-text-muted hover:text-accent transition-colors text-sm"
+                        class="contact-detail text-text-muted hover:text-accent transition-colors text-sm"
                     >
                         {Bio.contact.Phone.displayName}
                     </a>
                     <a
                         href={Bio.contact.Email.src}
-                        class="text-text-muted hover:text-accent transition-colors text-sm"
+                        class="contact-detail text-text-muted hover:text-accent transition-colors text-sm"
                     >
                         {Bio.contact.Email.displayName}
                     </a>
@@ -180,7 +180,7 @@ $effect(() => {
                         href={Bio.contact.GitHub.src}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="text-text-muted hover:text-accent transition-colors"
+                        class="contact-detail text-text-muted hover:text-accent transition-colors"
                     >
                         <Fa icon={Bio.contact.GitHub.icon} class="text-lg" />
                     </a>
@@ -188,7 +188,7 @@ $effect(() => {
                         href={Bio.contact.LinkedIn.src}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="text-text-muted hover:text-accent transition-colors"
+                        class="contact-detail text-text-muted hover:text-accent transition-colors"
                     >
                         <Fa icon={Bio.contact.LinkedIn.icon} class="text-lg" />
                     </a>
