@@ -80,8 +80,8 @@ $effect(() => {
 </svelte:head>
 
 <div class="min-h-screen bg-bg flex flex-col p-6 md:p-8 lg:p-12">
-    <main class="flex-1">
-        <div class="flex flex-col items-center text-center justify-center mb-12 translate-y-32">
+    <main class="flex-1 flex flex-col items-center justify-center">
+        <div class="flex flex-col items-center text-center justify-center mb-12">
             <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10 mb-24 md:mb-48">
                 <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border">
                     <img
