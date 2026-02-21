@@ -3,8 +3,16 @@ import Fa from 'svelte-fa';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faXmark } from '@fortawesome/free-solid-svg-icons';
 import ContactForm from './ContactForm.svelte';
+import FeaturedItemCard from '../Components/FeaturedItemCard.svelte';
 import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Lib/contactFormAnimation';
 import { tick } from 'svelte';
+import type { FeaturedItem } from '@/types';
+
+interface Props {
+    featuredItems?: FeaturedItem[];
+}
+
+let { featuredItems = [] }: Props = $props();
 
 let showContactForm = $state(false);
 let showSocialIcons = $state(true);
@@ -56,20 +64,33 @@ $effect(() => {
     <title>Stefan Olivier</title>
 </svelte:head>
 
-<div class="min-h-screen bg-bg flex flex-col justify-between p-6 md:p-8 lg:p-12">
-    <main class="flex-1 flex items-center justify-center">
-        <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10">
-            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border">
-                <img
-                    src="https://stefanolivier.imgix.net/img/owlsh.jpg"
-                    alt="Avatar"
-                    class="w-full h-full object-cover"
-                />
+<div class="min-h-screen bg-bg flex flex-col p-6 md:p-8 lg:p-12">
+    <main class="flex-1">
+        <div class="flex flex-col items-center text-center mb-12">
+            <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10 mb-8">
+                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border">
+                    <img
+                        src="https://stefanolivier.imgix.net/img/owlsh.jpg"
+                        alt="Avatar"
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+                <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
+                    <h1 class="font-semibold text-4xl sm:text-5xl lg:text-6xl text-text tracking-tight">{Bio.name}</h1>
+                    <p class="text-base sm:text-lg lg:text-xl text-text-muted mt-1 sm:mt-1.5">{Bio.occupation}</p>
+                </div>
             </div>
-            <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
-                <h1 class="font-semibold text-4xl sm:text-5xl lg:text-6xl text-text tracking-tight">{Bio.name}</h1>
-                <p class="text-base sm:text-lg lg:text-xl text-text-muted mt-1 sm:mt-1.5">{Bio.occupation}</p>
-            </div>
+
+            {#if featuredItems.length > 0}
+                <section class="w-full max-w-4xl">
+                    <h2 class="text-lg font-medium text-text-muted mb-4">Featured Projects</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {#each featuredItems as item}
+                            <FeaturedItemCard {item} />
+                        {/each}
+                    </div>
+                </section>
+            {/if}
         </div>
     </main>
 

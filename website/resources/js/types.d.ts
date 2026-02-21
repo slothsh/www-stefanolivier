@@ -37,3 +37,16 @@ export type CanvasProps<T = {}> = {
 export type IndexItem = {
     date: string,
 }
+
+export type FeaturedItemSource = 'github' | 'blog' | 'project' | 'external';
+
+export interface FeaturedItem {
+    id: number;
+    sourceType: FeaturedItemSource;
+    title: string;
+    description: string;
+    imageUrl: string | null;
+    linkUrl: string;
+    linkText: string;
+    metadata: Record<string, unknown> | null;
+}
