@@ -1,9 +1,9 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import ContactForm from './ContactForm.svelte';
 import FeaturedItemCard from '../Components/FeaturedItemCard.svelte';
+import Footer from '../Components/Footer.svelte';
 import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Lib/contactFormAnimation';
 import { tick } from 'svelte';
 import type { FeaturedItem } from '@/types';
@@ -15,7 +15,6 @@ interface Props {
 let { featuredItems = [] }: Props = $props();
 
 let showContactForm = $state(false);
-let showSocialIcons = $state(true);
 let overlayRef: HTMLElement | undefined = $state();
 let formRef: HTMLElement | undefined = $state();
 let clickOrigin = $state({ x: 0, y: 0 });
@@ -28,7 +27,6 @@ async function handleEmailClick(e: MouseEvent) {
         y: rect.top + rect.height / 2,
     };
     showContactForm = true;
-    showSocialIcons = false;
     await tick();
     if (overlayRef && formRef) {
         animateFormOpen(clickOrigin.x, clickOrigin.y, overlayRef, formRef, target);
@@ -37,7 +35,6 @@ async function handleEmailClick(e: MouseEvent) {
 
 function handleFormClose() {
     if (overlayRef && formRef) {
-        showSocialIcons = true;
         animateFormClose(overlayRef, formRef, () => {
             showContactForm = false;
         });
@@ -93,31 +90,7 @@ $effect(() => {
         </div>
     </main>
 
-    <footer class="flex gap-4 sm:gap-5 justify-end relative z-[55] transition-opacity duration-300" class:opacity-0={!showSocialIcons}>
-        <a
-            href={Bio.contact.GitHub.src}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-text-muted hover:text-accent transition-colors"
-        >
-            <Fa icon={faGithub} size="lg" />
-        </a>
-        <a
-            href={Bio.contact.LinkedIn.src}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-text-muted hover:text-accent transition-colors"
-        >
-            <Fa icon={faLinkedin} size="lg" />
-        </a>
-        <button
-            type="button"
-            onclick={handleEmailClick}
-            class="text-text-muted hover:text-accent transition-colors cursor-pointer"
-        >
-            <Fa icon={faEnvelope} size="lg" />
-        </button>
-    </footer>
+    <Footer />
 </div>
 
 {#if showContactForm}
