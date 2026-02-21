@@ -6,6 +6,7 @@ import FeaturedItemCard from '../Components/FeaturedItemCard.svelte';
 import SocialLinks from '../Components/SocialLinks.svelte';
 import Footer from '../Components/Footer.svelte';
 import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Lib/contactFormAnimation';
+import { lockScroll, unlockScroll } from '../Lib/scrollLock';
 import { tick } from 'svelte';
 import type { FeaturedItem } from '@/types';
 
@@ -58,8 +59,12 @@ function handleResize() {
 
 $effect(() => {
     if (showContactForm) {
+        lockScroll();
         window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            unlockScroll();
+        };
     }
 });
 
