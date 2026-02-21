@@ -7,6 +7,7 @@ import SocialLinks from '../Components/SocialLinks.svelte';
 import Footer from '../Components/Footer.svelte';
 import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Lib/contactFormAnimation';
 import { lockScroll, unlockScroll } from '../Lib/scrollLock';
+import { cn } from '../Lib/cn';
 import { tick } from 'svelte';
 import type { FeaturedItem } from '@/types';
 
@@ -81,8 +82,11 @@ $effect(() => {
 
 <div class="min-h-screen bg-bg flex flex-col p-6 md:p-8 lg:p-12">
     <main class="flex-1 flex flex-col items-center justify-center">
-        <div class="flex flex-col items-center text-center justify-center mb-12">
-            <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10 my-12 md:my-24">
+        <div class="flex flex-col items-center text-center justify-center">
+            <div class={cn(
+                'flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10',
+                featuredItems.length > 0 ? 'my-12 md:my-24' : ''
+            )}>
                 <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border">
                     <img
                         src="https://stefanolivier.imgix.net/img/owlsh.jpg"
@@ -114,16 +118,14 @@ $effect(() => {
             onEmailClick={handleEmailClick}
             class={!showSocialIcons ? 'opacity-0' : ''}
         />
+        <Footer />
     {:else}
-        <footer class="mt-auto">
-            <SocialLinks
-                variant="bottom"
-                onEmailClick={handleEmailClick}
-                class={!showSocialIcons ? 'opacity-0' : ''}
-            />
-        </footer>
+        <SocialLinks
+            variant="bottom"
+            onEmailClick={handleEmailClick}
+            class={!showSocialIcons ? 'opacity-0' : ''}
+        />
     {/if}
-    <Footer />
 </div>
 
 {#if showContactForm}
