@@ -6,9 +6,9 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 let isVisible = $state(false);
 let {
-    class: className
+    class: className,
 }: {
-    class?: string
+    class?: string,
 } = $props();
 
 function checkScrollable() {

@@ -12,7 +12,10 @@ interface Props {
 let { onEmailClick, class: className = '' }: Props = $props();
 </script>
 
-<header class={cn('fixed top-6 right-6 z-40 flex justify-end bg-bg', className)}>
+<header class={cn(
+    'fixed top-0 left-0 right-0 z-40 flex justify-end bg-bg p-4 md:p-6',
+    className
+)}>
     <div class="flex gap-4 sm:gap-5">
         <a
             href={Bio.contact.GitHub.src}

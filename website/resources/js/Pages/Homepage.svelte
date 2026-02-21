@@ -69,15 +69,15 @@ $effect(() => {
     <title>Stefan Olivier</title>
 </svelte:head>
 
-<div class="min-h-screen bg-bg flex flex-col p-6 md:p-8 lg:p-12">
+<div class="min-h-screen bg-bg flex flex-col px-6 md:px-8 lg:px-12">
     {#if featuredItems.length > 0}
         <Header onEmailClick={handleEmailClick} />
     {/if}
-    <main class="flex-1 flex flex-col items-center justify-center">
+    <main class="flex-1 flex flex-col items-center justify-center mt-6 md:mt-8 lg:mt-12">
         <div class="flex flex-col items-center text-center justify-center">
             <div class={cn(
                 'flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10',
-                featuredItems.length > 0 ? 'my-12 md:my-24' : ''
+                { 'my-12 md:my-24': featuredItems.length > 0 }
             )}>
                 <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border">
                     <img
