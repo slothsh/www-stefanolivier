@@ -1,9 +1,9 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import ContactForm from './ContactForm.svelte';
 import FeaturedItemCard from '../Components/FeaturedItemCard.svelte';
+import SocialLinks from '../Components/SocialLinks.svelte';
 import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Lib/contactFormAnimation';
 import { tick } from 'svelte';
 import type { FeaturedItem } from '@/types';
@@ -16,9 +16,14 @@ let { featuredItems = [] }: Props = $props();
 
 let showContactForm = $state(false);
 let showSocialIcons = $state(true);
+let isScrollable = $state(false);
 let overlayRef: HTMLElement | undefined = $state();
 let formRef: HTMLElement | undefined = $state();
 let clickOrigin = $state({ x: 0, y: 0 });
+
+function checkScrollable() {
+    isScrollable = document.documentElement.scrollHeight > window.innerHeight;
+}
 
 async function handleEmailClick(e: MouseEvent) {
     const target = e.currentTarget as HTMLElement;
@@ -58,6 +63,12 @@ $effect(() => {
         return () => window.removeEventListener('resize', handleResize);
     }
 });
+
+$effect(() => {
+    checkScrollable();
+    window.addEventListener('resize', checkScrollable);
+    return () => window.removeEventListener('resize', checkScrollable);
+});
 </script>
 
 <svelte:head>
@@ -93,31 +104,21 @@ $effect(() => {
         </div>
     </main>
 
-    <footer class="flex gap-4 sm:gap-5 justify-end relative z-[55] transition-opacity duration-300" class:opacity-0={!showSocialIcons}>
-        <a
-            href={Bio.contact.GitHub.src}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-text-muted hover:text-accent transition-colors"
-        >
-            <Fa icon={faGithub} size="lg" />
-        </a>
-        <a
-            href={Bio.contact.LinkedIn.src}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-text-muted hover:text-accent transition-colors"
-        >
-            <Fa icon={faLinkedin} size="lg" />
-        </a>
-        <button
-            type="button"
-            onclick={handleEmailClick}
-            class="text-text-muted hover:text-accent transition-colors cursor-pointer"
-        >
-            <Fa icon={faEnvelope} size="lg" />
-        </button>
-    </footer>
+    {#if isScrollable}
+        <SocialLinks
+            variant="sticky-top"
+            onEmailClick={handleEmailClick}
+            class={!showSocialIcons ? 'opacity-0' : ''}
+        />
+    {:else}
+        <footer class="mt-auto">
+            <SocialLinks
+                variant="bottom"
+                onEmailClick={handleEmailClick}
+                class={!showSocialIcons ? 'opacity-0' : ''}
+            />
+        </footer>
+    {/if}
 </div>
 
 {#if showContactForm}
