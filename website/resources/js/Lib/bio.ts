@@ -43,13 +43,13 @@ declare global {
     contact: {
         Phone: {
             icon: faPhone,
-            src: 'tel:+27612345678',
-            displayName: '+27 61 234 5678',
+            src: 'tel:+27761855537',
+            displayName: '+27 76 185 5537',
         },
         Email: {
             icon: faEnvelope,
-            src: 'mailto:dev@stefanolivier.com',
-            displayName: 'dev@stefanolivier.com',
+            src: 'mailto:s.olivier1194@gmail.com',
+            displayName: 's.olivier1194@gmail.com',
         },
         GitHub: {
             icon: faGithub,
