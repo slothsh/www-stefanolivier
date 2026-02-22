@@ -108,6 +108,7 @@ $effect(() => {
         <Footer class="mt-16" />
     {:else}
         <SocialLinks
+            class="mb-8"
             variant="bottom"
             onEmailClick={handleEmailClick}
         />
