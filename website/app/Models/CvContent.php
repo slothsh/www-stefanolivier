@@ -15,6 +15,6 @@ class CvContent extends Model
 
     protected $casts = [
         'content' => 'object',
-        'tags' => CommaListToArray::class,
+        'tags' => \App\Models\CommaListToArray::class,
     ];
 }
