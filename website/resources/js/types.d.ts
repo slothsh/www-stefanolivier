@@ -50,3 +50,38 @@ export interface FeaturedItem {
     linkText: string;
     metadata: Record<string, unknown> | null;
 }
+
+export interface CvExperience {
+    company: string;
+    position: string;
+    startDate: string;
+    endDate?: string;
+    description: string;
+    highlights?: string[];
+}
+
+export interface CvEducation {
+    institution: string;
+    degree: string;
+    field: string;
+    startDate: string;
+    endDate?: string;
+}
+
+export interface CvContent {
+    name: string;
+    title: string;
+    email?: string;
+    phone?: string;
+    location?: string;
+    summary?: string;
+    experience: CvExperience[];
+    education: CvEducation[];
+    skills: string[];
+}
+
+export interface CvData {
+    id: number;
+    content: CvContent;
+    tags: string[];
+}
