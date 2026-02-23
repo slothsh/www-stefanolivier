@@ -29,6 +29,7 @@ declare global {
         contact: { [K in Contact]: ContactItem },
         name: string,
         avatarUrl: SrcWeb | `/${string}`,
+        portraitUrl: SrcWeb | `/${string}`,
     }
 
     var Bio: Bio;
@@ -40,6 +41,7 @@ declare global {
     about: 'I make websites and applications that have the happiest bits, nibbles, and bytes.',
     occupation: 'Software Engineer',
     avatarUrl: 'https://stefanolivier.imgix.net/img/owlsh.jpg',
+    portraitUrl: 'https://stefanolivier.imgix.net/stefan.jpg',
     contact: {
         Phone: {
             icon: faPhone,

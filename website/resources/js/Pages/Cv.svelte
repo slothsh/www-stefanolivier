@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { CvData } from '@/types';
+import { formatDate } from 'date-fns';
 
 interface Props {
     cv: CvData;
@@ -7,39 +8,35 @@ interface Props {
 
 let { cv }: Props = $props();
 
-function formatDate(dateStr: string): string {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-}
-
 function formatRange(start: string, end?: string): string {
-    const startFormatted = formatDate(start);
-    const endFormatted = end ? formatDate(end) : 'Present';
+    const startFormatted = formatDate(start, 'MMM Y');
+    const endFormatted = end ? formatDate(end, 'MMM Y') : 'Present';
     return `${startFormatted} - ${endFormatted}`;
 }
 </script>
 
-<svelte:head>
-    <title>{cv.content.name} - CV</title>
-</svelte:head>
-
 <div class="min-h-screen bg-white text-gray-900 print:p-0">
     <div class="max-w-[210mm] mx-auto p-8 print:p-6 print:max-w-none">
         <header class="border-b border-gray-300 pb-6 mb-6 print:pb-4 print:mb-4">
-            <h1 class="text-3xl font-bold text-gray-900 print:text-2xl">{cv.content.name}</h1>
-            {#if cv.content.title}
-                <p class="text-xl text-gray-600 mt-1 print:text-lg">{cv.content.title}</p>
-            {/if}
-            <div class="flex flex-wrap gap-4 mt-3 text-sm text-gray-600 print:gap-3 print:text-xs">
-                {#if cv.content.email}
-                    <a href="mailto:{cv.content.email}" class="hover:text-gray-900 print:text-gray-600">{cv.content.email}</a>
-                {/if}
-                {#if cv.content.phone}
-                    <a href="tel:{cv.content.phone}" class="hover:text-gray-900 print:text-gray-600">{cv.content.phone}</a>
-                {/if}
-                {#if cv.content.location}
-                    <span class="print:text-gray-600">{cv.content.location}</span>
-                {/if}
+            <div class="flex justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 print:text-2xl">{cv.content.name}</h1>
+                    {#if cv.content.title}
+                        <p class="text-xl text-gray-600 mt-1 print:text-lg">{cv.content.title}</p>
+                    {/if}
+                    <div class="flex flex-wrap gap-4 mt-3 text-sm text-gray-600 print:gap-3 print:text-xs">
+                        {#if cv.content.email}
+                            <a href="mailto:{cv.content.email}" class="hover:text-gray-900 print:text-gray-600">{cv.content.email}</a>
+                        {/if}
+                        {#if cv.content.phone}
+                            <a href="tel:{cv.content.phone}" class="hover:text-gray-900 print:text-gray-600">{cv.content.phone}</a>
+                        {/if}
+                        {#if cv.content.location}
+                            <span class="print:text-gray-600">{cv.content.location}</span>
+                        {/if}
+                    </div>
+                </div>
+                <img src={Bio.portraitUrl} class="rounded-full shadow-[0_20mm_10mm_rgba(0,0,0,0.1)]" width="124mm" alt="owl illustration">
             </div>
         </header>
 

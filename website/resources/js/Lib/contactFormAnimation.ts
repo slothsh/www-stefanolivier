@@ -94,20 +94,20 @@ export function animateFormClose(
 
 export function updateClipPathOnResize(overlayEl: HTMLElement, formEl: HTMLElement): void {
     if (!isOpen) return;
-    
+
     requestAnimationFrame(() => {
         if (!isOpen) return;
-        
+
         let originX = storedOrigin.x;
         let originY = storedOrigin.y;
-        
+
         if (storedTriggerEl) {
             const rect = storedTriggerEl.getBoundingClientRect();
             originX = rect.left + rect.width / 2;
             originY = rect.top + rect.height / 2;
             storedOrigin = { x: originX, y: originY };
         }
-        
+
         overlayEl.style.clipPath = `circle(${CIRCLE_MAX_RADIUS} at ${originX}px ${originY}px)`;
         formEl.style.clipPath = `circle(${CIRCLE_MAX_RADIUS} at ${originX}px ${originY}px)`;
     });

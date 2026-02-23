@@ -15,6 +15,10 @@ class CommaListToArray implements CastsAttributes
 
     public function set(Model $model, string $key, mixed $value, array $attributes): string
     {
+        if ($value instanceof Collection) {
+            return implode(',', $value->toArray());
+        }
+
         return implode(',', $value);
     }
 }

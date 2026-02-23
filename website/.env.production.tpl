@@ -44,4 +44,10 @@ VITE_PUSHER_PORT="${PUSHER_PORT}"
 VITE_PUSHER_SCHEME="${PUSHER_SCHEME}"
 VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
+LARAVEL_PDF_DRIVER=gotenberg
+{{ with service "gottenberg" }}
+GOTENBERG_URL=http://{{ (index . 0).Address }}:{{ (index . 1).Port }}
+{{ end }}
+
+INERTIA_SSR_ENABLED=true
 INERTIA_SSR_URL="https://127.0.0.1:13814"

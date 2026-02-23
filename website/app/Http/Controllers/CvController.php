@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\CvContent;
 use Illuminate\Routing\Controller;
+use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\LaravelPdf\Facades\Pdf;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CvController extends Controller
 {
@@ -19,11 +19,19 @@ class CvController extends Controller
         ]);
     }
 
-    public function download(CvContent $cv): StreamedResponse
+    public function download(CvContent $cv)
     {
-        return Pdf::view('pdf.cv', ['cv' => $cv])
-            ->format('a4')
-            ->driver('weasyprint')
-            ->name('cv-' . $cv->id . '.pdf');
+        try {
+            $html = inertia('Cv.svelte', ['cv' => $cv])
+                ->rootView('pdf.cv')
+                ->toResponse(request())
+                ->getContent();
+
+            return Pdf::html($html)
+                ->format('a4')
+                ->name('cv-' . $cv->id . '.pdf');
+        } catch (\Throwable $t) {
+            dd($t);
+        }
     }
 }
