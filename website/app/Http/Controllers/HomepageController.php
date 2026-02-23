@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CvContent;
 use App\Models\FeaturedItem;
 use Illuminate\Routing\Controller;
 use Inertia\Response;
@@ -22,8 +23,12 @@ class HomepageController extends Controller {
                 'metadata' => $item->metadata,
             ]);
 
+        $cv = CvContent::find(2);
+        $cvDownloadUrl = $cv ? route('cv.download', $cv) : null;
+
         return inertia('Homepage.svelte', [
             'featuredItems' => $featuredItems,
+            'cvDownloadUrl' => $cvDownloadUrl,
         ]);
     }
 }

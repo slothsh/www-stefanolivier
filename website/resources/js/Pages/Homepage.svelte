@@ -1,6 +1,6 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
 import ContactForm from './ContactForm.svelte';
 import FeaturedItemCard from '../Components/FeaturedItemCard.svelte';
 import SocialLinks from '../Components/SocialLinks.svelte';
@@ -14,9 +14,10 @@ import type { FeaturedItem } from '@/types';
 
 interface Props {
     featuredItems?: FeaturedItem[];
+    cvDownloadUrl?: string | null;
 }
 
-let { featuredItems = [] }: Props = $props();
+let { featuredItems = [], cvDownloadUrl = null }: Props = $props();
 
 let showContactForm = $state(false);
 let overlayRef: HTMLElement | undefined = $state();
@@ -71,7 +72,7 @@ $effect(() => {
 
 <div class="min-h-screen bg-bg flex flex-col px-6 md:px-8 lg:px-12">
     {#if featuredItems.length > 0}
-        <Header onEmailClick={handleEmailClick} />
+        <Header onEmailClick={handleEmailClick} {cvDownloadUrl} />
     {/if}
     <main class="flex-1 flex flex-col items-center justify-center mt-6 md:mt-8 lg:mt-12">
         <div class="flex flex-col items-center text-center justify-center">
@@ -105,12 +106,13 @@ $effect(() => {
     </main>
 
     {#if featuredItems.length > 0}
-        <Footer class="mt-16" />
+        <Footer class="mt-16" {cvDownloadUrl} />
     {:else}
         <SocialLinks
             class="mb-8"
             variant="bottom"
             onEmailClick={handleEmailClick}
+            {cvDownloadUrl}
         />
     {/if}
 </div>
@@ -175,6 +177,16 @@ $effect(() => {
                                 <Fa icon={Bio.contact.LinkedIn.icon} class="text-lg w-5" />
                                 <span>{Bio.contact.LinkedIn.displayName}</span>
                             </a>
+                            {#if cvDownloadUrl}
+                                <a
+                                    href={cvDownloadUrl}
+                                    download
+                                    class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                >
+                                    <Fa icon={faFileArrowDown} class="text-lg w-5" />
+                                    <span>Download CV</span>
+                                </a>
+                            {/if}
                         </div>
                     </div>
                 </div>
@@ -207,6 +219,15 @@ $effect(() => {
                     >
                         <Fa icon={Bio.contact.LinkedIn.icon} class="text-lg" />
                     </a>
+                    {#if cvDownloadUrl}
+                        <a
+                            href={cvDownloadUrl}
+                            download
+                            class="contact-detail text-text-muted hover:text-accent transition-colors"
+                        >
+                            <Fa icon={faFileArrowDown} class="text-lg" />
+                        </a>
+                    {/if}
                 </div>
             </div>
         </div>

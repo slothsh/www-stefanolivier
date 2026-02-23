@@ -36,7 +36,7 @@ function formatRange(start: string, end?: string): string {
                         {/if}
                     </div>
                 </div>
-                <img src={Bio.portraitUrl} class="rounded-full shadow-[0_20mm_10mm_rgba(0,0,0,0.1)]" width="124mm" alt="owl illustration">
+                <img src={Bio.portraitUrl} class="rounded-full" width="124mm" alt="owl illustration">
             </div>
         </header>
 

@@ -1,15 +1,16 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
     variant: 'sticky-top' | 'bottom';
     onEmailClick: (e: MouseEvent) => void;
+    cvDownloadUrl?: string | null;
     class?: string;
 }
 
-let { variant, onEmailClick, class: className = '' }: Props = $props();
+let { variant, onEmailClick, cvDownloadUrl = null, class: className = '' }: Props = $props();
 
 const baseClasses = 'flex gap-4 sm:gap-5 transition-opacity duration-300';
 const variantClasses = {
@@ -35,6 +36,15 @@ const variantClasses = {
     >
         <Fa icon={faLinkedin} size="lg" />
     </a>
+    {#if cvDownloadUrl}
+        <a
+            href={cvDownloadUrl}
+            download
+            class="text-text-muted hover:text-accent transition-colors"
+        >
+            <Fa icon={faFileArrowDown} size="lg" />
+        </a>
+    {/if}
     <button
         type="button"
         onclick={onEmailClick}

@@ -1,13 +1,15 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
     import { cn } from '@/Lib/cn';
 
 let isVisible = $state(false);
 let {
+    cvDownloadUrl = null,
     class: className,
 }: {
+    cvDownloadUrl?: string | null,
     class?: string,
 } = $props();
 
@@ -50,6 +52,15 @@ $effect(() => {
         >
             <Fa icon={faLinkedin} size="lg" />
         </a>
+        {#if cvDownloadUrl}
+            <a
+                href={cvDownloadUrl}
+                download
+                class="text-text-muted hover:text-accent transition-colors"
+            >
+                <Fa icon={faFileArrowDown} size="lg" />
+            </a>
+        {/if}
         <a
             href={Bio.contact.Email.src}
             class="text-text-muted hover:text-accent transition-colors"

@@ -1,15 +1,16 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { cn } from '@/Lib/cn';
 
 interface Props {
     onEmailClick: (e: MouseEvent) => void;
+    cvDownloadUrl?: string | null;
     class?: string;
 }
 
-let { onEmailClick, class: className = '' }: Props = $props();
+let { onEmailClick, cvDownloadUrl = null, class: className = '' }: Props = $props();
 </script>
 
 <header class={cn(
@@ -33,6 +34,15 @@ let { onEmailClick, class: className = '' }: Props = $props();
         >
             <Fa icon={faLinkedin} size="lg" />
         </a>
+        {#if cvDownloadUrl}
+            <a
+                href={cvDownloadUrl}
+                download
+                class="text-text-muted hover:text-accent transition-colors"
+            >
+                <Fa icon={faFileArrowDown} size="lg" />
+            </a>
+        {/if}
         <button
             type="button"
             onclick={onEmailClick}
