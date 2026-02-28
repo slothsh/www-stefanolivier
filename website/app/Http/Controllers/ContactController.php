@@ -32,7 +32,7 @@ class ContactController extends Controller {
                 ",
                 $validated['email'],
                 $validated['name'],
-                $validated['email']
+                $validated['message']
             ));
 
             return redirect()->back()->with('success', 'Your message has been sent successfully.');
