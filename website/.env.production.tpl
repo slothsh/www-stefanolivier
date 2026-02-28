@@ -48,6 +48,10 @@ LARAVEL_PDF_DRIVER=gotenberg
 {{ with service "gottenberg" }}
 GOTENBERG_URL=http://{{ (index . 0).Address }}:{{ (index . 1).Port }}
 {{ end }}
+{{ with secret "kv/data/default/secrets/gottenberg" }}
+GOTENBERG_USERNAME={{ .Data.data.username }}
+GOTENBERG_PASSWORD={{ .Data.data.password }}
+{{ end }}
 
 INERTIA_SSR_ENABLED=true
 INERTIA_SSR_URL="https://127.0.0.1:13814"
