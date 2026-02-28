@@ -54,4 +54,4 @@ GOTENBERG_PASSWORD="{{ .Data.data.password }}"
 {{ end }}
 
 INERTIA_SSR_ENABLED=true
-INERTIA_SSR_URL="https://127.0.0.1:13814"
+INERTIA_SSR_URL="http://127.0.0.1:13714"
