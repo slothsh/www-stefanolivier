@@ -9,17 +9,22 @@ use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller {
     public function store(ContactFormRequest $request) {
-        $validated = $request->validated();
+        try {
+            $validated = $request->validated();
 
-        Mail::to('s.olivier1194@gmail.com')
-            ->send(new ContactFormSubmitted(
+            LogsEmail::create($validated);
+
+            $contactFormSubmitted = new ContactFormSubmitted(
                 $validated['name'],
                 $validated['email'],
                 $validated['message']
-            ));
+            );
 
-        LogsEmail::create($validated);
+            Mail::to(config('mail.me.address'))->send($contactFormSubmitted);
 
-        return redirect()->back()->with('success', 'Your message has been sent successfully.');
+            return redirect()->back()->with('success', 'Your message has been sent successfully.');
+        } catch (\Throwable $t) {
+            return redirect()->back()->with('error', 'Your message could not be delivered');
+        }
     }
 }
