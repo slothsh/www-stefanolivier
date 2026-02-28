@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ContactFormRequest;
 use App\Mail\ContactFormSubmitted;
 use App\Models\LogsEmail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller {
@@ -21,6 +22,18 @@ class ContactController extends Controller {
             );
 
             Mail::to(config('mail.me.address'))->send($contactFormSubmitted);
+
+            Log::channel('discord')->notice(sprintf("
+                📬\n
+                **Website Contact Request**\n
+                **From:** %s
+                **Name:** %s\n
+                _%s_
+                ",
+                $validated['email'],
+                $validated['name'],
+                $validated['email']
+            ));
 
             return redirect()->back()->with('success', 'Your message has been sent successfully.');
         } catch (\Throwable $t) {

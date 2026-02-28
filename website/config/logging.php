@@ -4,6 +4,7 @@ use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
+use App\Logging\Discord\CreateDiscordLogger;
 
 return [
 
@@ -80,6 +81,13 @@ return [
             'emoji' => env('LOG_SLACK_EMOJI', ':boom:'),
             'level' => env('LOG_LEVEL', 'critical'),
             'replace_placeholders' => true,
+        ],
+
+        'discord' => [
+            'driver' => 'custom',
+            'via'    => CreateDiscordLogger::class,
+            'url' => env('LOG_DISCORD_WEBHOOK_URL'),
+            'level'  => env('LOG_LEVEL', 'notice'),
         ],
 
         'papertrail' => [

@@ -68,3 +68,7 @@ GOTENBERG_PASSWORD="{{ .Data.data.password }}"
 
 INERTIA_SSR_ENABLED=true
 INERTIA_SSR_URL="http://127.0.0.1:13714"
+
+{{ with secret "kv/data/default/website-stefanolivier/discord" }}
+LOG_DISCORD_WEBHOOK_URL="{{ .Data.data.log_webhook_url }}"
+{{ end }}
