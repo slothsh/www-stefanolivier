@@ -46,7 +46,7 @@ VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
 LARAVEL_PDF_DRIVER=gotenberg
 {{ with service "gottenberg" }}
-GOTENBERG_URL=http://{{ (index . 0).Address }}:{{ (index . 1).Port }}
+GOTENBERG_URL=http://{{ (index . 0).Address }}:{{ (index . 0).Port }}
 {{ end }}
 {{ with secret "kv/data/default/secrets/gottenberg" }}
 GOTENBERG_USERNAME={{ .Data.data.username }}

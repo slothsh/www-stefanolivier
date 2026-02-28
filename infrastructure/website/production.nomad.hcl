@@ -54,6 +54,10 @@ job "website-stefanolivier" {
         port = "ssr"
       }
 
+      env {
+        BUILD_TIME = "{{ timestamp }}"
+      }
+
       vault {}
 
       template {
