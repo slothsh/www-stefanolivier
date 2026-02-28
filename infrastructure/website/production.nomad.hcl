@@ -54,11 +54,16 @@ job "website-stefanolivier" {
         port = "ssr"
       }
 
-      env {
-        BUILD_TIME = "{{ timestamp }}"
-      }
-
       vault {}
+
+      template {
+        data = <<-EOF
+        BUILD_TIME={{timestamp}}
+        EOF
+
+        destination = "local/env.txt"
+        env         = true
+      }
 
       template {
         data = <<EOF
