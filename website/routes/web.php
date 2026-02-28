@@ -19,6 +19,5 @@ Route::prefix('/blog')->group(function () {
 });
 
 Route::prefix('/cv')->group(function () {
-    Route::get('/{cv}', [CvController::class, 'index'])->name('cv.show');
-    Route::get('/{cv}/download', [CvController::class, 'download'])->name('cv.download');
+    Route::get('/latest/download', [CvController::class, 'downloadLatest'])->name('cv.latest.download');
 });

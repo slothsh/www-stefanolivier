@@ -23,8 +23,8 @@ class HomepageController extends Controller {
                 'metadata' => $item->metadata,
             ]);
 
-        $cv = CvContent::find(2);
-        $cvDownloadUrl = $cv ? route('cv.download', $cv) : null;
+        $cvData = CvContent::hasTag('latest')->get();
+        $cvDownloadUrl = !$cvData->isEmpty() ? route('cv.latest.download') : null;
 
         return inertia('Homepage.svelte', [
             'featuredItems' => $featuredItems,

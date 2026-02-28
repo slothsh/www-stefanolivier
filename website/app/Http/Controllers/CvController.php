@@ -3,35 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\CvContent;
+use Carbon\Carbon;
 use Illuminate\Routing\Controller;
-use Inertia\Inertia;
-use Inertia\Response;
 use Spatie\LaravelPdf\Facades\Pdf;
 
-class CvController extends Controller
-{
-    public function index(): Response
-    {
-        $cv = CvContent::firstOrFail();
-
-        return inertia('Cv.svelte', [
-            'cv' => $cv,
-        ]);
-    }
-
-    public function download(CvContent $cv)
-    {
+class CvController extends Controller {
+    public function downloadLatest() {
         try {
-            $html = inertia('Cv.svelte', ['cv' => $cv])
+            $cvData = CvContent::hasTag('latest')->get();
+
+            if ($cvData->isEmpty()) {
+                abort(404);
+            }
+
+            $html = inertia('Cv.svelte', ['cv' => $cvData->last()])
                 ->rootView('pdf.cv')
+                ->withViewData('title', 'Download')
                 ->toResponse(request())
                 ->getContent();
 
+            $cvName = sprintf('Stefan Olivier CV - %s.pdf', Carbon::today()->format('d M Y'));
+
             return Pdf::html($html)
                 ->format('a4')
-                ->name('cv-' . $cv->id . '.pdf');
+                ->name($cvName);
         } catch (\Throwable $t) {
-            dd($t);
+            // TODO: Log to discord
+            abort(404);
         }
     }
 }

@@ -2,7 +2,8 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Stefan Olivier</title>
+
+        <title>{{ $title ?? 'Curriculum Vitae' }}</title>
 
         <style>
             @page {
