@@ -25,7 +25,7 @@ job "website-stefanolivier" {
   group "website" {
     network {
       port "http" { to = 80 }
-      port "ssr" { to = 13814 }
+      port "ssr" { to = 13714 }
     }
 
     task "app" {
