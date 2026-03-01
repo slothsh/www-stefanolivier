@@ -8,7 +8,7 @@ import path from 'path'
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/js/app.ts', 'resources/js/appPdf.ts'],
+            input: ['resources/js/app.ts', 'resources/js/appPdf.ts', 'resources/js/appImage.ts'],
             ssr: 'resources/js/ssr.ts',
             refresh: true,
         }),

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CoverImageController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\FeaturedItemController;
 use App\Http\Controllers\HomepageController;
@@ -20,4 +21,8 @@ Route::prefix('/blog')->group(function () {
 
 Route::prefix('/cv')->group(function () {
     Route::get('/latest/download', [CvController::class, 'downloadLatest'])->name('cv.latest.download');
+});
+
+Route::prefix('/cover-image')->group(function () {
+    Route::get('/{featuredItem}/{width}/{height}/download', [CoverImageController::class, 'download'])->name('coverImage.download');
 });

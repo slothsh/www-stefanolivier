@@ -23,6 +23,7 @@ class FeaturedItemController extends Controller
             'title' => $item->title,
             'description' => $item->description,
             'imageUrl' => $item->image_url,
+            'coverImageContentA' => $item->cover_image_content,
             'linkUrl' => $item->link_url,
             'linkText' => $item->link_text,
             'metadata' => $item->metadata,

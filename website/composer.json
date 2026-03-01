@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.10.1",
         "pontedilana/php-weasyprint": "^2.4",
         "spatie/laravel-pdf": "^2.2",
+        "spatie/laravel-screenshot": "^1.1",
         "tightenco/ziggy": "^2.5"
     },
     "require-dev": {
