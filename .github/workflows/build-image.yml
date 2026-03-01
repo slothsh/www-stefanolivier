@@ -63,7 +63,7 @@ jobs:
 
       - name: Submit Nomad job
         run: |
-          nomad job run -detach -token="${{ secrets.NOMAD_CI_TOKEN }}" -var="REGISTRY_USER=${{ secrets.REGISTRY_USER }}" -var="REGISTRY_PASSWORD=${{ secrets.REGISTRY_PASSWORD }}" -address=https://nomad.stefanolivier.com ./infrastructure/website/production.nomad.hcl
+          nomad job run -detach -token="${{ secrets.NOMAD_CI_TOKEN }}" -var="TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')" -var="REGISTRY_USER=${{ secrets.REGISTRY_USER }}" -var="REGISTRY_PASSWORD=${{ secrets.REGISTRY_PASSWORD }}" -address=https://nomad.stefanolivier.com ./infrastructure/website/production.nomad.hcl
 
       - name: Notify build deployed
         uses: actions/github-script@v7

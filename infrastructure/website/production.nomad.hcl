@@ -8,6 +8,11 @@ variable "REGISTRY_PASSWORD" {
   default = ""
 }
 
+variable "TIMESTAMP" {
+  type = string
+  default = "{{timestamp}}"
+}
+
 job "website-stefanolivier" {
   namespace = "default"
 
@@ -58,7 +63,7 @@ job "website-stefanolivier" {
 
       template {
         data = <<-EOF
-        BUILD_TIME={{timestamp}}
+        BUILD_TIME="{{ nomadVar "TIMESTAMP" }}"
         EOF
 
         destination = "local/env.txt"
