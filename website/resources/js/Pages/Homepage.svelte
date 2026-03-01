@@ -235,4 +235,17 @@ $effect(() => {
         </div>
     </div>
 {/if}
-<Toaster position="top-center" />
+<Toaster 
+    position="top-center" 
+    theme="dark" 
+    richColors 
+    closeButton 
+    toastOptions={{
+        classes: {
+            success: 'toast-success',
+            error: 'toast-error',
+            warning: 'toast-warning',
+            info: 'toast-info',
+        }
+    }}
+/>
