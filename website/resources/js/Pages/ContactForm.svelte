@@ -2,6 +2,7 @@
 import { createForm } from '@tanstack/svelte-form';
 import { z } from 'zod';
 import { router } from '@inertiajs/svelte';
+import { toast } from 'svelte-sonner';
 
 interface Props {
     onClose: () => void;
@@ -37,14 +38,21 @@ const form = createForm(() => ({
         serverErrors = {};
 
         router.post(route('contact.store'), value, {
+            onSuccess: () => {
+                form.reset();
+                toast.success('Message sent successfully! I\'ll get back to you soon.');
+            },
             onError: (errors) => {
                 if (errors && typeof errors === 'object') {
                     serverErrors = errors as Record<string, string>;
                 }
+                toast.error('Failed to send message', {
+                    description: 'Please try again or contact me through other means.',
+                });
             },
-            onFinish: () => setTimeout(() => {
+            onFinish: () => {
                 isSubmitting = false;
-            }, 2000),
+            },
         });
     },
 }));
@@ -140,10 +148,6 @@ const form = createForm(() => ({
             {/snippet}
         </form.Field>
     </div>
-
-    {#if Object.keys(serverErrors).length > 0 && !serverErrors.name && !serverErrors.email && !serverErrors.message}
-        <p class="text-sm text-red-400">An error occurred. Please try again.</p>
-    {/if}
 
     <div class="flex gap-3 pt-2">
         <button

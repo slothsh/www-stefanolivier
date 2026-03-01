@@ -37,7 +37,7 @@ class ContactController extends Controller {
 
             return redirect()->back()->with('success', 'Your message has been sent successfully.');
         } catch (\Throwable $t) {
-            return redirect()->back()->with('error', 'Your message could not be delivered');
+            return redirect()->back()->withErrors('error', 'Your message could not be delivered');
         }
     }
 }

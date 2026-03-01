@@ -10,6 +10,7 @@ import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Li
 import { lockScroll, unlockScroll } from '../Lib/scrollLock';
 import { cn } from '../Lib/cn';
 import { tick } from 'svelte';
+import { toast, Toaster } from 'svelte-sonner';
 import type { FeaturedItem } from '@/types';
 
 interface Props {
@@ -40,6 +41,7 @@ async function handleEmailClick(e: MouseEvent) {
 
 function handleFormClose() {
     if (overlayRef && formRef) {
+        toast.dismiss();
         animateFormClose(overlayRef, formRef, () => {
             showContactForm = false;
         });
@@ -233,3 +235,4 @@ $effect(() => {
         </div>
     </div>
 {/if}
+<Toaster position="top-center" />
