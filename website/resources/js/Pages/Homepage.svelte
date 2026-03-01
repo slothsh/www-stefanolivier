@@ -17,9 +17,10 @@ import type { FeaturedItem } from '@/types';
 interface Props {
     featuredItems?: FeaturedItem[];
     cvDownloadUrl?: string | null;
+    contactCardQrCode?: string;
 }
 
-let { featuredItems = [], cvDownloadUrl = null }: Props = $props();
+let { featuredItems = [], cvDownloadUrl = null, contactCardQrCode = '' }: Props = $props();
 
 let showContactForm = $state(false);
 let overlayRef: HTMLElement | undefined = $state();
@@ -205,6 +206,16 @@ $effect(() => {
                                     <CopyButton text={cvDownloadUrl} />
                                 </div>
                             {/if}
+                            {#if contactCardQrCode}
+                                <div class="pt-4 mt-4 border-t border-border">
+                                    <p class="text-sm font-medium text-text-muted mb-3">Save Contact</p>
+                                    <img
+                                        src={contactCardQrCode}
+                                        alt="Contact QR Code"
+                                        class="rounded-md border border-border"
+                                    />
+                                </div>
+                            {/if}
                         </div>
                     </div>
                 </div>
@@ -261,11 +272,11 @@ $effect(() => {
         </div>
     </div>
 {/if}
-<Toaster 
-    position="top-center" 
-    theme="dark" 
-    richColors 
-    closeButton 
+<Toaster
+    position="top-center"
+    theme="dark"
+    richColors
+    closeButton
     toastOptions={{
         classes: {
             success: 'toast-success',

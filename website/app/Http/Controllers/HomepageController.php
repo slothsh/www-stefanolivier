@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GenerateContactCardQrCode;
 use App\Models\CvContent;
 use App\Models\FeaturedItem;
 use Illuminate\Routing\Controller;
 use Inertia\Response;
 
-class HomepageController extends Controller {
-    public function index(): Response {
+class HomepageController extends Controller
+{
+    public function index(GenerateContactCardQrCode $generateQrCode): Response
+    {
         $featuredItems = FeaturedItem::visible()
             ->ordered()
             ->get()
@@ -24,11 +27,12 @@ class HomepageController extends Controller {
             ]);
 
         $cvData = CvContent::hasTag('latest')->get();
-        $cvDownloadUrl = !$cvData->isEmpty() ? route('cv.latest.download') : null;
+        $cvDownloadUrl = ! $cvData->isEmpty() ? route('cv.latest.download') : null;
 
         return inertia('Homepage.svelte', [
             'featuredItems' => $featuredItems,
             'cvDownloadUrl' => $cvDownloadUrl,
+            'contactCardQrCode' => $generateQrCode(),
         ]);
     }
 }
