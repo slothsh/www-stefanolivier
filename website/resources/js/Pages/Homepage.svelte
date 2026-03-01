@@ -139,16 +139,17 @@ $effect(() => {
         </button>
         <div class="flex items-center justify-center h-full p-4">
             <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-4xl shadow-xl flex flex-col">
-                <div class="flex flex-col md:flex-row gap-8">
-                    <div class="flex-1 md:flex-[2]">
+                <div class="flex flex-col md:flex-row h-full gap-8">
+                    <div class="flex-1 md:flex-[2] flex flex-col">
                         <ContactForm
                             isVisible={showContactForm}
                             onClose={handleFormClose}
                         />
                     </div>
-                    <div class="hidden md:flex flex-1 flex-col border-l border-border pl-8">
-                        <h2 class="contact-detail text-xl font-semibold text-text mb-6">Contact</h2>
-                        <div class="space-y-4">
+                    <div class="hidden md:flex flex-1 flex-col border-l border-border pl-8 justify-between">
+                        <div>
+                            <h2 class="contact-detail text-xl font-semibold text-text mb-6">Contact</h2>
+                            <div class="space-y-4">
                             <div class="flex items-center">
                                 <a
                                     href={Bio.contact.Phone.src}
@@ -216,6 +217,7 @@ $effect(() => {
                                     />
                                 </div>
                             {/if}
+                        </div>
                         </div>
                     </div>
                 </div>

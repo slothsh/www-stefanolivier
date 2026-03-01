@@ -66,87 +66,89 @@ const form = createForm(() => ({
         hasSubmitted = true;
         form.handleSubmit();
     }}
-    class="space-y-5"
+    class="flex flex-col h-full"
 >
-    <div>
-        <label for="name" class="block text-sm font-medium text-text-muted mb-1.5">
-            Name
-        </label>
-        <form.Field name="name">
-            {#snippet children(field)}
-                <input
-                    type="text"
-                    id="name"
-                    name={field.name}
-                    value={field.state.value}
-                    onblur={field.handleBlur}
-                    oninput={(e) => field.handleChange(e.currentTarget.value)}
-                    class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
-                    placeholder="Your name"
-                />
-                <div class="min-h-5 mt-1 form-hint">
-                    {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
-                        <p class="text-sm text-red-400">{field.state.meta.errors[0]?.message}</p>
-                    {:else if serverErrors.name}
-                        <p class="text-sm text-red-400">{serverErrors.name}</p>
-                    {/if}
-                </div>
-            {/snippet}
-        </form.Field>
-    </div>
+    <div class="flex-1 flex flex-col min-h-0">
+        <div>
+            <label for="name" class="block text-sm font-medium text-text-muted mb-1.5">
+                Name
+            </label>
+            <form.Field name="name">
+                {#snippet children(field)}
+                    <input
+                        type="text"
+                        id="name"
+                        name={field.name}
+                        value={field.state.value}
+                        onblur={field.handleBlur}
+                        oninput={(e) => field.handleChange(e.currentTarget.value)}
+                        class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+                        placeholder="Your name"
+                    />
+                    <div class="min-h-5 mt-1 form-hint">
+                        {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
+                            <p class="text-sm text-red-400 mb-1">{field.state.meta.errors[0]?.message}</p>
+                        {:else if serverErrors.name}
+                            <p class="text-sm text-red-400 mb-1">{serverErrors.name}</p>
+                        {/if}
+                    </div>
+                {/snippet}
+            </form.Field>
+        </div>
 
-    <div>
-        <label for="email" class="block text-sm font-medium text-text-muted mb-1.5">
-            Email
-        </label>
-        <form.Field name="email">
-            {#snippet children(field)}
-                <input
-                    type="email"
-                    id="email"
-                    name={field.name}
-                    value={field.state.value}
-                    onblur={field.handleBlur}
-                    oninput={(e) => field.handleChange(e.currentTarget.value)}
-                    class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
-                    placeholder="you@example.com"
-                />
-                <div class="min-h-5 mt-1 form-hint">
-                    {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
-                        <p class="text-sm text-red-400">{field.state.meta.errors[0]?.message}</p>
-                    {:else if serverErrors.email}
-                        <p class="text-sm text-red-400">{serverErrors.email}</p>
-                    {/if}
-                </div>
-            {/snippet}
-        </form.Field>
-    </div>
+        <div>
+            <label for="email" class="block text-sm font-medium text-text-muted mb-1.5">
+                Email
+            </label>
+            <form.Field name="email">
+                {#snippet children(field)}
+                    <input
+                        type="email"
+                        id="email"
+                        name={field.name}
+                        value={field.state.value}
+                        onblur={field.handleBlur}
+                        oninput={(e) => field.handleChange(e.currentTarget.value)}
+                        class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+                        placeholder="you@example.com"
+                    />
+                    <div class="min-h-5 mt-1 form-hint">
+                        {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
+                            <p class="text-sm text-red-400 mb-1">{field.state.meta.errors[0]?.message}</p>
+                        {:else if serverErrors.email}
+                            <p class="text-sm text-red-400 mb-1">{serverErrors.email}</p>
+                        {/if}
+                    </div>
+                {/snippet}
+            </form.Field>
+        </div>
 
-    <div>
-        <label for="message" class="block text-sm font-medium text-text-muted mb-1.5">
-            Message
-        </label>
-        <form.Field name="message">
-            {#snippet children(field)}
-                <textarea
-                    id="message"
-                    name={field.name}
-                    rows="4"
-                    value={field.state.value}
-                    onblur={field.handleBlur}
-                    oninput={(e) => field.handleChange(e.currentTarget.value)}
-                    class="w-full px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors resize-none"
-                    placeholder="Your message..."
-                ></textarea>
-                <div class="min-h-5 mt-1 form-hint">
-                    {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
-                        <p class="text-sm text-red-400">{field.state.meta.errors[0]?.message}</p>
-                    {:else if serverErrors.message}
-                        <p class="text-sm text-red-400">{serverErrors.message}</p>
-                    {/if}
-                </div>
-            {/snippet}
-        </form.Field>
+        <div class="flex-1 flex flex-col min-h-0">
+            <label for="message" class="block text-sm font-medium text-text-muted mb-1.5">
+                Message
+            </label>
+            <form.Field name="message">
+                {#snippet children(field)}
+                    <textarea
+                        id="message"
+                        name={field.name}
+                        rows="6"
+                        value={field.state.value}
+                        onblur={field.handleBlur}
+                        oninput={(e) => field.handleChange(e.currentTarget.value)}
+                        class="w-full flex-1 min-h-[120px] px-3 py-2 bg-bg border border-border rounded-md text-text placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors resize-none"
+                        placeholder="Your message..."
+                    ></textarea>
+                    <div class="min-h-5 mt-1 form-hint">
+                        {#if (hasSubmitted || field.state.meta.isBlurred) && field.state.meta.errors && field.state.meta.errors.length > 0}
+                            <p class="text-sm text-red-400 mb-1">{field.state.meta.errors[0]?.message}</p>
+                        {:else if serverErrors.message}
+                            <p class="text-sm text-red-400 mb-1">{serverErrors.message}</p>
+                        {/if}
+                    </div>
+                {/snippet}
+            </form.Field>
+        </div>
     </div>
 
     <div class="flex gap-3 pt-2">
