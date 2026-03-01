@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FeaturedItem;
+use Illuminate\Container\Attributes\Log;
 use Illuminate\Routing\Controller;
 use Spatie\LaravelScreenshot\Facades\Screenshot;
 
@@ -30,7 +31,7 @@ class CoverImageController extends Controller {
 
             return response(base64_decode($imageData), 200)->header('Content-Type', 'image/png');
         } catch (\Throwable $t) {
-            // TODO: Log to discord
+            Log::channel('discord')->error($t->getMessage());
             abort(404);
         }
     }
