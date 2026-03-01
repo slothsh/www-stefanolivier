@@ -9,12 +9,30 @@
         --accent: #6b8f71;
         --border: #2a352a;
 
+        --toast-success: #4a7c59;
+        --toast-success-foreground: #f0fdf4;
+        --toast-error: #dc2626;
+        --toast-error-foreground: #fef2f2;
+        --toast-warning: #d97706;
+        --toast-warning-foreground: #fffbeb;
+        --toast-info: #475569;
+        --toast-info-foreground: #f8fafc;
+
         @media (prefers-color-scheme: dark) {
             --bg: #0f140f;
             --text: #e8e8e8;
             --text-muted: #8a918a;
             --accent: #7a9f7f;
             --border: #1f2a1f;
+
+            --toast-success: #4ade80;
+            --toast-success-foreground: #052e16;
+            --toast-error: #f87171;
+            --toast-error-foreground: #450a0a;
+            --toast-warning: #fbbf24;
+            --toast-warning-foreground: #451a03;
+            --toast-info: #94a3b8;
+            --toast-info-foreground: #0f172a;
         }
     }
 
@@ -39,4 +57,33 @@
     --color-text-muted: var(--text-muted);
     --color-accent: var(--accent);
     --color-border: var(--border);
+    --color-toast-success: var(--toast-success);
+    --color-toast-success-fg: var(--toast-success-foreground);
+    --color-toast-error: var(--toast-error);
+    --color-toast-error-fg: var(--toast-error-foreground);
+    --color-toast-warning: var(--toast-warning);
+    --color-toast-warning-fg: var(--toast-warning-foreground);
+    --color-toast-info: var(--toast-info);
+    --color-toast-info-fg: var(--toast-info-foreground);
+}
+
+.toast-success {
+    background-color: var(--toast-success) !important;
+    color: var(--toast-success-foreground) !important;
+    border-color: var(--toast-success) !important;
+}
+.toast-error {
+    background-color: var(--toast-error) !important;
+    color: var(--toast-error-foreground) !important;
+    border-color: var(--toast-error) !important;
+}
+.toast-warning {
+    background-color: var(--toast-warning) !important;
+    color: var(--toast-warning-foreground) !important;
+    border-color: var(--toast-warning) !important;
+}
+.toast-info {
+    background-color: var(--toast-info) !important;
+    color: var(--toast-info-foreground) !important;
+    border-color: var(--toast-info) !important;
 }
