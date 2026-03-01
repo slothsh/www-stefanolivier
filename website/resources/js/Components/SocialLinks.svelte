@@ -15,7 +15,7 @@ let { variant, onEmailClick, cvDownloadUrl = null, class: className = '' }: Prop
 const baseClasses = 'flex gap-4 sm:gap-5 transition-opacity duration-300';
 const variantClasses = {
     'sticky-top': 'fixed top-6 right-6 z-40',
-    'bottom': 'justify-end relative z-[55]',
+    'bottom': 'justify-end relative z-30',
 };
 </script>
 
