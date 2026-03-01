@@ -76,6 +76,9 @@ Use td usage -q after first read.
 ## Common Commands
 
 ```bash
+# Install packages
+cd website && bun install ...
+
 # Development server
 cd website && bun run dev
 
