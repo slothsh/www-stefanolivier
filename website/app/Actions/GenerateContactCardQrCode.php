@@ -2,6 +2,8 @@
 
 namespace App\Actions;
 
+use chillerlan\QRCode\Common\EccLevel;
+use chillerlan\QRCode\Output\QROutputInterface;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 
@@ -10,8 +12,8 @@ class GenerateContactCardQrCode {
         $vcard = $this->buildVCard();
 
         $options = new QROptions([
-            'eccLevel' => QRCode::ECC_M,
-            'outputType' => QRCode::OUTPUT_IMAGE_PNG,
+            'eccLevel' => EccLevel::H,
+            'outputType' => QROutputInterface::GDIMAGE_PNG,
             'imageBase64' => true,
         ]);
 

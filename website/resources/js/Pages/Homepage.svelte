@@ -1,6 +1,6 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
-import { faXmark, faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faFileArrowDown, faUser, faFilePdf, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 import ContactForm from './ContactForm.svelte';
 import CopyButton from '../Components/CopyButton.svelte';
 import FeaturedItemCard from '../Components/FeaturedItemCard.svelte';
@@ -18,11 +18,13 @@ interface Props {
     featuredItems?: FeaturedItem[];
     cvDownloadUrl?: string | null;
     contactCardQrCode?: string;
+    cvPdfQrCode?: string;
 }
 
-let { featuredItems = [], cvDownloadUrl = null, contactCardQrCode = '' }: Props = $props();
+let { featuredItems = [], cvDownloadUrl = null, contactCardQrCode = '', cvPdfQrCode = '' }: Props = $props();
 
 let showContactForm = $state(false);
+let activeQrCode = $state<'contact' | 'cv'>('contact');
 let overlayRef: HTMLElement | undefined = $state();
 let formRef: HTMLElement | undefined = $state();
 let clickOrigin = $state({ x: 0, y: 0 });
@@ -207,14 +209,39 @@ $effect(() => {
                                     <CopyButton text={cvDownloadUrl} />
                                 </div>
                             {/if}
-                            {#if contactCardQrCode}
+                            {#if contactCardQrCode && cvPdfQrCode}
                                 <div class="qr-code pt-4 mt-4 border-t border-border">
-                                    <p class="qr-code text-sm font-medium text-text-muted mb-3">Contact Card</p>
-                                    <img
-                                        src={contactCardQrCode}
-                                        alt="Contact QR Code"
-                                        class="qr-code rounded-md border border-border"
-                                    />
+                                    <div class="flex gap-2 mb-3">
+                                        <button
+                                            type="button"
+                                            onclick={() => activeQrCode = 'contact'}
+                                            class="qr-code flex-1 flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition-colors {activeQrCode === 'contact' ? 'bg-accent text-bg' : 'bg-bg text-text-muted hover:text-text'}"
+                                        >
+                                            <Fa icon={faAddressCard} class="text-xs" />
+                                            Contact
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onclick={() => activeQrCode = 'cv'}
+                                            class="qr-code flex-1 flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition-colors {activeQrCode === 'cv' ? 'bg-accent text-bg' : 'bg-bg text-text-muted hover:text-text'}"
+                                        >
+                                            <Fa icon={faFilePdf} class="text-xs" />
+                                            Download CV
+                                        </button>
+                                    </div>
+                                    {#if activeQrCode === 'contact'}
+                                        <img
+                                            src={contactCardQrCode}
+                                            alt="Contact QR Code"
+                                            class="qr-code rounded-md border border-border w-full"
+                                        />
+                                    {:else}
+                                        <img
+                                            src={cvPdfQrCode}
+                                            alt="CV PDF QR Code"
+                                            class="qr-code rounded-md border border-border w-full"
+                                        />
+                                    {/if}
                                 </div>
                             {/if}
                         </div>

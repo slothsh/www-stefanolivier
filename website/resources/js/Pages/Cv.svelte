@@ -9,8 +9,8 @@ interface Props {
 let { cv }: Props = $props();
 
 function formatRange(start: string, end?: string): string {
-    const startFormatted = formatDate(start, 'MMM Y');
-    const endFormatted = end ? formatDate(end, 'MMM Y') : 'Present';
+    const startFormatted = formatDate(start, 'MMM y');
+    const endFormatted = end ? formatDate(end, 'MMM y') : 'Present';
     return `${startFormatted} - ${endFormatted}`;
 }
 </script>

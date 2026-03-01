@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\GenerateContactCardQrCode;
+use App\Actions\GenerateCvPdfQrCode;
 use App\Models\CvContent;
 use App\Models\FeaturedItem;
 use Illuminate\Routing\Controller;
@@ -10,7 +11,7 @@ use Inertia\Response;
 
 class HomepageController extends Controller
 {
-    public function index(GenerateContactCardQrCode $generateQrCode): Response
+    public function index(GenerateContactCardQrCode $generateContactQrCode, GenerateCvPdfQrCode $generateCvPdfQrCode): Response
     {
         $featuredItems = FeaturedItem::visible()
             ->ordered()
@@ -32,7 +33,8 @@ class HomepageController extends Controller
         return inertia('Homepage.svelte', [
             'featuredItems' => $featuredItems,
             'cvDownloadUrl' => $cvDownloadUrl,
-            'contactCardQrCode' => $generateQrCode(),
+            'contactCardQrCode' => $generateContactQrCode(),
+            'cvPdfQrCode' => $generateCvPdfQrCode(),
         ]);
     }
 }
