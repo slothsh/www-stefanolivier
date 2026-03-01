@@ -39,7 +39,7 @@ COPY ./website /app/build
 WORKDIR /app/build
 RUN /home/app/.composer/composer update
 RUN /home/app/.composer/composer install
-RUN touch ./storage/framework/cache/cache.sqlite
+RUN touch ./database/cache.sqlite
 RUN php artisan migrate --path=database/migrations/cache --database=cache_sqlite --force
 RUN php artisan config:clear
 RUN php artisan optimize

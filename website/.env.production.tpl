@@ -21,7 +21,6 @@ DB_PORT={{ (index . 0).Port }}
 CACHE_STORE=database
 DB_CACHE_CONNECTION=cache_sqlite
 DB_CACHE_LOCK_CONNECTION=cache_sqlite
-DB_CACHE_DATABASE=storage/framework/cache/cache.sqlite
 
 QUEUE_CONNECTION=database
 DB_QUEUE_CONNECTION=cache_sqlite
@@ -29,7 +28,6 @@ DB_QUEUE_TABLE=jobs
 
 BROADCAST_DRIVER=log
 FILESYSTEM_DISK=local
-QUEUE_CONNECTION=sync
 SESSION_DRIVER=file
 SESSION_LIFETIME=120
 
