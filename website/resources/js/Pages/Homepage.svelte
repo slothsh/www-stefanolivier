@@ -2,6 +2,7 @@
 import Fa from 'svelte-fa';
 import { faXmark, faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
 import ContactForm from './ContactForm.svelte';
+import CopyButton from '../Components/CopyButton.svelte';
 import FeaturedItemCard from '../Components/FeaturedItemCard.svelte';
 import SocialLinks from '../Components/SocialLinks.svelte';
 import Footer from '../Components/Footer.svelte';
@@ -147,88 +148,113 @@ $effect(() => {
                     <div class="hidden md:flex flex-1 flex-col border-l border-border pl-8">
                         <h2 class="contact-detail text-xl font-semibold text-text mb-6">Contact</h2>
                         <div class="space-y-4">
-                            <a
-                                href={Bio.contact.Phone.src}
-                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
-                            >
-                                <Fa icon={Bio.contact.Phone.icon} class="text-lg w-5" />
-                                <span>{Bio.contact.Phone.displayName}</span>
-                            </a>
-                            <a
-                                href={Bio.contact.Email.src}
-                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
-                            >
-                                <Fa icon={Bio.contact.Email.icon} class="text-lg w-5" />
-                                <span>{Bio.contact.Email.displayName}</span>
-                            </a>
-                            <a
-                                href={Bio.contact.GitHub.src}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
-                            >
-                                <Fa icon={Bio.contact.GitHub.icon} class="text-lg w-5" />
-                                <span>{Bio.contact.GitHub.displayName}</span>
-                            </a>
-                            <a
-                                href={Bio.contact.LinkedIn.src}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
-                            >
-                                <Fa icon={Bio.contact.LinkedIn.icon} class="text-lg w-5" />
-                                <span>{Bio.contact.LinkedIn.displayName}</span>
-                            </a>
-                            {#if cvDownloadUrl}
+                            <div class="flex items-center">
                                 <a
-                                    href={cvDownloadUrl}
-                                    download
+                                    href={Bio.contact.Phone.src}
                                     class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
                                 >
-                                    <Fa icon={faFileArrowDown} class="text-lg w-5" />
-                                    <span>Download CV</span>
+                                    <Fa icon={Bio.contact.Phone.icon} class="text-lg w-5" />
+                                    <span>{Bio.contact.Phone.displayName}</span>
                                 </a>
+                                <CopyButton text={Bio.contact.Phone.displayName} />
+                            </div>
+                            <div class="flex items-center">
+                                <a
+                                    href={Bio.contact.Email.src}
+                                    class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                >
+                                    <Fa icon={Bio.contact.Email.icon} class="text-lg w-5" />
+                                    <span>{Bio.contact.Email.displayName}</span>
+                                </a>
+                                <CopyButton text={Bio.contact.Email.displayName} />
+                            </div>
+                            <div class="flex items-center">
+                                <a
+                                    href={Bio.contact.GitHub.src}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                >
+                                    <Fa icon={Bio.contact.GitHub.icon} class="text-lg w-5" />
+                                    <span>{Bio.contact.GitHub.displayName}</span>
+                                </a>
+                                <CopyButton text={Bio.contact.GitHub.src} />
+                            </div>
+                            <div class="flex items-center">
+                                <a
+                                    href={Bio.contact.LinkedIn.src}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                >
+                                    <Fa icon={Bio.contact.LinkedIn.icon} class="text-lg w-5" />
+                                    <span>{Bio.contact.LinkedIn.displayName}</span>
+                                </a>
+                                <CopyButton text={Bio.contact.LinkedIn.src} />
+                            </div>
+                            {#if cvDownloadUrl}
+                                <div class="flex items-center">
+                                    <a
+                                        href={cvDownloadUrl}
+                                        download
+                                        class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                    >
+                                        <Fa icon={faFileArrowDown} class="text-lg w-5" />
+                                        <span>Download CV</span>
+                                    </a>
+                                    <CopyButton text={cvDownloadUrl} />
+                                </div>
                             {/if}
                         </div>
                     </div>
                 </div>
                 <div class="md:hidden flex flex-row gap-4 justify-center pt-6 mt-6 border-t border-border">
-                    <a
-                        href={Bio.contact.Phone.src}
-                        class="contact-detail text-text-muted hover:text-accent transition-colors text-sm"
-                    >
-                        {Bio.contact.Phone.displayName}
-                    </a>
-                    <a
-                        href={Bio.contact.Email.src}
-                        class="contact-detail text-text-muted hover:text-accent transition-colors text-sm"
-                    >
-                        {Bio.contact.Email.displayName}
-                    </a>
-                    <a
-                        href={Bio.contact.GitHub.src}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="contact-detail text-text-muted hover:text-accent transition-colors"
-                    >
-                        <Fa icon={Bio.contact.GitHub.icon} class="text-lg" />
-                    </a>
-                    <a
-                        href={Bio.contact.LinkedIn.src}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="contact-detail text-text-muted hover:text-accent transition-colors"
-                    >
-                        <Fa icon={Bio.contact.LinkedIn.icon} class="text-lg" />
-                    </a>
-                    {#if cvDownloadUrl}
+                    <div class="flex flex-row items-center">
                         <a
-                            href={cvDownloadUrl}
-                            download
+                            href={Bio.contact.Phone.src}
+                            class="contact-detail text-text-muted hover:text-accent transition-colors text-sm"
+                        >
+                            {Bio.contact.Phone.displayName}
+                        </a>
+                    </div>
+                    <div class="flex flex-row items-center">
+                        <a
+                            href={Bio.contact.Email.src}
+                            class="contact-detail text-text-muted hover:text-accent transition-colors text-sm"
+                        >
+                            {Bio.contact.Email.displayName}
+                        </a>
+                    </div>
+                    <div class="flex flex-row items-center">
+                        <a
+                            href={Bio.contact.GitHub.src}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             class="contact-detail text-text-muted hover:text-accent transition-colors"
                         >
-                            <Fa icon={faFileArrowDown} class="text-lg" />
+                            <Fa icon={Bio.contact.GitHub.icon} class="text-lg" />
                         </a>
+                    </div>
+                    <div class="flex flex-row items-center">
+                        <a
+                            href={Bio.contact.LinkedIn.src}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="contact-detail text-text-muted hover:text-accent transition-colors"
+                        >
+                            <Fa icon={Bio.contact.LinkedIn.icon} class="text-lg" />
+                        </a>
+                    </div>
+                    {#if cvDownloadUrl}
+                        <div class="flex flex-row items-center">
+                            <a
+                                href={cvDownloadUrl}
+                                download
+                                class="contact-detail text-text-muted hover:text-accent transition-colors"
+                            >
+                                <Fa icon={faFileArrowDown} class="text-lg" />
+                            </a>
+                        </div>
                     {/if}
                 </div>
             </div>
