@@ -45,7 +45,7 @@ return [
         'cache_sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_CACHE_URL'),
-            'database' => env('DB_CACHE_DATABASE', database_path('storage/framework/cache/cache.sqlite')),
+            'database' => env('DB_CACHE_DATABASE', database_path('cache.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
             'busy_timeout' => null,
