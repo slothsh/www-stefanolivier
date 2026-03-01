@@ -16,6 +16,10 @@ variable "TIMESTAMP" {
 job "website-stefanolivier" {
   namespace = "default"
 
+  meta {
+    TIMESTAMP = var.TIMESTAMP
+  }
+
   update {
     max_parallel      = 1
     health_check      = "task_states"
@@ -63,7 +67,7 @@ job "website-stefanolivier" {
 
       template {
         data = <<-EOF
-        BUILD_TIME="{{ nomadVar "TIMESTAMP" }}"
+        BUILD_TIME="{{ env "NOMAD_META_TIMESTAMP" }}"
         EOF
 
         destination = "local/env.txt"
