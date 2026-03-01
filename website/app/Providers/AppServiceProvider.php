@@ -24,10 +24,10 @@ class AppServiceProvider extends ServiceProvider {
      */
     public function boot(): void {
         Http::macro('gotenberg', function () {
-            return Http::baseUrl(env('GOTENBERG_URL', 'http://localhost:3000'))
+            return Http::baseUrl(config('gotenberg.url'))
                 ->withBasicAuth(
-                    env('GOTENBERG_USERNAME', 'gotenberg'),
-                    env('GOTENBERG_PASSWORD', 'password')
+                    config('gotenberg.username'),
+                    config('gotenberg.password')
                 );
         });
     }
