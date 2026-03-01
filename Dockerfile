@@ -30,7 +30,7 @@ RUN apt-get update
 RUN apt-get install -y curl unzip
 RUN apt-get install -y supervisor sqlite3 nginx nginx-extras
 RUN apt-get install -y php php-cli
-RUN apt-get install -y php-mbstring php-xml php-bcmath php-curl php-zip php-sqlite3 php-pgsql php-tokenizer php-ctype php-json php-fpm
+RUN apt-get install -y php-mbstring php-xml php-bcmath php-curl php-zip php-sqlite3 php-pgsql php-tokenizer php-ctype php-json php-fpm php-gd
 RUN curl -fsSL https://bun.sh/install | bash
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir /home/app/.composer --filename composer
 
