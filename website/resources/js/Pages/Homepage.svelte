@@ -208,12 +208,12 @@ $effect(() => {
                                 </div>
                             {/if}
                             {#if contactCardQrCode}
-                                <div class="pt-4 mt-4 border-t border-border">
-                                    <p class="text-sm font-medium text-text-muted mb-3">Contact Card</p>
+                                <div class="qr-code pt-4 mt-4 border-t border-border">
+                                    <p class="qr-code text-sm font-medium text-text-muted mb-3">Contact Card</p>
                                     <img
                                         src={contactCardQrCode}
                                         alt="Contact QR Code"
-                                        class="rounded-md border border-border"
+                                        class="qr-code rounded-md border border-border"
                                     />
                                 </div>
                             {/if}

@@ -28,7 +28,7 @@ export function animateFormOpen(
     formEl.style.clipPath = `circle(0% at ${originX}px ${originY}px)`;
 
     const formElements = formEl.querySelectorAll<HTMLElement>(
-        'h2, label, input, textarea, button, .form-group, .form-field, .form-hint, .contact-detail'
+        'h2, label, input, textarea, button, .form-group, .form-field, .form-hint, .contact-detail, .qr-code'
     );
 
     formElements.forEach((el) => {
@@ -66,7 +66,7 @@ export function animateFormClose(
     const { x: originX, y: originY } = storedOrigin;
 
     const formElements = formEl.querySelectorAll<HTMLElement>(
-        'h2, label, input, textarea, button, .form-group, .form-field, .form-hint, .contact-detail'
+        'h2, label, input, textarea, button, .form-group, .form-field, .form-hint, .contact-detail, .qr-code'
     );
 
     animate(formElements, {
