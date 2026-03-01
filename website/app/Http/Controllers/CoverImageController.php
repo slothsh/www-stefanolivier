@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\FeaturedItem;
-use Illuminate\Container\Attributes\Log;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 use Spatie\LaravelScreenshot\Facades\Screenshot;
 
 class CoverImageController extends Controller {
