@@ -7,7 +7,6 @@ use App\Http\Controllers\CoverLetterController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\FeaturedItemController;
 use App\Http\Controllers\HomepageController;
-use App\Http\Middleware\HttpAuthMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomepageController::class, 'index'])->name('home.index');
