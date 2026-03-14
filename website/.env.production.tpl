@@ -70,5 +70,3 @@ INERTIA_SSR_URL="http://127.0.0.1:13714"
 {{ with secret "kv/data/default/website-stefanolivier/discord" }}
 LOG_DISCORD_WEBHOOK_URL="{{ .Data.data.log_webhook_url }}"
 {{ end }}
-
-API_TOKEN={{ secret "kv/data/default/website-stefanolivier/api-token" }}
