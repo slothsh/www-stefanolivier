@@ -109,7 +109,7 @@ function getExternalLinkIcon(iconKey: string) {
                             </div>
                             <p class="text-gray-700 text-sm mt-2 print:text-xs">{exp.description}</p>
                             {#if exp.highlights && exp.highlights.length > 0}
-                                <ul class="list-disc list-inside text-sm text-gray-700 mt-2 print:text-xs">
+                                <ul class="list-disc list-outside ml-4 text-sm text-gray-700 mt-2 print:text-xs">
                                     {#each exp.highlights as highlight}
                                         <li class="print:my-0.5">{highlight}</li>
                                     {/each}
