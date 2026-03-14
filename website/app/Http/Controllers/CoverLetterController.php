@@ -16,8 +16,10 @@ class CoverLetterController extends Controller {
             $content = $coverLetterData->content;
             if (is_array($content)) {
                 // Replace template variables in content if needed
-                // This would depend on how template variables are stored in the content
-                // For now, we'll pass the content as-is and let the frontend handle variable replacement
+                $templateVars = request()->query(); // Get all query parameters
+                
+                // Recursively replace template variables in the content array
+                $content = $this->replaceTemplateVariables($content, $templateVars);
             }
 
             $html = inertia('CoverLetter.svelte', ['coverLetter' => $coverLetterData])
@@ -35,5 +37,30 @@ class CoverLetterController extends Controller {
             // TODO: Log to discord
             abort(404);
         }
+    }
+    
+    /**
+     * Recursively replace template variables in an array or string
+     */
+    private function replaceTemplateVariables($data, array $templateVars) {
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                $data[$key] = $this->replaceTemplateVariables($value, $templateVars);
+            }
+            return $data;
+        }
+        
+        if (is_string($data)) {
+            // Replace template variables like {variable_name} with actual values
+            foreach ($templateVars as $varName => $varValue) {
+                $placeholder = '{' . $varName . '}';
+                if (strpos($data, $placeholder) !== false) {
+                    $data = str_replace($placeholder, $varValue, $data);
+                }
+            }
+            return $data;
+        }
+        
+        return $data;
     }
 }
