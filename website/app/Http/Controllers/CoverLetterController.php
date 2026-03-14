@@ -9,15 +9,11 @@ use Illuminate\Routing\Controller;
 use Spatie\LaravelPdf\Facades\Pdf;
 
 class CoverLetterController extends Controller {
-    public function download($id) {
+    public function download($id, RenderBladeContent $renderBladeContent) {
         try {
             $coverLetterData = CoverLetterContent::findOrFail($id);
 
-            $content = $coverLetterData->content;
-            if (is_array($content)) {
-                $content = (new RenderBladeContent())($content, request()->query());
-                $coverLetterData->content = $content;
-            }
+            $coverLetterData->content = $renderBladeContent($coverLetterData->content, request()->query());
 
             $html = inertia('CoverLetter.svelte', ['coverLetter' => $coverLetterData])
                 ->rootView('pdf.cover-letter')

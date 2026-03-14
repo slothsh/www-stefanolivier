@@ -29,6 +29,6 @@ Route::prefix('/cover-image')->group(function () {
     Route::get('/{featuredItem}/{width}/{height}/download', [CoverImageController::class, 'download'])->name('coverImage.download');
 });
 
-Route::prefix('/cover-letter')->middleware([HttpAuthMiddleware::class])->group(function () {
+Route::prefix('/cover-letter')->group(function () {
     Route::get('/{id}/download', [CoverLetterController::class, 'download'])->name('cover-letter.download');
 });
