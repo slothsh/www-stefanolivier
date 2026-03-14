@@ -85,3 +85,23 @@ export interface CvData {
     content: CvContent;
     tags: string[];
 }
+
+export interface CoverLetterContent {
+    date: string;
+    recipient_name: string;
+    recipient_title: string;
+    recipient_company: string;
+    recipient_address?: string;
+    paragraphs: string[];
+    closing: string;
+    sender_name: string;
+    sender_title?: string;
+    sender_phone?: string;
+    sender_email?: string;
+}
+
+export interface CoverLetterData {
+    id: number;
+    content: CoverLetterContent;
+    tags: string[];
+}

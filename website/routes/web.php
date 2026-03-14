@@ -3,9 +3,11 @@
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CoverImageController;
+use App\Http\Controllers\CoverLetterController;
 use App\Http\Controllers\CvController;
 use App\Http\Controllers\FeaturedItemController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Middleware\HttpAuthMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomepageController::class, 'index'])->name('home.index');
@@ -25,4 +27,8 @@ Route::prefix('/cv')->group(function () {
 
 Route::prefix('/cover-image')->group(function () {
     Route::get('/{featuredItem}/{width}/{height}/download', [CoverImageController::class, 'download'])->name('coverImage.download');
+});
+
+Route::prefix('/cover-letter')->middleware([HttpAuthMiddleware::class])->group(function () {
+    Route::get('/{id}/download', [CoverLetterController::class, 'download'])->name('cover-letter.download');
 });
