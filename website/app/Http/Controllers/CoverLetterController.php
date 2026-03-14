@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\RenderBladeContent;
 use App\Models\CoverLetterContent;
 use Carbon\Carbon;
 use Illuminate\Routing\Controller;
@@ -12,14 +13,10 @@ class CoverLetterController extends Controller {
         try {
             $coverLetterData = CoverLetterContent::findOrFail($id);
 
-            // Process template variables from query params
             $content = $coverLetterData->content;
             if (is_array($content)) {
-                // Replace template variables in content if needed
-                $templateVars = request()->query(); // Get all query parameters
-                
-                // Recursively replace template variables in the content array
-                $content = $this->replaceTemplateVariables($content, $templateVars);
+                $content = (new RenderBladeContent())($content, request()->query());
+                $coverLetterData->content = $content;
             }
 
             $html = inertia('CoverLetter.svelte', ['coverLetter' => $coverLetterData])
@@ -34,33 +31,8 @@ class CoverLetterController extends Controller {
                 ->format('a4')
                 ->name($cvName);
         } catch (\Throwable $t) {
-            // TODO: Log to discord
+            Log::channel('discord')->error($t->getMessage());
             abort(404);
         }
-    }
-    
-    /**
-     * Recursively replace template variables in an array or string
-     */
-    private function replaceTemplateVariables($data, array $templateVars) {
-        if (is_array($data)) {
-            foreach ($data as $key => $value) {
-                $data[$key] = $this->replaceTemplateVariables($value, $templateVars);
-            }
-            return $data;
-        }
-        
-        if (is_string($data)) {
-            // Replace template variables like {variable_name} with actual values
-            foreach ($templateVars as $varName => $varValue) {
-                $placeholder = '{' . $varName . '}';
-                if (strpos($data, $placeholder) !== false) {
-                    $data = str_replace($placeholder, $varValue, $data);
-                }
-            }
-            return $data;
-        }
-        
-        return $data;
     }
 }
