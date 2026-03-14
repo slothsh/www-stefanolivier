@@ -33,7 +33,7 @@ function getArray(key: string): string[] {
         {/if}
 
         {#if getValue('recipient_name') || getValue('recipient_title') || getValue('recipient_company')}
-            <div class="mb-6 print:mb-4">
+            <header class="border-b border-gray-300 print:pb-4 print:mb-4">
                 {#if getValue('recipient_name')}
                     <p class="text-lg font-medium text-gray-900">{getString('recipient_name')}</p>
                 {/if}
@@ -46,16 +46,16 @@ function getArray(key: string): string[] {
                 {#if getValue('recipient_address')}
                     <p class="text-sm text-gray-600">{getString('recipient_address')}</p>
                 {/if}
-            </div>
+            </header>
         {/if}
 
         {#if getValue('salutation')}
             <div class="mb-6 print:mb-4">
-                <p class="text-lg font-medium text-gray-900">Dear {getString('salutation')},</p>
+                <p class="print:text-xs text-gray-700">Dear {getString('salutation')},</p>
             </div>
         {:else if getValue('recipient_name')}
             <div class="mb-6 print:mb-4">
-                <p class="text-lg font-medium text-gray-900">Dear {getString('recipient_name')},</p>
+                <p class="print:text-xs text-gray-700">Dear {getString('recipient_name')},</p>
             </div>
         {/if}
 
@@ -74,22 +74,22 @@ function getArray(key: string): string[] {
         {/if}
 
         {#if getValue('closing') || getValue('sender_name')}
-            <div class="mt-10 print:mt-8">
+            <div class="print:text-xs mt-10 print:mt-8">
                 {#if getValue('closing')}
                     <p class="text-gray-700">{getString('closing')},</p>
                 {/if}
                 {#if getValue('sender_name')}
-                    <p class="text-gray-700 mt-2 font-medium">{getString('sender_name')}</p>
+                    <p class="text-gray-700 mt-2">{getString('sender_name')}</p>
                 {/if}
                 {#if getValue('sender_title')}
-                    <p class="text-sm text-gray-600">{getString('sender_title')}</p>
+                    <p class="text-gray-700">{getString('sender_title')}</p>
                 {/if}
                 {#if getValue('sender_phone')}
-                    <p class="text-sm text-gray-600">{getString('sender_phone')}</p>
+                    <p class="text-gray-700">{getString('sender_phone')}</p>
                 {/if}
                 {#if getValue('sender_email')}
-                    <p class="text-sm text-gray-600">
-                        <a href="mailto:{getString('sender_email')}" class="hover:text-gray-900 print:text-gray-600">
+                    <p class="text-gray-700">
+                        <a href="mailto:{getString('sender_email')}" class="hover:text-gray-900 print:text-gray-700">
                             {getString('sender_email')}
                         </a>
                     </p>
