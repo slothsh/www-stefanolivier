@@ -17,19 +17,62 @@ class CvContentFactory extends Factory
         $experienceCount = $this->faker->numberBetween(2, 4);
         $educationCount = $this->faker->numberBetween(1, 2);
 
-        $content = [
-            'name' => $this->faker->name(),
-            'title' => $this->faker->randomElement(['Software Developer', 'Full-Stack Developer', 'Senior Engineer', 'Tech Lead']),
-            'email' => $this->faker->safeEmail(),
-            'location' => $this->faker->country(),
-            'summary' => $this->faker->paragraph(),
-            'experience' => collect(range(1, $experienceCount))->map(fn ($i) => $this->experienceEntry($i))->toArray(),
-            'education' => collect(range(1, $educationCount))->map(fn () => $this->educationEntry())->toArray(),
-            'skills' => $this->faker->randomElements(
-                ['PHP', 'Laravel', 'TypeScript', 'Svelte', 'Vue.js', 'React', 'Tailwind CSS', 'PostgreSQL', 'Redis', 'Docker', 'Git', 'Node.js', 'Python', 'AWS'],
-                $this->faker->numberBetween(5, 10)
-            ),
-        ];
+          $content = [
+              'name' => $this->faker->name(),
+              'title' => $this->faker->randomElement(['Software Developer', 'Full-Stack Developer', 'Senior Engineer', 'Tech Lead']),
+              'email' => $this->faker->safeEmail(),
+              'location' => $this->faker->country(),
+              'summary' => $this->faker->paragraph(),
+              'status' => $this->faker->randomElement([
+                  ['Available for hire', 'Open to remote work'],
+                  ['Available for hire'],
+                  ['Open to remote work'],
+                  ['Seeking new opportunities'],
+                  ['Available for contract work']
+              ]),
+              'externalLinks' => [
+                  [
+                      'label' => 'LinkedIn',
+                      'url' => $this->faker->url(),
+                      'icon' => 'linkedin'
+                  ],
+                  [
+                      'label' => 'GitHub',
+                      'url' => $this->faker->url(),
+                      'icon' => 'github'
+                  ],
+                  [
+                      'label' => 'Portfolio',
+                      'url' => $this->faker->url(),
+                      'icon' => 'globe'
+                  ]
+              ],
+              'projects' => collect(range(1, $this->faker->numberBetween(2, 4)))->map(function () {
+                  $technologies = $this->faker->randomElements(
+                      ['PHP', 'Laravel', 'TypeScript', 'Svelte', 'Vue.js', 'React', 'Tailwind CSS', 'PostgreSQL', 'Redis', 'Docker', 'Git', 'Node.js', 'Python', 'AWS'],
+                      $this->faker->numberBetween(3, 6)
+                  );
+                  
+                  $startDate = $this->faker->dateTimeBetween('-2 years', '-6 months');
+                  $isCurrent = $this->faker->boolean(30); // 30% chance of being current
+                  $endDate = $isCurrent ? null : $this->faker->dateTimeBetween($startDate, 'now');
+                  
+                  return [
+                      'name' => $this->faker->words(3, true),
+                      'description' => $this->faker->sentence(),
+                      'technologies' => $technologies,
+                      'link' => $this->faker->boolean() ? $this->faker->url() : null,
+                      'startDate' => $startDate->format('Y-m'),
+                      'endDate' => $endDate?->format('Y-m'),
+                  ];
+              })->toArray(),
+              'experience' => collect(range(1, $experienceCount))->map(fn ($i) => $this->experienceEntry($i))->toArray(),
+              'education' => collect(range(1, $educationCount))->map(fn () => $this->educationEntry())->toArray(),
+              'skills' => $this->faker->randomElements(
+                  ['PHP', 'Laravel', 'TypeScript', 'Svelte', 'Vue.js', 'React', 'Tailwind CSS', 'PostgreSQL', 'Redis', 'Docker', 'Git', 'Node.js', 'Python', 'AWS'],
+                  $this->faker->numberBetween(5, 10)
+              ),
+          ];
 
         return [
             'content' => $content,

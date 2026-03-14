@@ -75,9 +75,20 @@ export interface CvContent {
     phone?: string;
     location?: string;
     summary?: string;
+    status?: string[];
+    externalLinks?: Array<{ label: string; url: string; icon: string }>;
+    auxiliaryItems?: string[];
     experience: CvExperience[];
     education: CvEducation[];
     skills: string[];
+    projects?: Array<{
+        name: string;
+        description: string;
+        technologies: string[];
+        link?: string;
+        startDate?: string;
+        endDate?: string;
+    }>;
 }
 
 export interface CvData {

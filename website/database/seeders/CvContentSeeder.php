@@ -16,6 +16,51 @@ class CvContentSeeder extends Seeder
                 'email' => 'hello@stefanolivier.com',
                 'location' => 'Netherlands',
                 'summary' => 'Full-stack software developer with expertise in modern web technologies. Passionate about building elegant solutions and delivering high-quality user experiences. Experienced in Laravel, TypeScript, and Svelte.',
+                'status' => ['Available for hire', 'Open to remote work'],
+                'externalLinks' => [
+                    [
+                        'label' => 'LinkedIn',
+                        'url' => 'https://linkedin.com/in/stefanolivier',
+                        'icon' => 'linkedin'
+                    ],
+                    [
+                        'label' => 'GitHub',
+                        'url' => 'https://github.com/stefanolivier',
+                        'icon' => 'github'
+                    ],
+                    [
+                        'label' => 'Portfolio',
+                        'url' => 'https://stefanolivier.com',
+                        'icon' => 'globe'
+                    ]
+                ],
+                'auxiliaryItems' => ['Open to remote', 'Based in NL'],
+                'projects' => [
+                    [
+                        'name' => 'Personal Portfolio Website',
+                        'description' => 'A modern, responsive portfolio website showcasing my skills, experience, and projects. Built with Laravel, Svelte, and Tailwind CSS.',
+                        'technologies' => ['Laravel', 'Svelte', 'TypeScript', 'Tailwind CSS', 'Vite'],
+                        'link' => 'https://stefanolivier.com',
+                        'startDate' => '2024-01',
+                        'endDate' => null
+                    ],
+                    [
+                        'name' => 'E-commerce Platform',
+                        'description' => 'Full-featured e-commerce platform with product catalog, shopping cart, payment processing, and admin dashboard.',
+                        'technologies' => ['Laravel', 'Vue.js', 'MySQL', 'Redis', 'Docker'],
+                        'link' => 'https://github.com/stefanolivier/ecommerce-platform',
+                        'startDate' => '2023-06',
+                        'endDate' => '2023-12'
+                    ],
+                    [
+                        'name' => 'Task Management API',
+                        'description' => 'RESTful API for task management with authentication, filtering, and real-time updates.',
+                        'technologies' => ['Node.js', 'Express', 'PostgreSQL', 'Socket.IO'],
+                        'link' => 'https://github.com/stefanolivier/task-manager-api',
+                        'startDate' => '2023-03',
+                        'endDate' => '2023-05'
+                    ]
+                ],
                 'experience' => [
                     [
                         'company' => 'Tech Company',
