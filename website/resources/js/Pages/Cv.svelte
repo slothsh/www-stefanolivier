@@ -74,7 +74,7 @@ function getExternalLinkIcon(iconKey: string) {
                     {/if}
 
                     {#if cv.content.auxiliaryItems && cv.content.auxiliaryItems.length > 0}
-                        <div class="flex flex-wrap gap-2 mt-2">
+                        <div class="flex flex-wrap gap-2 mt-4">
                             {#each cv.content.auxiliaryItems as item}
                                 <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700 print:bg-gray-50 print:text-gray-600">
                                     {item}
@@ -83,7 +83,7 @@ function getExternalLinkIcon(iconKey: string) {
                         </div>
                     {/if}
                 </div>
-                <img src={Bio.portraitUrl} class="rounded-full" width="124mm" alt="portrait image">
+                <img src={Bio.portraitUrl} class="rounded-full w-40 h-40 object-cover" alt="portrait image">
             </div>
         </header>
 
@@ -109,7 +109,7 @@ function getExternalLinkIcon(iconKey: string) {
                             </div>
                             <p class="text-gray-700 text-sm mt-2 print:text-xs">{exp.description}</p>
                             {#if exp.highlights && exp.highlights.length > 0}
-                                <ul class="list-disc ml-4 pl-2 text-sm text-gray-700 mt-2 print:text-xs">
+                                <ul class="list-disc pl-2 ml-4 text-sm text-gray-700 mt-2 print:text-xs">
                                     {#each exp.highlights as highlight}
                                         <li class="print:my-0.5">{highlight}</li>
                                     {/each}
