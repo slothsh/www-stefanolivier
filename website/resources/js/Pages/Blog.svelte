@@ -47,7 +47,7 @@ function noOp() {}
                 </main>
 
                 <aside class="hidden lg:block lg:col-span-4 lg:pl-8">
-                    <div class="sticky top-8">
+                    <div class="sticky top-24">
                         <div class="bg-bg border border-border rounded-lg p-4">
                             <h3 class="font-semibold text-text mb-4">Recent Posts</h3>
                             <div class="divide-y divide-border">
