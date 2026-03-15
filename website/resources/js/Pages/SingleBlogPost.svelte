@@ -12,7 +12,6 @@ import { toast, Toaster } from 'svelte-sonner';
 import Fa from 'svelte-fa';
 import { faXmark, faFileArrowDown, faPhone, faEnvelope, faFilePdf, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { Bio } from '../Lib/bio';
 
 interface Props {
     post: BlogPost;
