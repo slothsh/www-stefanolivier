@@ -14,7 +14,7 @@ export interface BlogPostSnippet {
 
 export interface BlogPost {
     title: string,
-    body_text: string,
+    content: string,
     structured_content: object,
     tldr?: string,
     posted_at: string,
