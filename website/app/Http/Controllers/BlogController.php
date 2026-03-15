@@ -7,6 +7,7 @@ use App\Actions\GenerateCvPdfQrCode;
 use App\Models\BlogPost;
 use App\Models\CvContent;
 use Illuminate\Routing\Controller;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 
 class BlogController extends Controller {
@@ -30,12 +31,18 @@ class BlogController extends Controller {
         ]);
     }
 
-    public function show(string $slug, GenerateContactCardQrCode $generateContactQrCode, GenerateCvPdfQrCode $generateCvPdfQrCode): Response {
+    public function show(string $slug, GenerateContactCardQrCode $generateContactQrCode, GenerateCvPdfQrCode $generateCvPdfQrCode): RedirectResponse|Response {
+        $post = BlogPost::query()->select('title', 'content', 'structured_content', 'tags', 'posted_at', 'read_time', 'author')->where('slug', $slug)->first();
+
+        if (! $post) {
+            return redirect()->route('blog.index');
+        }
+
         $cvData = CvContent::hasTag('latest')->get();
         $cvDownloadUrl = ! $cvData->isEmpty() ? route('cv.latest.download') : null;
 
         return inertia('SingleBlogPost.svelte', [
-            'post' => BlogPost::query()->select('title', 'content', 'structured_content', 'tags', 'posted_at', 'read_time', 'author')->where('slug', $slug)->firstOrFail(),
+            'post' => $post,
             'cvDownloadUrl' => $cvDownloadUrl,
             'contactCardQrCode' => $generateContactQrCode(),
             'cvPdfQrCode' => $cvDownloadUrl ? $generateCvPdfQrCode() : null,

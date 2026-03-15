@@ -289,7 +289,15 @@ $effect(() => {
             <div class="lg:grid lg:grid-cols-12 lg:gap-8">
                 <main class="lg:col-span-8">
                     {#if Object.keys(posts).length === 0}
-                        <p class="text-text-muted">No blog posts yet.</p>
+                        <div class="flex flex-col items-center justify-center py-16 text-center">
+                            <div class="w-16 h-16 rounded-full bg-bg-secondary flex items-center justify-center mb-4">
+                                <span class="text-3xl">📝</span>
+                            </div>
+                            <h3 class="text-lg font-medium text-text mb-2">No blog posts yet</h3>
+                            <p class="text-text-muted max-w-md">
+                                I'm still writing my first blog post. Check back soon for thoughts on software development, programming, and technology.
+                            </p>
+                        </div>
                     {:else}
                         {#each Object.entries(posts) as [month, monthPosts] (month)}
                             <MonthGroup {month} posts={monthPosts} />
