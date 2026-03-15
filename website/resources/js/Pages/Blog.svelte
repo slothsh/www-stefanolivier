@@ -5,10 +5,15 @@ import BlogPostItem from '../Components/BlogPostItem.svelte';
 import Header from '../Components/Header.svelte';
 import Footer from '../Components/Footer.svelte';
 import ContactForm from './ContactForm.svelte';
+import CopyButton from '../Components/CopyButton.svelte';
 import { animateFormOpen, animateFormClose, updateClipPathOnResize } from '../Lib/contactFormAnimation';
 import { lockScroll, unlockScroll } from '../Lib/scrollLock';
 import { tick } from 'svelte';
 import { toast, Toaster } from 'svelte-sonner';
+import Fa from 'svelte-fa';
+import { faXmark, faFileArrowDown, faPhone, faEnvelope, faFilePdf, faAddressCard } from '@fortawesome/free-solid-svg-icons';
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { Bio } from '../Lib/bio';
 
 interface MonthGroupedPosts {
     [month: string]: BlogPostSnippet[];
@@ -18,13 +23,15 @@ interface Props {
     posts: MonthGroupedPosts;
     cvDownloadUrl?: string | null;
     contactCardQrCode?: string;
+    cvPdfQrCode?: string;
 }
 
-let { posts, cvDownloadUrl = null, contactCardQrCode = '' }: Props = $props();
+let { posts, cvDownloadUrl = null, contactCardQrCode = '', cvPdfQrCode = '' }: Props = $props();
 
 let allPosts = Object.values(posts).flat();
 
 let showContactForm = $state(false);
+let activeQrCode = $state<'contact' | 'cv'>('contact');
 let overlayRef: HTMLElement | undefined = $state();
 let formRef: HTMLElement | undefined = $state();
 let clickOrigin = $state({ x: 0, y: 0 });
@@ -77,7 +84,20 @@ $effect(() => {
     <meta name="description" content="Read my latest blog posts about software development, programming, and technology." />
 </svelte:head>
 
-<Toaster />
+<Toaster
+    position="top-center"
+    theme="dark"
+    richColors
+    closeButton
+    toastOptions={{
+        classes: {
+            success: 'toast-success',
+            error: 'toast-error',
+            warning: 'toast-warning',
+            info: 'toast-info',
+        }
+    }}
+/>
 
 {#if showContactForm}
     <div
@@ -93,11 +113,166 @@ $effect(() => {
             onclick={handleFormClose}
             class="absolute top-6 left-6 text-text-muted hover:text-text transition-colors cursor-pointer"
         >
-            ✕
+            <Fa icon={faXmark} class="text-3xl" />
         </button>
         <div class="flex items-center justify-center h-full p-4">
-            <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-md shadow-xl flex flex-col">
-                <ContactForm onClose={handleFormClose} {contactCardQrCode} isVisible={showContactForm} />
+            <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-4xl shadow-xl flex flex-col">
+                <div class="flex flex-col md:flex-row h-full gap-8">
+                    <div class="flex-1 md:flex-[2] flex flex-col">
+                        <ContactForm
+                            isVisible={showContactForm}
+                            onClose={handleFormClose}
+                        />
+                    </div>
+                    <div class="hidden md:flex flex-1 flex-col border-l border-border pl-8 justify-between">
+                        <div>
+                            <h2 class="contact-detail text-xl font-semibold text-text mb-6">Contact</h2>
+                            <div class="space-y-4">
+                            <div class="flex items-center">
+                                <a
+                                    href={Bio.contact.Phone.src}
+                                    class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                >
+                                    <Fa icon={faPhone} class="text-lg w-5" />
+                                    <span>{Bio.contact.Phone.displayName}</span>
+                                </a>
+                                <CopyButton text={Bio.contact.Phone.displayName} />
+                            </div>
+                            <div class="flex items-center">
+                                <a
+                                    href={Bio.contact.Email.src}
+                                    class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                >
+                                    <Fa icon={faEnvelope} class="text-lg w-5" />
+                                    <span>{Bio.contact.Email.displayName}</span>
+                                </a>
+                                <CopyButton text={Bio.contact.Email.displayName} />
+                            </div>
+                            <div class="flex items-center">
+                                <a
+                                    href={Bio.contact.GitHub.src}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                >
+                                    <Fa icon={faGithub} class="text-lg w-5" />
+                                    <span>{Bio.contact.GitHub.displayName}</span>
+                                </a>
+                                <CopyButton text={Bio.contact.GitHub.src} />
+                            </div>
+                            <div class="flex items-center">
+                                <a
+                                    href={Bio.contact.LinkedIn.src}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                >
+                                    <Fa icon={faLinkedin} class="text-lg w-5" />
+                                    <span>{Bio.contact.LinkedIn.displayName}</span>
+                                </a>
+                                <CopyButton text={Bio.contact.LinkedIn.src} />
+                            </div>
+                            {#if cvDownloadUrl}
+                                <div class="flex items-center">
+                                    <a
+                                        href={cvDownloadUrl}
+                                        download
+                                        class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors"
+                                    >
+                                        <Fa icon={faFileArrowDown} class="text-lg w-5" />
+                                        <span>Download CV</span>
+                                    </a>
+                                    <CopyButton text={cvDownloadUrl} />
+                                </div>
+                            {/if}
+                            {#if contactCardQrCode && cvPdfQrCode}
+                                <div class="qr-code pt-4 mt-4 border-t border-border">
+                                    <div class="flex gap-2 mb-3">
+                                        <button
+                                            type="button"
+                                            onclick={() => activeQrCode = 'contact'}
+                                            class="qr-code flex-1 flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition-colors {activeQrCode === 'contact' ? 'bg-accent text-bg' : 'bg-bg text-text-muted hover:text-text'}"
+                                        >
+                                            <Fa icon={faAddressCard} class="text-xs" />
+                                            Contact
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onclick={() => activeQrCode = 'cv'}
+                                            class="qr-code flex-1 flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition-colors {activeQrCode === 'cv' ? 'bg-accent text-bg' : 'bg-bg text-text-muted hover:text-text'}"
+                                        >
+                                            <Fa icon={faFilePdf} class="text-xs" />
+                                            Download CV
+                                        </button>
+                                    </div>
+                                    {#if activeQrCode === 'contact'}
+                                        <img
+                                            src={contactCardQrCode}
+                                            alt="Contact QR Code"
+                                            class="qr-code rounded-md border border-border w-full"
+                                        />
+                                    {:else}
+                                        <img
+                                            src={cvPdfQrCode}
+                                            alt="CV PDF QR Code"
+                                            class="qr-code rounded-md border border-border w-full"
+                                        />
+                                    {/if}
+                                </div>
+                            {/if}
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:hidden flex flex-row gap-4 justify-center pt-6 mt-6 border-t border-border">
+                    <div class="flex flex-row items-center">
+                        <a
+                            href={Bio.contact.Phone.src}
+                            class="contact-detail text-text-muted hover:text-accent transition-colors text-sm"
+                        >
+                            {Bio.contact.Phone.displayName}
+                        </a>
+                    </div>
+                    <div class="flex flex-row items-center">
+                        <a
+                            href={Bio.contact.Email.src}
+                            class="contact-detail text-text-muted hover:text-accent transition-colors text-sm"
+                        >
+                            {Bio.contact.Email.displayName}
+                        </a>
+                    </div>
+                    <div class="flex flex-row items-center">
+                        <a
+                            href={Bio.contact.GitHub.src}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="contact-detail text-text-muted hover:text-accent transition-colors"
+                        >
+                            <Fa icon={faGithub} class="text-lg" />
+                        </a>
+                    </div>
+                    <div class="flex flex-row items-center">
+                        <a
+                            href={Bio.contact.LinkedIn.src}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="contact-detail text-text-muted hover:text-accent transition-colors"
+                        >
+                            <Fa icon={faLinkedin} class="text-lg" />
+                        </a>
+                    </div>
+                    {#if cvDownloadUrl}
+                        <div class="flex flex-row items-center">
+                            <a
+                                href={cvDownloadUrl}
+                                download
+                                class="contact-detail text-text-muted hover:text-accent transition-colors"
+                            >
+                                <Fa icon={faFileArrowDown} class="text-lg" />
+                            </a>
+                        </div>
+                    {/if}
+                </div>
             </div>
         </div>
     </div>
