@@ -78,7 +78,8 @@ class BlogPostFactory extends Factory
             'tags' => $this->faker->randomElements(['tag1', 'tag2', 'tag3', 'tag4', 'tag5'], $this->faker->numberBetween(1, 5)),
             'read_time' => $this->faker->numberBetween(120, 60),
             'live' => true,
-            'posted_at' => $this->faker->dateTimeBetween('-1 year', '+1 year')
+            'posted_at' => $this->faker->dateTimeBetween('-1 year', '+1 year'),
+            'author' => $this->faker->name(),
         ];
     }
 }
