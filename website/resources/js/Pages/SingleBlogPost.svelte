@@ -84,13 +84,23 @@ function formatDate(dateString: string): string {
 {#if showContactForm}
     <div
         bind:this={overlayRef}
-        class="fixed inset-0 z-50 bg-bg/90 backdrop-blur-sm"
+        class="fixed inset-0 z-50"
+    ></div>
+    <div
+        bind:this={formRef}
+        class="fixed inset-0 z-[60]"
     >
-        <div
-            bind:this={formRef}
-            class="fixed left-1/2 top-0 w-full max-w-md bg-bg border border-border rounded-2xl shadow-2xl"
+        <button
+            type="button"
+            onclick={handleFormClose}
+            class="absolute top-6 left-6 text-text-muted hover:text-text transition-colors cursor-pointer"
         >
-            <ContactForm onClose={handleFormClose} contactCardQrCode={contactCardQrCode} isVisible={showContactForm} />
+            ✕
+        </button>
+        <div class="flex items-center justify-center h-full p-4">
+            <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-md shadow-xl flex flex-col">
+                <ContactForm onClose={handleFormClose} contactCardQrCode={contactCardQrCode} isVisible={showContactForm} />
+            </div>
         </div>
     </div>
 {/if}
