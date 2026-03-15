@@ -6,6 +6,7 @@ use App\Actions\GenerateContactCardQrCode;
 use App\Actions\GenerateCvPdfQrCode;
 use App\Models\CvContent;
 use App\Models\FeaturedItem;
+use App\Models\BlogPost;
 use Illuminate\Routing\Controller;
 use Inertia\Response;
 
@@ -30,11 +31,14 @@ class HomepageController extends Controller
         $cvData = CvContent::hasTag('latest')->get();
         $cvDownloadUrl = ! $cvData->isEmpty() ? route('cv.latest.download') : null;
 
+        $hasBlogPosts = BlogPost::query()->exists();
+
         return inertia('Homepage.svelte', [
             'featuredItems' => $featuredItems,
             'cvDownloadUrl' => $cvDownloadUrl,
             'contactCardQrCode' => $generateContactQrCode(),
             'cvPdfQrCode' => $generateCvPdfQrCode(),
+            'showBlogLink' => $hasBlogPosts,
         ]);
     }
 }

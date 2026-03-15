@@ -18,9 +18,10 @@ interface Props {
     cvDownloadUrl?: string | null;
     contactCardQrCode?: string;
     cvPdfQrCode?: string;
+    showBlogLink?: boolean;
 }
 
-let { post, cvDownloadUrl = null, contactCardQrCode = '', cvPdfQrCode = '' }: Props = $props();
+let { post, cvDownloadUrl = null, contactCardQrCode = '', cvPdfQrCode = '', showBlogLink = true }: Props = $props();
 
 let showContactForm = $state(false);
 let activeQrCode = $state<'contact' | 'cv'>('contact');
@@ -280,7 +281,7 @@ function formatDate(dateString: string): string {
 {/if}
 
 <div class="min-h-screen bg-bg flex flex-col">
-    <Header onEmailClick={handleEmailClick} {cvDownloadUrl} />
+    <Header onEmailClick={handleEmailClick} {cvDownloadUrl} {showBlogLink} />
     <main class="flex-1 pt-20">
         <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <header class="mb-12">

@@ -19,9 +19,10 @@ interface Props {
     cvDownloadUrl?: string | null;
     contactCardQrCode?: string;
     cvPdfQrCode?: string;
+    showBlogLink?: boolean;
 }
 
-let { featuredItems = [], cvDownloadUrl = null, contactCardQrCode = '', cvPdfQrCode = '' }: Props = $props();
+let { featuredItems = [], cvDownloadUrl = null, contactCardQrCode = '', cvPdfQrCode = '', showBlogLink = true }: Props = $props();
 
 let showContactForm = $state(false);
 let activeQrCode = $state<'contact' | 'cv'>('contact');
@@ -78,7 +79,7 @@ $effect(() => {
 
 <div class="min-h-screen bg-bg flex flex-col px-6 md:px-8 lg:px-12">
     {#if featuredItems.length > 0}
-        <Header onEmailClick={handleEmailClick} {cvDownloadUrl} />
+        <Header onEmailClick={handleEmailClick} {cvDownloadUrl} {showBlogLink} />
     {/if}
     <main class="flex-1 flex flex-col items-center justify-center mt-6 md:mt-8 lg:mt-12">
         <div class="flex flex-col items-center text-center justify-center">

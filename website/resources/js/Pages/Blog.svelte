@@ -23,9 +23,10 @@ interface Props {
     cvDownloadUrl?: string | null;
     contactCardQrCode?: string;
     cvPdfQrCode?: string;
+    showBlogLink?: boolean;
 }
 
-let { posts, cvDownloadUrl = null, contactCardQrCode = '', cvPdfQrCode = '' }: Props = $props();
+let { posts, cvDownloadUrl = null, contactCardQrCode = '', cvPdfQrCode = '', showBlogLink = true }: Props = $props();
 
 let allPosts = $derived(Object.values(posts).flat());
 
@@ -278,7 +279,7 @@ $effect(() => {
 {/if}
 
 <div class="min-h-screen bg-bg flex flex-col">
-    <Header onEmailClick={handleEmailClick} {cvDownloadUrl} />
+    <Header onEmailClick={handleEmailClick} {cvDownloadUrl} {showBlogLink} />
     <main class="flex-1 pt-20 h-full">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             {#if Object.keys(posts).length > 0}

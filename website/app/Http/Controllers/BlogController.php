@@ -28,6 +28,7 @@ class BlogController extends Controller {
             'cvDownloadUrl' => $cvDownloadUrl,
             'contactCardQrCode' => $generateContactQrCode(),
             'cvPdfQrCode' => $cvDownloadUrl ? $generateCvPdfQrCode() : null,
+            'showBlogLink' => ! $posts->isEmpty(),
         ]);
     }
 
@@ -46,6 +47,7 @@ class BlogController extends Controller {
             'cvDownloadUrl' => $cvDownloadUrl,
             'contactCardQrCode' => $generateContactQrCode(),
             'cvPdfQrCode' => $cvDownloadUrl ? $generateCvPdfQrCode() : null,
+            'showBlogLink' => true,
         ]);
     }
 }

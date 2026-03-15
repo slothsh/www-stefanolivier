@@ -3,20 +3,40 @@ import Fa from 'svelte-fa';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { cn } from '@/Lib/cn';
+import { router } from '@inertiajs/svelte';
 
 interface Props {
     onEmailClick: (e: MouseEvent) => void;
     cvDownloadUrl?: string | null;
+    showBlogLink?: boolean;
     class?: string;
 }
 
-let { onEmailClick, cvDownloadUrl = null, class: className = '' }: Props = $props();
+let { onEmailClick, cvDownloadUrl = null, showBlogLink = true, class: className = '' }: Props = $props();
 </script>
 
 <header class={cn(
-    'fixed top-0 left-0 right-0 z-40 flex justify-end bg-bg p-4 md:p-6',
+    'fixed top-0 left-0 right-0 z-40 flex justify-between items-center bg-bg p-4 md:p-6',
     className
 )}>
+    <div class="flex gap-3 sm:gap-4 text-sm font-medium">
+        <button
+            type="button"
+            onclick={() => router.get('/')}
+            class="text-text-muted hover:text-accent transition-colors"
+        >
+            Home
+        </button>
+        {#if showBlogLink}
+            <button
+                type="button"
+                onclick={() => router.get('/blog')}
+                class="text-text-muted hover:text-accent transition-colors"
+            >
+                Blog
+            </button>
+        {/if}
+    </div>
     <div class="flex gap-4 sm:gap-5">
         <a
             href={Bio.contact.GitHub.src}
