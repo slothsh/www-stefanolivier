@@ -75,7 +75,7 @@ class BlogPostFactory extends Factory
             'slug' => $this->faker->slug(8),
             'content' => $this->faker->text(2048),
             'structured_content' => $structutedContent,
-            'tags' => $this->faker->randomElements(['tag1', 'tag2', 'tag3', 'tag4', 'tag5'], $this->faker->numberBetween(1, 5)),
+            'tags' => collect($this->faker->randomElements(['tag1', 'tag2', 'tag3', 'tag4', 'tag5'], $this->faker->numberBetween(1, 5))),
             'read_time' => $this->faker->numberBetween(120, 60),
             'live' => true,
             'posted_at' => $this->faker->dateTimeBetween('-1 year', '+1 year'),
