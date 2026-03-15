@@ -279,12 +279,14 @@ $effect(() => {
 
 <div class="min-h-screen bg-bg flex flex-col">
     <Header onEmailClick={handleEmailClick} {cvDownloadUrl} />
-    <main class="flex-1 pt-20">
+    <main class="flex-1 pt-20 h-full">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <header class="mb-12">
-                <h1 class="text-4xl font-bold text-text mb-4">Blog</h1>
-                <p class="text-lg text-text-muted">Thoughts on software development, programming, and technology.</p>
-            </header>
+            {#if Object.keys(posts).length > 0}
+                <header class="mb-12">
+                    <h1 class="text-4xl font-bold text-text mb-4">Blog</h1>
+                        <p class="text-lg text-text-muted">Thoughts on software development, programming, and technology.</p>
+                </header>
+            {/if}
 
             <div class="lg:grid lg:grid-cols-12 lg:gap-8">
                 <main class="{Object.keys(posts).length === 0 ? 'lg:col-span-12' : 'lg:col-span-8'}">
@@ -295,7 +297,7 @@ $effect(() => {
                             </div>
                             <h3 class="text-lg font-medium text-text mb-2">No blog posts yet</h3>
                             <p class="text-text-muted max-w-md">
-                                I'm still writing my first blog post. Check back soon for thoughts on software development, programming, and technology.
+                                Nothing interesting here, yet. Check back soon for thoughts on software development, programming, and technology.
                             </p>
                         </div>
                     {:else}
