@@ -287,7 +287,7 @@ $effect(() => {
             </header>
 
             <div class="lg:grid lg:grid-cols-12 lg:gap-8">
-                <main class="lg:col-span-8">
+                <main class="{Object.keys(posts).length === 0 ? 'lg:col-span-12' : 'lg:col-span-8'}">
                     {#if Object.keys(posts).length === 0}
                         <div class="flex flex-col items-center justify-center py-16 text-center">
                             <div class="w-16 h-16 rounded-full bg-bg-secondary flex items-center justify-center mb-4">
@@ -305,18 +305,20 @@ $effect(() => {
                     {/if}
                 </main>
 
-                <aside class="hidden lg:block lg:col-span-4 lg:pl-8">
-                    <div class="sticky top-24">
-                        <div class="bg-bg border border-border rounded-lg p-4">
-                            <h3 class="font-semibold text-text mb-4">Recent Posts</h3>
-                            <div class="divide-y divide-border">
-                                {#each allPosts.slice(0, 5) as post (post.slug)}
-                                    <BlogPostItem {post} />
-                                {/each}
+                {#if Object.keys(posts).length > 0}
+                    <aside class="hidden lg:block lg:col-span-4 lg:pl-8">
+                        <div class="sticky top-24">
+                            <div class="bg-bg border border-border rounded-lg p-4">
+                                <h3 class="font-semibold text-text mb-4">Recent Posts</h3>
+                                <div class="divide-y divide-border">
+                                    {#each allPosts.slice(0, 5) as post (post.slug)}
+                                        <BlogPostItem {post} />
+                                    {/each}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </aside>
+                    </aside>
+                {/if}
             </div>
         </div>
     </main>
