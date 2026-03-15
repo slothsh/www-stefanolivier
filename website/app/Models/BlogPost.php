@@ -11,6 +11,19 @@ class BlogPost extends Model
 
     protected $table = 'blog_posts';
 
+    protected $fillable = [
+        'title',
+        'blurb',
+        'slug',
+        'content',
+        'structured_content',
+        'tags',
+        'read_time',
+        'live',
+        'posted_at',
+        'author',
+    ];
+
     protected $guarded = ['id'];
 
     protected $casts = [
