@@ -313,5 +313,5 @@ $effect(() => {
             </div>
         </div>
     </main>
-    <Footer {cvDownloadUrl} />
+    <Footer class="mx-6" {cvDownloadUrl} />
 </div>

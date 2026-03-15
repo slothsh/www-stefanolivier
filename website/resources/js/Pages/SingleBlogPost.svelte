@@ -335,5 +335,5 @@ function formatDate(dateString: string): string {
             </footer>
         </article>
     </main>
-    <Footer {cvDownloadUrl} />
+    <Footer class="mx-6" {cvDownloadUrl} />
 </div>
