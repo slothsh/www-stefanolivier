@@ -9,6 +9,7 @@ export interface BlogPostSnippet {
     posted_at: string,
     tags: string[],
     read_time: number,
+    author: string,
 }
 
 export interface BlogPost {
@@ -19,6 +20,7 @@ export interface BlogPost {
     posted_at: string,
     tags: string[],
     read_time: number,
+    author: string,
 }
 
 export type CanvasProps<T = {}> = {
