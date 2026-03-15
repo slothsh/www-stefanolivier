@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GenerateContactCardQrCode;
 use App\Models\BlogPost;
 use App\Models\CvContent;
 use Illuminate\Routing\Controller;
 use Inertia\Response;
 
 class BlogController extends Controller {
-    public function index(): Response {
+    public function index(GenerateContactCardQrCode $generateContactQrCode): Response {
         $posts = BlogPost::query()
             ->select('title', 'blurb', 'slug', 'posted_at', 'tags', 'read_time', 'author')
             ->orderBy('posted_at', 'desc')
@@ -23,16 +24,18 @@ class BlogController extends Controller {
         return inertia('Blog.svelte', [
             'posts' => $posts,
             'cvDownloadUrl' => $cvDownloadUrl,
+            'contactCardQrCode' => $generateContactQrCode(),
         ]);
     }
 
-    public function show(string $slug): Response {
+    public function show(string $slug, GenerateContactCardQrCode $generateContactQrCode): Response {
         $cvData = CvContent::hasTag('latest')->get();
         $cvDownloadUrl = ! $cvData->isEmpty() ? route('cv.latest.download') : null;
 
         return inertia('SingleBlogPost.svelte', [
             'post' => BlogPost::query()->select('title', 'content', 'structured_content', 'tags', 'posted_at', 'read_time', 'author')->where('slug', $slug)->firstOrFail(),
             'cvDownloadUrl' => $cvDownloadUrl,
+            'contactCardQrCode' => $generateContactQrCode(),
         ]);
     }
 }
