@@ -29,5 +29,6 @@ class BlogPost extends Model
     protected $casts = [
         'structured_content' => 'object',
         'tags' => CommaListToArray::class,
+        'posted_at' => 'datetime',
     ];
 }

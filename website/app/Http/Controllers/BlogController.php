@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\BlogPost;
 use Illuminate\Routing\Controller;
 use Inertia\Response;
-use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller {
     public function index(): Response {
