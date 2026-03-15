@@ -15,7 +15,7 @@ interface Props {
 
 let { onEmailClick, cvDownloadUrl = null, showBlogLink = true, class: className = '' }: Props = $props();
 
-let showLinks = $derived(showBlogLink);
+let showLinks = $derived(route().current('home.index') && showBlogLink || route().current('blog.*'));
 </script>
 
 <header class={cn(
@@ -23,8 +23,8 @@ let showLinks = $derived(showBlogLink);
     { 'border-b border-border': !route().current('home.index') },
     className
 )}>
-    {#if showLinks}
-        <div class="flex gap-3 sm:gap-4 text-sm font-medium">
+    <div class="flex gap-3 sm:gap-4 text-sm font-medium">
+        {#if showLinks}
             <button
                 type="button"
                 onclick={() => router.get(route('home.index'))}
@@ -41,8 +41,8 @@ let showLinks = $derived(showBlogLink);
                     Blog
                 </button>
             {/if}
-        </div>
-    {/if}
+        {/if}
+    </div>
     <div class="flex gap-4 sm:gap-5">
         <a
             href={Bio.contact.GitHub.src}
