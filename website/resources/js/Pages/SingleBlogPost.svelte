@@ -90,7 +90,7 @@ function formatDate(dateString: string): string {
             bind:this={formRef}
             class="fixed left-1/2 top-0 w-full max-w-md bg-bg border border-border rounded-2xl shadow-2xl"
         >
-            <ContactForm onClose={handleFormClose} contactCardQrCode={contactCardQrCode} />
+            <ContactForm onClose={handleFormClose} contactCardQrCode={contactCardQrCode} isVisible={showContactForm} />
         </div>
     </div>
 {/if}
