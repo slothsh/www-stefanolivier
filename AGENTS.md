@@ -14,10 +14,14 @@ Use td usage -q after first read.
 /
 ├── website/                 # Main Laravel application
 │   ├── app/
+│   │   ├── Actions/         # Business logic actions
+│   │   ├── Blade/           # Custom Blade helpers
+│   │   ├── Drivers/         # External service drivers
 │   │   ├── Http/
 │   │   │   ├── Controllers/ # Laravel controllers
 │   │   │   ├── Middleware/  # HTTP middleware
 │   │   │   └── Requests/    # Form request validation
+│   │   ├── Logging/         # Custom logging implementations
 │   │   ├── Mail/            # Mailable classes
 │   │   ├── Models/          # Eloquent models
 │   │   └── Providers/       # Service providers
@@ -26,7 +30,9 @@ Use td usage -q after first read.
 │   │   ├── js/
 │   │   │   ├── Pages/       # Svelte page components (Inertia)
 │   │   │   ├── Lib/         # Shared utilities and animations
-│   │   │   └── app.ts       # Entry point
+│   │   │   ├── app.ts       # Main entry point
+│   │   │   ├── appPdf.ts    # PDF generation entry point
+│   │   │   └── appImage.ts  # Image generation entry point
 │   │   └── views/           # Blade templates (email, SSR)
 │   ├── routes/
 │   │   └── web.php          # Route definitions
@@ -41,6 +47,8 @@ Use td usage -q after first read.
 - **Mail**: Laravel Mail (SMTP)
 - **Routing**: Standard Laravel routing with controller classes
 - **Validation**: Form Request classes
+- **PDF & Screenshots**: `spatie/laravel-pdf`, `spatie/laravel-screenshot`, `php-weasyprint`
+- **QR Codes**: `chillerlan/php-qrcode`
 - **Key packages**: Inertia.js Laravel, Ziggy (route helpers)
 
 ## Frontend Stack
@@ -52,6 +60,8 @@ Use td usage -q after first read.
 - **Icons**: Font Awesome via svelte-fa
 - **Forms**: TanStack Form with Zod validation
 - **Routing**: Inertia.js for SPA navigation
+- **Notifications**: `svelte-sonner`
+- **Code Highlighting**: `highlight.js`
 
 ## Coding Conventions
 
