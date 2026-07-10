@@ -51,8 +51,8 @@ RUN apt autoremove --purge
 
 # Server Configuration
 COPY ./infrastructure/website/nginx.conf /etc/nginx/nginx.conf
-COPY ./infrastructure/website/php-fpm-www.conf /etc/php/8.3/fpm/pool.d/www.conf
-COPY ./infrastructure/website/php-fpm.conf /etc/php/8.3/fpm/php-fpm.conf
+COPY ./infrastructure/website/php-fpm-www.conf /etc/php/8.5/fpm/pool.d/www.conf
+COPY ./infrastructure/website/php-fpm.conf /etc/php/8.5/fpm/php-fpm.conf
 COPY ./infrastructure/website/supervisord.conf /etc/supervisor/supervisord.conf
 
 # Server logs
