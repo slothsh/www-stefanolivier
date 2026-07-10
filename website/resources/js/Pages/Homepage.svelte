@@ -221,14 +221,16 @@ $effect(() => {
                                             <Fa icon={faAddressCard} class="text-xs" />
                                             Contact
                                         </button>
-                                        <button
-                                            type="button"
-                                            onclick={() => activeQrCode = 'cv'}
-                                            class="qr-code flex-1 flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition-colors {activeQrCode === 'cv' ? 'bg-accent text-bg' : 'bg-bg text-text-muted hover:text-text'}"
-                                        >
-                                            <Fa icon={faFilePdf} class="text-xs" />
-                                            Download CV
-                                        </button>
+                                        {#if false}
+                                            <button
+                                                type="button"
+                                                onclick={() => activeQrCode = 'cv'}
+                                                class="qr-code flex-1 flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition-colors {activeQrCode === 'cv' ? 'bg-accent text-bg' : 'bg-bg text-text-muted hover:text-text'}"
+                                            >
+                                                <Fa icon={faFilePdf} class="text-xs" />
+                                                Download CV
+                                            </button>
+                                        {/if}
                                     </div>
                                     {#if activeQrCode === 'contact'}
                                         <img
