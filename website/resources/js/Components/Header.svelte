@@ -60,7 +60,7 @@ let showLinks = $derived(route().current('home.index') && showBlogLink || route(
         >
             <Fa icon={faLinkedin} size="lg" />
         </a>
-        {#if cvDownloadUrl}
+        {#if false}
             <a
                 href={cvDownloadUrl}
                 download

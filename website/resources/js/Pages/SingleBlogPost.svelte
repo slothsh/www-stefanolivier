@@ -174,7 +174,7 @@ function formatDate(dateString: string): string {
                                 </a>
                                 <CopyButton text={Bio.contact.LinkedIn.src} />
                             </div>
-                            {#if cvDownloadUrl}
+                            {#if false}
                                 <div class="flex items-center">
                                     <a
                                         href={cvDownloadUrl}
@@ -263,7 +263,7 @@ function formatDate(dateString: string): string {
                             <Fa icon={faLinkedin} class="text-lg" />
                         </a>
                     </div>
-                    {#if cvDownloadUrl}
+                    {#if false}
                         <div class="flex flex-row items-center">
                             <a
                                 href={cvDownloadUrl}

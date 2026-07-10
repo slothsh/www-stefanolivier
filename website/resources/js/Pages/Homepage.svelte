@@ -197,7 +197,7 @@ $effect(() => {
                                 </a>
                                 <CopyButton text={Bio.contact.LinkedIn.src} />
                             </div>
-                            {#if cvDownloadUrl}
+                            {#if false}
                                 <div class="flex items-center">
                                     <a
                                         href={cvDownloadUrl}
@@ -286,7 +286,7 @@ $effect(() => {
                             <Fa icon={Bio.contact.LinkedIn.icon} class="text-lg" />
                         </a>
                     </div>
-                    {#if cvDownloadUrl}
+                    {#if false}
                         <div class="flex flex-row items-center">
                             <a
                                 href={cvDownloadUrl}
