@@ -37,11 +37,11 @@ REDIS_PORT=6379
 
 MAIL_MAILER=smtp
 MAIL_SCHEME=smtps
-MAIL_HOST=stefanolivier.com
+MAIL_HOST=mail.stefanolivier.com
 MAIL_PORT=465
 MAIL_USERNAME="website@stefanolivier.com"
 {{ with secret "kv/data/default/website-stefanolivier/email" }}
-MAIL_PASSWORD="{{ .Data.data.gmail_password }}"
+MAIL_PASSWORD="{{ .Data.data.password }}"
 {{ end }}
 MAIL_ME_ADDRESS="hello@stefanolivier.com"
 MAIL_ME_NAME="Stefan Olivier"
