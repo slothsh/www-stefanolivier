@@ -50,8 +50,8 @@ declare global {
         },
         Email: {
             icon: faEnvelope,
-            src: 'mailto:s.olivier1194@gmail.com',
-            displayName: 's.olivier1194@gmail.com',
+            src: 'mailto:hello@stefanolivier.com',
+            displayName: 'hello@stefanolivier.com',
         },
         GitHub: {
             icon: faGithub,

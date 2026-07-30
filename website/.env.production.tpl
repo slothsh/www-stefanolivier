@@ -37,15 +37,15 @@ REDIS_PORT=6379
 
 MAIL_MAILER=smtp
 MAIL_SCHEME=smtps
-MAIL_HOST=smtp.gmail.com
+MAIL_HOST=stefanolivier.com
 MAIL_PORT=465
-MAIL_USERNAME="s.olivier1194+website@gmail.com"
+MAIL_USERNAME="website+contact@stefanolivier.com"
 {{ with secret "kv/data/default/website-stefanolivier/email" }}
 MAIL_PASSWORD="{{ .Data.data.gmail_password }}"
 {{ end }}
-MAIL_ME_ADDRESS="s.olivier1194@gmail.com"
+MAIL_ME_ADDRESS="hello@stefanolivier.com"
 MAIL_ME_NAME="Stefan Olivier"
-MAIL_FROM_ADDRESS="s.olivier1194+website@gmail.com"
+MAIL_FROM_ADDRESS="website+contact@gmail.com"
 MAIL_FROM_NAME="Website"
 
 VITE_APP_NAME="${APP_NAME}"

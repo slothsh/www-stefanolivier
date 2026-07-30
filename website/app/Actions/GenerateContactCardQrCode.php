@@ -35,7 +35,7 @@ class GenerateContactCardQrCode
             'N:Olivier;Stefan;;;',
             'FN:Stefan Olivier',
             'TEL;TYPE=WORK,VOICE:+27761855537',
-            'EMAIL:s.olivier1194@gmail.com',
+            'EMAIL:hello@stefanolivier.com',
             'URL:https://stefanolivier.com/',
             'URL:https://linkedin.com/in/stefan-olivier-628261145',
             'URL:https://github.com/slothsh',
