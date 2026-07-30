@@ -36,16 +36,16 @@ REDIS_PASSWORD=null
 REDIS_PORT=6379
 
 MAIL_MAILER=smtp
-MAIL_SCHEME=smtps
 MAIL_HOST=mail.stefanolivier.com
 MAIL_PORT=465
 MAIL_USERNAME="website@stefanolivier.com"
 {{ with secret "kv/data/default/website-stefanolivier/email" }}
 MAIL_PASSWORD="{{ .Data.data.password }}"
 {{ end }}
+MAIL_ENCRYPTION=ssl
 MAIL_ME_ADDRESS="hello@stefanolivier.com"
 MAIL_ME_NAME="Stefan Olivier"
-MAIL_FROM_ADDRESS="website+contact@stefanolivier.com"
+MAIL_FROM_ADDRESS="website@stefanolivier.com"
 MAIL_FROM_NAME="Website"
 
 VITE_APP_NAME="${APP_NAME}"
