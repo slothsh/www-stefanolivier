@@ -45,7 +45,7 @@ MAIL_PASSWORD="{{ .Data.data.gmail_password }}"
 {{ end }}
 MAIL_ME_ADDRESS="hello@stefanolivier.com"
 MAIL_ME_NAME="Stefan Olivier"
-MAIL_FROM_ADDRESS="website+contact@gmail.com"
+MAIL_FROM_ADDRESS="website+contact@stefanolivier.com"
 MAIL_FROM_NAME="Website"
 
 VITE_APP_NAME="${APP_NAME}"
