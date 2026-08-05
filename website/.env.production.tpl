@@ -36,7 +36,7 @@ REDIS_PASSWORD=null
 REDIS_PORT=6379
 
 MAIL_MAILER=smtp
-MAIL_HOST=smtp.stefanolivier.com
+MAIL_HOST=_dc-mx.82e7c3a15aac.stefanolivier.com
 MAIL_PORT=465
 MAIL_ENCRYPTION=smtps
 MAIL_USERNAME="website@stefanolivier.com"
