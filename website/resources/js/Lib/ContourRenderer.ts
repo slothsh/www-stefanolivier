@@ -9,6 +9,7 @@ export interface RendererConfig {
     dprMultiplier?: number;
     alpha?: boolean;
     maxColors?: number;
+    lineWidth?: number;
 }
 
 const MAX_COLORS = 8;
@@ -50,12 +51,14 @@ export class ContourRenderer {
     private segmentCount = 0;
     private colors: ContourColor[] = [{ r: 0.42, g: 0.56, b: 0.44, a: 0.6 }];
     private background: ContourColor = { r: 0, g: 0, b: 0, a: 0 };
+    private lineWidth = 1;
     private dpr: number;
     private colorData = new Float32Array(MAX_COLORS * 4);
 
     constructor(canvas: HTMLCanvasElement, config?: RendererConfig) {
         this.canvas = canvas;
         this.dpr = config?.dprMultiplier ?? (typeof window !== 'undefined' ? window.devicePixelRatio : 1);
+        this.lineWidth = config?.lineWidth ?? 1;
 
         const gl = canvas.getContext('webgl2', {
             alpha: config?.alpha ?? true,
@@ -75,6 +78,7 @@ export class ContourRenderer {
 
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+        gl.lineWidth(config?.lineWidth ?? 1);
     }
 
     private compileShader(type: number, source: string): WebGLShader | null {
@@ -169,6 +173,11 @@ export class ContourRenderer {
 
     setBackground(r: number, g: number, b: number, a: number): void {
         this.background = { r, g, b, a };
+    }
+
+    setLineWidth(width: number): void {
+        this.lineWidth = width;
+        this.gl?.lineWidth(width);
     }
 
     resize(width: number, height: number): void {
