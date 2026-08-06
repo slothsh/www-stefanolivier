@@ -1,8 +1,7 @@
 <script lang="ts">
 import { ContourRenderer } from '@/Lib/ContourRenderer';
 import type { ContourColor } from '@/Lib/ContourRenderer';
-import { computeContours } from '@/Lib/ContourComputer';
-import { generateNoiseGrid } from '@/Lib/NoiseField';
+import { contourSync } from '@/Lib/ContourSync';
 
 const DEFAULT_COLORS: ContourColor[] = [
     { r: 0.353, g: 0.478, b: 0.373, a: 0.55 },
@@ -30,20 +29,10 @@ function resolveThemeColors(): ContourColor[] {
 }
 
 let {
-    gridCols = 100,
-    gridRows = 100,
-    levelCount = 30,
-    animationSpeed = 0.0003,
-    seed = 1337,
     lineWidth = 1,
     showThroughContent = false,
     colors,
 }: {
-    gridCols?: number;
-    gridRows?: number;
-    levelCount?: number;
-    animationSpeed?: number;
-    seed?: number;
     lineWidth?: number;
     showThroughContent?: boolean;
     colors?: ContourColor[];
@@ -59,31 +48,14 @@ $effect(() => {
     renderer.setColors(colors ?? resolveThemeColors());
     renderer.resize(window.innerWidth, window.innerHeight);
 
-    let time = 0;
-    let frameId = 0;
-    let running = true;
-
-    const loop = () => {
-        if (!running) return;
-        time += animationSpeed;
-        const grid = generateNoiseGrid(gridCols, gridRows, seed, time);
-        const e1 = Math.sqrt(Math.pow(window.innerWidth, 2) + Math.pow(window.innerHeight, 2));
-        const e2 = Math.sqrt(Math.pow(1920, 2) + Math.pow(1080, 2));
-        const scaledLevelCount = Math.min(30, Math.ceil(e1 / e2 * 30));
-        const { vertices, levels, segmentCount } = computeContours(grid, gridCols, gridRows, scaledLevelCount);
-        renderer.updateData(vertices, levels, segmentCount);
-        renderer.render();
-        frameId = requestAnimationFrame(loop);
-    };
-    frameId = requestAnimationFrame(loop);
+    contourSync.addRenderer(renderer);
 
     const onResize = () => renderer.resize(window.innerWidth, window.innerHeight);
     window.addEventListener('resize', onResize);
 
     return () => {
-        running = false;
-        cancelAnimationFrame(frameId);
         window.removeEventListener('resize', onResize);
+        contourSync.removeRenderer(renderer);
         renderer.destroy();
     };
 });

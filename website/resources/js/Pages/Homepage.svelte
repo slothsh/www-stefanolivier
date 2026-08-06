@@ -2,6 +2,7 @@
 import Fa from 'svelte-fa';
 import { faXmark, faFileArrowDown, faUser, faFilePdf, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 import ContactForm from './ContactForm.svelte';
+import ContactFormContourCanvas from '../Components/ContactFormContourCanvas.svelte';
 import CopyButton from '../Components/CopyButton.svelte';
 import FeaturedItemCard from '../Components/FeaturedItemCard.svelte';
 import SocialLinks from '../Components/SocialLinks.svelte';
@@ -133,15 +134,16 @@ $effect(() => {
         bind:this={formRef}
         class="fixed inset-0 z-[60]"
     >
+        <ContactFormContourCanvas />
         <button
             type="button"
             onclick={handleFormClose}
-            class="absolute top-6 left-6 text-text-muted hover:text-text transition-colors cursor-pointer"
+            class="absolute top-6 left-6 z-20 text-text-muted hover:text-text transition-colors cursor-pointer"
         >
             <Fa icon={faXmark} class="text-3xl" />
         </button>
-        <div class="flex items-center justify-center h-full p-4">
-            <div class="bg-bg border border-border rounded-lg p-6 w-full max-w-4xl shadow-xl flex flex-col">
+        <div class="relative z-10 flex items-center justify-center h-full p-4">
+            <div class="bg-bg/80 border border-border rounded-lg p-6 w-full max-w-4xl shadow-xl flex flex-col backdrop-blur-sm">
                 <div class="flex flex-col md:flex-row h-full gap-8">
                     <div class="flex-1 md:flex-[2] flex flex-col">
                         <ContactForm

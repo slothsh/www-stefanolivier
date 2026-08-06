@@ -1755,7 +1755,7 @@ function Footer($$renderer, $$props) {
     let isVisible = false;
     let { cvDownloadUrl = null, class: className } = $$props;
     $$renderer2.push(`<footer${attr_class(clsx(cn$1(
-      "flex flex-col sm:flex-row items-center justify-between gap-4 py-6 border-t border-border transition-opacity duration-300 bg-bg",
+      "flex flex-col sm:flex-row items-center justify-between gap-4 py-6 transition-opacity duration-300",
       {
         "opacity-100": isVisible,
         "opacity-0 pointer-events-none": true
@@ -3418,6 +3418,378 @@ const __vite_glob_0_4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   __proto__: null,
   default: Cv
 }, Symbol.toStringTag, { value: "Module" }));
+var csComp;
+((csComp2) => {
+  ((Helpers2) => {
+    var EPSILON = 1e-10;
+    class ContourBuilder {
+      constructor(level) {
+        __publicField(this, "count", 0);
+        __publicField(this, "s", null);
+        this.level = level;
+      }
+      addSegment(a2, b2) {
+        var ss = this.s;
+        var ma = null, mb = null;
+        var prependA = false, prependB = false;
+        while (ss) {
+          if (ma === null) {
+            if (this.pointsEqual(a2, ss.head.p)) {
+              ma = ss;
+              prependA = true;
+            } else if (this.pointsEqual(a2, ss.tail.p)) {
+              ma = ss;
+            }
+          }
+          if (mb === null) {
+            if (this.pointsEqual(b2, ss.head.p)) {
+              mb = ss;
+              prependB = true;
+            } else if (this.pointsEqual(b2, ss.tail.p)) {
+              mb = ss;
+            }
+          }
+          if (mb != null && ma != null) {
+            break;
+          } else {
+            ss = ss.next;
+          }
+        }
+        var c2 = (ma != null ? 1 : 0) | (mb != null ? 2 : 0);
+        switch (c2) {
+          case 0:
+            var aa = { p: a2, prev: null };
+            var bb = { p: b2, next: null };
+            aa.next = bb;
+            bb.prev = aa;
+            ma = { head: aa, tail: bb, next: this.s, prev: null, closed: false };
+            if (this.s) {
+              this.s.prev = ma;
+            }
+            this.s = ma;
+            ++this.count;
+            break;
+          case 1:
+            var pp = { p: b2 };
+            if (prependA) {
+              pp.next = ma.head;
+              pp.prev = null;
+              ma.head.prev = pp;
+              ma.head = pp;
+            } else {
+              pp.next = null;
+              pp.prev = ma.tail;
+              ma.tail.next = pp;
+              ma.tail = pp;
+            }
+            break;
+          case 2:
+            var pp = { p: a2 };
+            if (prependB) {
+              pp.next = mb.head;
+              pp.prev = null;
+              mb.head.prev = pp;
+              mb.head = pp;
+            } else {
+              pp.next = null;
+              pp.prev = mb.tail;
+              mb.tail.next = pp;
+              mb.tail = pp;
+            }
+            break;
+          case 3:
+            if (ma === mb) {
+              var pp = { p: ma.tail.p, next: ma.head, prev: null };
+              ma.head.prev = pp;
+              ma.head = pp;
+              ma.closed = true;
+              break;
+            }
+            switch ((prependA ? 1 : 0) | (prependB ? 2 : 0)) {
+              case 0:
+                this.reverseList(ma);
+              // fall through to head/tail case
+              case 1:
+                mb.tail.next = ma.head;
+                ma.head.prev = mb.tail;
+                mb.tail = ma.tail;
+                this.remove_seq(ma);
+                break;
+              case 3:
+                this.reverseList(ma);
+              // fall through to tail/head case
+              case 2:
+                ma.tail.next = mb.head;
+                mb.head.prev = ma.tail;
+                ma.tail = mb.tail;
+                this.remove_seq(mb);
+                break;
+            }
+        }
+      }
+      remove_seq(list) {
+        if (list.prev) {
+          list.prev.next = list.next;
+        } else {
+          this.s = list.next;
+        }
+        if (list.next) {
+          list.next.prev = list.prev;
+        }
+        --this.count;
+      }
+      /**
+       * Are two points equal.
+       * @param  {IPoint} a Point 1
+       * @param  {IPoint} b Point 2
+       * @return {boolean}  [True if equal, false otherwise]
+       */
+      pointsEqual(a2, b2) {
+        var dx = a2.x - b2.x, dy = a2.y - b2.y;
+        return dx * dx + dy * dy < EPSILON;
+      }
+      reverseList(list) {
+        var pp = list.head;
+        while (pp) {
+          var temp = pp.next;
+          pp.next = pp.prev;
+          pp.prev = temp;
+          pp = temp;
+        }
+        var temp = list.head;
+        list.head = list.tail;
+        list.tail = temp;
+      }
+    }
+    class Conrec {
+      /**
+       * Create a new Conrec class, optionally specifying the function to use for drawing the contour line.
+       * @param  {number} drawContour [description]
+       * @return {[type]}             [description]
+       */
+      constructor(drawContour) {
+        __publicField(this, "h", new Array(5));
+        __publicField(this, "sh", new Array(5));
+        __publicField(this, "xh", new Array(5));
+        __publicField(this, "yh", new Array(5));
+        __publicField(this, "contours");
+        if (drawContour) this.drawContour = drawContour;
+      }
+      /**
+       * contour is a contouring subroutine for rectangularily spaced data
+       *
+       * It emits calls to a line drawing subroutine supplied by the user which
+       * draws a contour map corresponding to real*4data on a randomly spaced
+       * rectangular grid. The coordinates emitted are in the same units given in
+       * the x() and y() arrays.
+       *
+       * Any number of contour levels may be specified but they must be in order of
+       * increasing value.
+       *
+       *
+       * @param {number[][]} d - matrix of data to contour
+       * @param {number} ilb,iub,jlb,jub - index lower and upper bounds of data matrix,
+       *                                 	 i in rows/latitude direction, j in columns/longitude direction
+       *
+       *             The following two, one dimensional arrays (x and y) contain
+       *             the horizontal and vertical coordinates of each sample points.
+       * @param {number[]} x  - data matrix column coordinates, e.g. latitude coordinates
+       * @param {number[]} y  - data matrix row coordinates, e.g. longitude coordinates
+       * @param {number} nc   - number of contour levels
+       * @param {number[]} z  - contour levels in increasing order.
+       */
+      contour(d2, ilb, iub, jlb, jub, x, y2, nc, z2) {
+        var h2 = this.h, sh = this.sh, xh = this.xh, yh = this.yh;
+        this.drawContour;
+        this.contours = {};
+        var xsect = function(p1, p2) {
+          return (h2[p2] * xh[p1] - h2[p1] * xh[p2]) / (h2[p2] - h2[p1]);
+        };
+        var ysect = function(p1, p2) {
+          return (h2[p2] * yh[p1] - h2[p1] * yh[p2]) / (h2[p2] - h2[p1]);
+        };
+        var m1, m2, m3;
+        var case_value;
+        var dmin, dmax;
+        var x1 = 0;
+        var x2 = 0;
+        var y1 = 0;
+        var y22 = 0;
+        var im = [0, 1, 1, 0];
+        var jm = [0, 0, 1, 1];
+        var castab = [
+          [
+            [0, 0, 8],
+            [0, 2, 5],
+            [7, 6, 9]
+          ],
+          [
+            [0, 3, 4],
+            [1, 3, 1],
+            [4, 3, 0]
+          ],
+          [
+            [9, 6, 7],
+            [5, 2, 0],
+            [8, 0, 0]
+          ]
+        ];
+        for (var j2 = jub - 1; j2 >= jlb; j2--) {
+          for (var i2 = ilb; i2 < iub; i2++) {
+            var temp1, temp2;
+            temp1 = Math.min(d2[i2][j2], d2[i2][j2 + 1]);
+            temp2 = Math.min(d2[i2 + 1][j2], d2[i2 + 1][j2 + 1]);
+            dmin = Math.min(temp1, temp2);
+            temp1 = Math.max(d2[i2][j2], d2[i2][j2 + 1]);
+            temp2 = Math.max(d2[i2 + 1][j2], d2[i2 + 1][j2 + 1]);
+            dmax = Math.max(temp1, temp2);
+            if (dmax < z2[0] && dmin > z2[nc - 1]) continue;
+            for (var k = 0; k < nc; k++) {
+              if (z2[k] >= dmin && z2[k] <= dmax) {
+                for (var m4 = 4; m4 >= 0; m4--) {
+                  if (m4 > 0) {
+                    h2[m4] = d2[i2 + im[m4 - 1]][j2 + jm[m4 - 1]] - z2[k];
+                    xh[m4] = x[i2 + im[m4 - 1]];
+                    yh[m4] = y2[j2 + jm[m4 - 1]];
+                  } else {
+                    h2[0] = 0.25 * (h2[1] + h2[2] + h2[3] + h2[4]);
+                    xh[0] = 0.5 * (x[i2] + x[i2 + 1]);
+                    yh[0] = 0.5 * (y2[j2] + y2[j2 + 1]);
+                  }
+                  if (h2[m4] > EPSILON) {
+                    sh[m4] = 1;
+                  } else if (h2[m4] < -1e-10) {
+                    sh[m4] = -1;
+                  } else
+                    sh[m4] = 0;
+                }
+                for (m4 = 1; m4 <= 4; m4++) {
+                  m1 = m4;
+                  m2 = 0;
+                  if (m4 != 4) {
+                    m3 = m4 + 1;
+                  } else {
+                    m3 = 1;
+                  }
+                  case_value = castab[sh[m1] + 1][sh[m2] + 1][sh[m3] + 1];
+                  if (case_value != 0) {
+                    switch (case_value) {
+                      case 1:
+                        x1 = xh[m1];
+                        y1 = yh[m1];
+                        x2 = xh[m2];
+                        y22 = yh[m2];
+                        break;
+                      case 2:
+                        x1 = xh[m2];
+                        y1 = yh[m2];
+                        x2 = xh[m3];
+                        y22 = yh[m3];
+                        break;
+                      case 3:
+                        x1 = xh[m3];
+                        y1 = yh[m3];
+                        x2 = xh[m1];
+                        y22 = yh[m1];
+                        break;
+                      case 4:
+                        x1 = xh[m1];
+                        y1 = yh[m1];
+                        x2 = xsect(m2, m3);
+                        y22 = ysect(m2, m3);
+                        break;
+                      case 5:
+                        x1 = xh[m2];
+                        y1 = yh[m2];
+                        x2 = xsect(m3, m1);
+                        y22 = ysect(m3, m1);
+                        break;
+                      case 6:
+                        x1 = xh[m3];
+                        y1 = yh[m3];
+                        x2 = xsect(m1, m2);
+                        y22 = ysect(m1, m2);
+                        break;
+                      case 7:
+                        x1 = xsect(m1, m2);
+                        y1 = ysect(m1, m2);
+                        x2 = xsect(m2, m3);
+                        y22 = ysect(m2, m3);
+                        break;
+                      case 8:
+                        x1 = xsect(m2, m3);
+                        y1 = ysect(m2, m3);
+                        x2 = xsect(m3, m1);
+                        y22 = ysect(m3, m1);
+                        break;
+                      case 9:
+                        x1 = xsect(m3, m1);
+                        y1 = ysect(m3, m1);
+                        x2 = xsect(m1, m2);
+                        y22 = ysect(m1, m2);
+                        break;
+                    }
+                    this.drawContour(x1, y1, x2, y22, z2[k], k);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      /**
+       * drawContour - interface for implementing the user supplied method to
+       * render the countours.
+       *
+       * Draws a line between the start and end coordinates.
+       *
+       * @param startX    - start coordinate for X
+       * @param startY    - start coordinate for Y
+       * @param endX      - end coordinate for X
+       * @param endY      - end coordinate for Y
+       * @param contourLevel - Contour level for line.
+       */
+      drawContour(startX, startY, endX, endY, contourLevel, k) {
+        var cb = this.contours[k];
+        if (!cb) {
+          cb = this.contours[k] = new ContourBuilder(contourLevel);
+        }
+        cb.addSegment({ x: startX, y: startY }, { x: endX, y: endY });
+      }
+      get contourList() {
+        var l2 = [];
+        var a2 = this.contours;
+        for (var k in a2) {
+          var s2 = a2[k].s;
+          var level = a2[k].level;
+          while (s2) {
+            var h2 = s2.head;
+            var l22 = [];
+            l22.level = level;
+            l22.k = k;
+            while (h2 && h2.p) {
+              l22.push(h2.p);
+              h2 = h2.next;
+            }
+            l2.push(l22);
+            s2 = s2.next;
+          }
+        }
+        l2.sort((a22, b2) => {
+          return a22.k - b2.k;
+        });
+        return l2;
+      }
+    }
+    Helpers2.Conrec = Conrec;
+  })(csComp2.Helpers || (csComp2.Helpers = {}));
+})(csComp || (csComp = {}));
+csComp.Helpers.Conrec;
+function ContactFormContourCanvas($$renderer, $$props) {
+  $$renderer.component(($$renderer2) => {
+    $$renderer2.push(`<canvas class="absolute inset-0 w-full h-full pointer-events-none"></canvas>`);
+  });
+}
 function FeaturedItemCard($$renderer, $$props) {
   $$renderer.component(($$renderer2) => {
     let { item } = $$props;
@@ -3530,9 +3902,11 @@ function Homepage($$renderer, $$props) {
     $$renderer2.push(`<!--]--></div> `);
     if (showContactForm) {
       $$renderer2.push("<!--[-->");
-      $$renderer2.push(`<div class="fixed inset-0 z-50"></div> <div class="fixed inset-0 z-[60]"><button type="button" class="absolute top-6 left-6 text-text-muted hover:text-text transition-colors cursor-pointer">`);
+      $$renderer2.push(`<div class="fixed inset-0 z-50"></div> <div class="fixed inset-0 z-[60]">`);
+      ContactFormContourCanvas($$renderer2);
+      $$renderer2.push(`<!----> <button type="button" class="absolute top-6 left-6 z-20 text-text-muted hover:text-text transition-colors cursor-pointer">`);
       Fa($$renderer2, { icon: faXmark, class: "text-3xl" });
-      $$renderer2.push(`<!----></button> <div class="flex items-center justify-center h-full p-4"><div class="bg-bg border border-border rounded-lg p-6 w-full max-w-4xl shadow-xl flex flex-col"><div class="flex flex-col md:flex-row h-full gap-8"><div class="flex-1 md:flex-[2] flex flex-col">`);
+      $$renderer2.push(`<!----></button> <div class="relative z-10 flex items-center justify-center h-full p-4"><div class="bg-bg/80 border border-border rounded-lg p-6 w-full max-w-4xl shadow-xl flex flex-col backdrop-blur-sm"><div class="flex flex-col md:flex-row h-full gap-8"><div class="flex-1 md:flex-[2] flex flex-col">`);
       ContactForm($$renderer2, { onClose: handleFormClose });
       $$renderer2.push(`<!----></div> <div class="hidden md:flex flex-1 flex-col border-l border-border pl-8 justify-between"><div><h2 class="contact-detail text-xl font-semibold text-text mb-6">Contact</h2> <div class="space-y-4"><div class="flex items-center"><a${attr("href", Bio.contact.Phone.src)} class="contact-detail flex items-center gap-3 text-text-muted hover:text-accent transition-colors">`);
       Fa($$renderer2, { icon: Bio.contact.Phone.icon, class: "text-lg w-5" });
