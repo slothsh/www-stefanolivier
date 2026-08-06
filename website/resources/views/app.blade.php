@@ -7,6 +7,9 @@
         @routes('web')
     </head>
     <body>
-        @inertia
+        <div id="contour-bg"></div>
+        <div id="app-wrapper">
+            @inertia
+        </div>
     </body>
 </html>
