@@ -18,6 +18,12 @@
         --toast-info: #475569;
         --toast-info-foreground: #f8fafc;
 
+        --contour-color-base: #5a7a5f;
+        --contour-color-mid: #6d8f72;
+        --contour-color-faint: #8aaa8e;
+        --contour-color-accent: #4e6b53;
+        --contour-page-backdrop: transparent;
+
         @media (prefers-color-scheme: dark) {
             --bg: #0f140f;
             --text: #e8e8e8;
@@ -33,6 +39,11 @@
             --toast-warning-foreground: #451a03;
             --toast-info: #94a3b8;
             --toast-info-foreground: #0f172a;
+
+            --contour-color-base: #46604b;
+            --contour-color-mid: #547058;
+            --contour-color-faint: #6d8570;
+            --contour-color-accent: #3d5340;
         }
     }
 
@@ -48,6 +59,22 @@
         font-size: 16px;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+    }
+
+    #contour-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    #app-wrapper {
+        position: relative;
+        z-index: 1;
+    }
+
+    #app > div:first-child.bg-bg {
+        background-color: var(--contour-page-backdrop);
     }
 }
 

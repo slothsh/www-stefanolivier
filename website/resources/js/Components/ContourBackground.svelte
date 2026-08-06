@@ -11,6 +11,24 @@ const DEFAULT_COLORS: ContourColor[] = [
     { r: 0.306, g: 0.42, b: 0.325, a: 0.6 },
 ];
 
+const COLOR_VARS = ['--contour-color-base', '--contour-color-mid', '--contour-color-faint', '--contour-color-accent'];
+
+function parseHexColor(value: string): { r: number; g: number; b: number } | null {
+    const match = /^#?([0-9a-f]{6})$/i.exec(value.trim());
+    if (!match) return null;
+    const int = parseInt(match[1], 16);
+    return { r: ((int >> 16) & 255) / 255, g: ((int >> 8) & 255) / 255, b: (int & 255) / 255 };
+}
+
+function resolveThemeColors(): ContourColor[] {
+    const styles = getComputedStyle(document.documentElement);
+    return COLOR_VARS.map((name, i) => {
+        const parsed = parseHexColor(styles.getPropertyValue(name));
+        if (!parsed) return DEFAULT_COLORS[i];
+        return { ...parsed, a: DEFAULT_COLORS[i].a };
+    });
+}
+
 let {
     gridCols = 80,
     gridRows = 60,
@@ -19,7 +37,7 @@ let {
     seed = 42,
     lineWidth = 1,
     showThroughContent = false,
-    colors = DEFAULT_COLORS,
+    colors,
 }: {
     gridCols?: number;
     gridRows?: number;
@@ -38,7 +56,7 @@ $effect(() => {
     if (!canvas) return;
 
     const renderer = new ContourRenderer(canvas, { lineWidth });
-    renderer.setColors(colors);
+    renderer.setColors(colors ?? resolveThemeColors());
     renderer.resize(window.innerWidth, window.innerHeight);
 
     let time = 0;
