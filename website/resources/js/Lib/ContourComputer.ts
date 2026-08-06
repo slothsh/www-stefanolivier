@@ -22,6 +22,7 @@ export function computeContours(
     let max = -Infinity;
     for (let j = 0; j < rows; j++) {
         const row = data[j];
+        if (!row) continue;
         for (let i = 0; i < cols; i++) {
             const v = row[i];
             if (v < min) min = v;
@@ -58,41 +59,43 @@ export function computeContours(
         d[i] = col;
     }
 
-    const conrec = new Conrec();
+    const initialCap = Math.min((cols - 1) * (rows - 1) * 4 * nc, 120000);
+    let vertexData = new Float32Array(initialCap * 4);
+    let levelData = new Float32Array(initialCap * 2);
+    let segIdx = 0;
+
+    const conrec = new Conrec((startX, startY, endX, endY, _contourLevel, k) => {
+        if (!isFinite(startX) || !isFinite(startY) || !isFinite(endX) || !isFinite(endY)) {
+            return;
+        }
+        if (segIdx >= vertexData.length / 4) {
+            const grow = new Float32Array(vertexData.length * 2);
+            grow.set(vertexData);
+            vertexData = grow;
+            const growLvl = new Float32Array(levelData.length * 2);
+            growLvl.set(levelData);
+            levelData = growLvl;
+        }
+        const vi = segIdx * 4;
+        const li = segIdx * 2;
+        vertexData[vi] = startX;
+        vertexData[vi + 1] = startY;
+        vertexData[vi + 2] = endX;
+        vertexData[vi + 3] = endY;
+        levelData[li] = k;
+        levelData[li + 1] = k;
+        segIdx++;
+    });
+
     conrec.contour(d, 0, cols - 1, 0, rows - 1, xCoords, yCoords, nc, z);
 
-    const contourList = conrec.contourList;
-
-    let totalSegments = 0;
-    for (let c = 0; c < contourList.length; c++) {
-        const contour = contourList[c];
-        if (contour.length > 1) {
-            totalSegments += contour.length - 1;
-        }
-    }
-
-    if (totalSegments === 0) {
+    if (segIdx === 0) {
         return { vertices: new Float32Array(0), levels: new Float32Array(0), segmentCount: 0 };
     }
 
-    const vertices = new Float32Array(totalSegments * 4);
-    const levels = new Float32Array(totalSegments * 2);
-    let offset = 0;
-    let levelOffset = 0;
-    for (let c = 0; c < contourList.length; c++) {
-        const contour = contourList[c];
-        const levelIndex = Number(contour.k) || 0;
-        for (let p = 0; p < contour.length - 1; p++) {
-            const a = contour[p];
-            const b = contour[p + 1];
-            vertices[offset++] = a.x;
-            vertices[offset++] = a.y;
-            vertices[offset++] = b.x;
-            vertices[offset++] = b.y;
-            levels[levelOffset++] = levelIndex;
-            levels[levelOffset++] = levelIndex;
-        }
-    }
-
-    return { vertices, levels, segmentCount: totalSegments };
+    return {
+        vertices: vertexData.slice(0, segIdx * 4),
+        levels: levelData.slice(0, segIdx * 2),
+        segmentCount: segIdx,
+    };
 }

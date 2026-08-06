@@ -37,17 +37,19 @@ void main() {
 }
 `;
 
+interface BufferPair {
+    position: WebGLBuffer;
+    level: WebGLBuffer;
+    vao: WebGLVertexArrayObject;
+}
+
 export class ContourRenderer {
     private canvas: HTMLCanvasElement;
     private gl: WebGL2RenderingContext | null = null;
     private program: WebGLProgram | null = null;
-    private positionBuffer: WebGLBuffer | null = null;
-    private levelBuffer: WebGLBuffer | null = null;
-    private vao: WebGLVertexArrayObject | null = null;
-    private colorUniformLoc: WebGLUniformLocation | null = null;
-    private colorCountLoc: WebGLUniformLocation | null = null;
-    private positionCapacity = 0;
-    private levelCapacity = 0;
+    private buffers: BufferPair[] = [];
+    private bufferIndex = 0;
+    private capacity = 0;
     private segmentCount = 0;
     private colors: ContourColor[] = [{ r: 0.42, g: 0.56, b: 0.44, a: 0.6 }];
     private background: ContourColor = { r: 0, g: 0, b: 0, a: 0 };
@@ -120,26 +122,34 @@ export class ContourRenderer {
         this.colorCountLoc = gl.getUniformLocation(program, 'u_colorCount');
     }
 
-    private initBuffers(): void {
+    private createBufferPair(): BufferPair | null {
         const gl = this.gl!;
-        this.vao = gl.createVertexArray();
-        gl.bindVertexArray(this.vao);
+        const vao = gl.createVertexArray();
+        const positionBuf = gl.createBuffer();
+        const levelBuf = gl.createBuffer();
+        if (!vao || !positionBuf || !levelBuf) return null;
 
-        this.positionBuffer = gl.createBuffer();
-        this.levelBuffer = gl.createBuffer();
+        gl.bindVertexArray(vao);
 
-        const positionLoc = gl.getAttribLocation(this.program!, 'a_position');
-        const levelLoc = gl.getAttribLocation(this.program!, 'a_level');
+        const posLoc = gl.getAttribLocation(this.program!, 'a_position');
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuf);
+        gl.enableVertexAttribArray(posLoc);
+        gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.enableVertexAttribArray(positionLoc);
-        gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.levelBuffer);
-        gl.enableVertexAttribArray(levelLoc);
-        gl.vertexAttribPointer(levelLoc, 1, gl.FLOAT, false, 0, 0);
+        const lvlLoc = gl.getAttribLocation(this.program!, 'a_level');
+        gl.bindBuffer(gl.ARRAY_BUFFER, levelBuf);
+        gl.enableVertexAttribArray(lvlLoc);
+        gl.vertexAttribPointer(lvlLoc, 1, gl.FLOAT, false, 0, 0);
 
         gl.bindVertexArray(null);
+        return { position: positionBuf, level: levelBuf, vao };
+    }
+
+    private initBuffers(): void {
+        for (let i = 0; i < 2; i++) {
+            const pair = this.createBufferPair();
+            if (pair) this.buffers.push(pair);
+        }
     }
 
     updateData(vertices: Float32Array, levels: Float32Array, segmentCount: number): void {
@@ -148,19 +158,25 @@ export class ContourRenderer {
 
         this.segmentCount = segmentCount;
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        if (vertices.length > this.positionCapacity) {
-            gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.DYNAMIC_DRAW);
-            this.positionCapacity = vertices.length;
-        } else if (vertices.length > 0) {
+        const totalFloats = vertices.length;
+        if (totalFloats > this.capacity) {
+            this.capacity = totalFloats;
+        }
+
+        if (this.capacity === 0) return;
+
+        this.bufferIndex = (this.bufferIndex + 1) % 2;
+        const pair = this.buffers[this.bufferIndex];
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, pair.position);
+        gl.bufferData(gl.ARRAY_BUFFER, this.capacity * 4, gl.DYNAMIC_DRAW);
+        if (totalFloats > 0) {
             gl.bufferSubData(gl.ARRAY_BUFFER, 0, vertices);
         }
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.levelBuffer);
-        if (levels.length > this.levelCapacity) {
-            gl.bufferData(gl.ARRAY_BUFFER, levels, gl.DYNAMIC_DRAW);
-            this.levelCapacity = levels.length;
-        } else if (levels.length > 0) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, pair.level);
+        gl.bufferData(gl.ARRAY_BUFFER, this.capacity * 4, gl.DYNAMIC_DRAW);
+        if (levels.length > 0) {
             gl.bufferSubData(gl.ARRAY_BUFFER, 0, levels);
         }
     }
@@ -215,7 +231,7 @@ export class ContourRenderer {
         gl.uniform4fv(this.colorUniformLoc, this.colorData);
         gl.uniform1i(this.colorCountLoc, count);
 
-        gl.bindVertexArray(this.vao);
+        gl.bindVertexArray(this.buffers[this.bufferIndex].vao);
         gl.drawArrays(gl.LINES, 0, this.segmentCount * 2);
         gl.bindVertexArray(null);
     }
@@ -224,14 +240,14 @@ export class ContourRenderer {
         const gl = this.gl;
         if (!gl) return;
 
-        if (this.positionBuffer) gl.deleteBuffer(this.positionBuffer);
-        if (this.levelBuffer) gl.deleteBuffer(this.levelBuffer);
-        if (this.vao) gl.deleteVertexArray(this.vao);
-        if (this.program) gl.deleteProgram(this.program);
+        for (const pair of this.buffers) {
+            if (pair.position) gl.deleteBuffer(pair.position);
+            if (pair.level) gl.deleteBuffer(pair.level);
+            if (pair.vao) gl.deleteVertexArray(pair.vao);
+        }
+        this.buffers = [];
 
-        this.positionBuffer = null;
-        this.levelBuffer = null;
-        this.vao = null;
+        if (this.program) gl.deleteProgram(this.program);
         this.program = null;
 
         const loseContext = gl.getExtension('WEBGL_lose_context');

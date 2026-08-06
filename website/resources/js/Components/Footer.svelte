@@ -28,7 +28,7 @@ $effect(() => {
 
 <footer
     class={cn(
-        "flex flex-col sm:flex-row items-center justify-between gap-4 py-6 border-t border-border transition-opacity duration-300",
+        "flex flex-col sm:flex-row items-center justify-between gap-4 py-6 transition-opacity duration-300",
         {'opacity-100': isVisible, 'opacity-0 pointer-events-none': !isVisible},
         className
     )}>

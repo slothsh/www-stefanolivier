@@ -19,7 +19,7 @@ let showLinks = $derived(route().current('home.index') && showBlogLink || route(
 </script>
 
 <header class={cn(
-    'fixed top-0 left-0 right-0 z-40 flex justify-between items-center bg-bg p-4 md:p-6',
+    'fixed top-0 left-0 right-0 z-40 flex justify-between items-center p-4 md:p-6',
     { 'border-b border-border': !route().current('home.index') },
     className
 )}>

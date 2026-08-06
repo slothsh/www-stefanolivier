@@ -77,7 +77,7 @@ $effect(() => {
     <title>Stefan Olivier</title>
 </svelte:head>
 
-<div class="min-h-screen bg-bg flex flex-col px-6 md:px-8 lg:px-12">
+<div class="min-h-screen flex flex-col px-6 md:px-8 lg:px-12">
     {#if featuredItems.length > 0}
         <Header onEmailClick={handleEmailClick} {cvDownloadUrl} {showBlogLink} />
     {/if}
@@ -87,14 +87,14 @@ $effect(() => {
                 'flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-10',
                 { 'my-12 md:my-24': featuredItems.length > 0 }
             )}>
-                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border">
+                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-border flex-shrink-0 ring-2 ring-border z-10">
                     <img
                         src="https://stefanolivier.imgix.net/img/owlsh.jpg"
                         alt="Avatar"
                         class="w-full h-full object-cover"
                     />
                 </div>
-                <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
+                <div class="flex flex-col items-center sm:items-start text-center sm:text-left z-10">
                     <h1 class="font-semibold text-4xl sm:text-5xl lg:text-6xl text-text tracking-tight">{Bio.name}</h1>
                     <p class="text-base sm:text-lg lg:text-xl text-text-muted mt-1 sm:mt-1.5">{Bio.occupation}</p>
                 </div>

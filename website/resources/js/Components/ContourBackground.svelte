@@ -30,11 +30,11 @@ function resolveThemeColors(): ContourColor[] {
 }
 
 let {
-    gridCols = 80,
-    gridRows = 60,
-    levelCount = 10,
+    gridCols = 100,
+    gridRows = 100,
+    levelCount = 30,
     animationSpeed = 0.0003,
-    seed = 42,
+    seed = 1337,
     lineWidth = 1,
     showThroughContent = false,
     colors,
@@ -67,7 +67,10 @@ $effect(() => {
         if (!running) return;
         time += animationSpeed;
         const grid = generateNoiseGrid(gridCols, gridRows, seed, time);
-        const { vertices, levels, segmentCount } = computeContours(grid, gridCols, gridRows, levelCount);
+        const e1 = Math.sqrt(Math.pow(window.innerWidth, 2) + Math.pow(window.innerHeight, 2));
+        const e2 = Math.sqrt(Math.pow(1920, 2) + Math.pow(1080, 2));
+        const scaledLevelCount = Math.min(30, Math.ceil(e1 / e2 * 30));
+        const { vertices, levels, segmentCount } = computeContours(grid, gridCols, gridRows, scaledLevelCount);
         renderer.updateData(vertices, levels, segmentCount);
         renderer.render();
         frameId = requestAnimationFrame(loop);
