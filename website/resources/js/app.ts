@@ -4,6 +4,7 @@ import '../css/app.css';
 import { createInertiaApp } from '@inertiajs/svelte';
 import { hydrate, mount } from 'svelte';
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
+import ContourBackground from './Components/ContourBackground.svelte';
 
 createInertiaApp({
     resolve: name => {
@@ -18,3 +19,8 @@ createInertiaApp({
         }
     },
 });
+
+const contourBgEl = document.getElementById('contour-bg');
+if (contourBgEl) {
+    mount(ContourBackground, { target: contourBgEl });
+}
