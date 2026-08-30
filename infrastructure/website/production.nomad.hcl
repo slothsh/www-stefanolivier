@@ -20,6 +20,11 @@ job "website-stefanolivier" {
     TIMESTAMP = var.TIMESTAMP
   }
 
+  constraint {
+    attribute = "${meta.node_group_web}"
+    value = "true"
+  }
+
   update {
     max_parallel      = 1
     health_check      = "task_states"
