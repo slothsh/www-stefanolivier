@@ -15,6 +15,9 @@ RUN --mount=type=secret,id=VAULT_TOKEN,env=VAULT_TOKEN curl -X GET -H "X-Vault-T
 # Main build
 FROM ubuntu:latest
 
+# Exact PHP patch release to install (packages.sury.org)
+ARG PHP_VERSION="8.5.12"
+
 # Add app User
 RUN useradd -m app
 
@@ -29,8 +32,18 @@ RUN mkdir /home/app/.composer
 RUN apt-get update
 RUN apt-get install -y curl unzip
 RUN apt-get install -y supervisor sqlite3 nginx nginx-extras
-RUN apt-get install -y php php-cli
-RUN apt-get install -y php-mbstring php-xml php-bcmath php-curl php-zip php-sqlite3 php-pgsql php-tokenizer php-ctype php-json php-fpm php-gd
+
+# Upstream PHP packages so a specific patch release can be installed
+RUN apt-get install -y ca-certificates
+RUN install -d /usr/share/keyrings
+RUN curl -fsSL https://packages.sury.org/php/apt.gpg -o /usr/share/keyrings/deb.sury.org-php.gpg
+RUN . /etc/os-release && echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/sury-php.list
+RUN printf 'Package: php8.5-* php8.5\nPin: version %s-*\nPin-Priority: 1001\n' "${PHP_VERSION}" > /etc/apt/preferences.d/php-8.5.pref
+RUN apt-get update
+RUN apt-get install -y php8.5-cli php8.5-fpm
+RUN apt-get install -y php8.5-mbstring php8.5-xml php8.5-bcmath php8.5-curl php8.5-zip php8.5-sqlite3 php8.5-pgsql php8.5-gd
+# Fail the build if the installed PHP (cli and fpm) is not the pinned patch release
+RUN php --version | head -n 1 | grep -q "PHP ${PHP_VERSION} " && php-fpm8.5 --version | head -n 1 | grep -q "PHP ${PHP_VERSION} "
 RUN curl -fsSL https://bun.sh/install | bash
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir /home/app/.composer --filename composer
 
